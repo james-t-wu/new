@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Deal Israel - Innonation</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="css/deal_israel.css">
+
+    <!-- 自定义下拉控件样式 -->
+    <style>
+        /* 美化的下拉选择控件 */
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select select {
+            width: 100%;
+            padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            appearance: none;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        /* 统一按钮和输入框高度 */
+        .form-control, .custom-select select, .btn {
+            height: calc(1.5em + 0.75rem + 2px) !important;
+        }
+
+        .custom-select select:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .custom-select select:disabled {
+            background-color: #e9ecef;
+            color: #6c757d;
+        }
+
+        /* 搜索框样式 */
+        .dropdown-search {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+            z-index: 10;
+        }
+
+        .dropdown-search input {
+            width: 100%;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-search input:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.125rem rgba(13, 110, 253, 0.25);
+        }
+
+        /* 优化选项显示 */
+        .custom-select select option {
+            padding: 0.5rem;
+        }
+
+        /* 加载状态 */
+        .custom-select.loading select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='%236c757d' d='M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z' opacity='0.25'/%3e%3cpath fill='%236c757d' d='M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z'%3e%3canimateTransform attributeName='transform' dur='0.75s' repeatCount='indefinite' type='rotate' values='0 12 12;360 12 12'/%3e%3c/path%3e%3c/svg%3e");
+        }
+
+        /* 现代化表格头部样式 - 舒适的浅灰色设计 */
+        .table thead.table-modern-header,
+        thead.table-modern-header {
+            background: #f8f9fa !important;
+            border-bottom: 1px solid #dee2e6 !important;
+            position: relative !important;
+        }
+
+        .table thead.table-modern-header th,
+        thead.table-modern-header th {
+            color: #495057 !important;
+            font-weight: 600 !important;
+            font-size: 0.875rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            padding: 1rem 0.75rem !important;
+            border: none !important;
+            position: relative !important;
+            background: #f8f9fa !important;
+        }
+
+        .table thead.table-modern-header th i,
+        thead.table-modern-header th i {
+            color: #6c757d !important;
+            margin-right: 0.5rem !important;
+            font-size: 0.875rem !important;
+        }
+
+        .table thead.table-modern-header th:not(:last-child)::after,
+        thead.table-modern-header th:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 25%;
+            height: 50%;
+            width: 1px;
+            background: #dee2e6;
+        }
+
+        /* 表格整体优化 */
+        .table {
+            border-radius: 0.5rem !important;
+            overflow: hidden !important;
+            box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05) !important;
+            border: 1px solid #dee2e6 !important;
+        }
+
+        /* 表格行hover效果 */
+        .table-hover tbody tr:hover {
+            background-color: rgba(25, 111, 166, 0.05) !important;
+            transform: translateY(-1px) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+
+        /* 表格数据单元格样式 */
+        .table tbody td {
+            padding: 0.875rem 0.75rem !important;
+            border-top: 1px solid #f1f5f9 !important;
+            color: #1e293b !important;
+            font-size: 0.875rem !important;
+        }
+
+        /* 强制覆盖Bootstrap默认样式 - 增强优先级 */
+        .table-hover .table-modern-header,
+        .table .table-modern-header,
+        table .table-modern-header,
+        .table-striped .table-modern-header,
+        .table-bordered .table-modern-header {
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
+        }
+
+        .table-hover .table-modern-header th,
+        .table .table-modern-header th,
+        table .table-modern-header th,
+        .table-striped .table-modern-header th,
+        .table-bordered .table-modern-header th {
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
+            color: #495057 !important;
+        }
+
+        /* 额外的Bootstrap表格类覆盖 */
+        .table thead th.table-modern-header,
+        .table thead tr.table-modern-header th,
+        .table-hover thead th,
+        .table-hover thead tr th {
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
+        }
+
+        /* 最终保险CSS - 直接针对table.table-hover的thead */
+        table.table.table-hover thead.table-modern-header,
+        table.table.table-hover thead.table-modern-header th,
+        table.table.table-hover thead.table-modern-header tr,
+        table.table.table-hover thead.table-modern-header tr th {
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
+            border-color: #dee2e6 !important;
+        }
+
+        /* Export按钮优化样式 */
+        .btn.btn-success {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn.btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn.btn-success i {
+            font-size: 1rem;
+        }
+
+        /* INNONATION Global Menu - common styles */
+
+        
+
+        /* 菜单模态框 */
+        /* 侧边栏菜单（遮罩层样式已移除） */
+
+        .modern-menu-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 320px;
+            max-width: 90%;
+            background: white;
+            border-radius: 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            border-right: 1px solid #e5e7eb;
+            transform: translateX(-100%);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            z-index: 1050;
+        }
+
+        .modern-menu-modal.active .modern-menu-content {
+            transform: translateX(0);
+        }
+
+        /* 页面内容适配 - 菜单展开时推动页面内容 */
+        body.menu-active {
+            margin-left: 320px;
+            transition: margin-left 0.3s ease;
+        }
+
+        body.menu-active.menu-collapsed {
+            margin-left: 80px;
+        }
+
+
+        /* 移动端不推动页面内容 */
+        @media (max-width: 768px) {
+            body.menu-active {
+                margin-left: 0;
+            }
+
+            body.menu-active.menu-collapsed {
+                margin-left: 0;
+            }
+
+        }
+
+        .modern-menu-header {
+            background: linear-gradient(135deg, #196fa6 0%, #104991 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 81px;
+        }
+
+        .menu-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modern-menu-collapse,
+        .modern-menu-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .modern-menu-collapse:hover,
+        .modern-menu-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .modern-menu-collapse {
+            transition: transform 0.3s ease;
+        }
+
+        .modern-menu-collapse.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* 折叠状态样式 */
+        .modern-menu-content.collapsed {
+            width: 80px;
+        }
+
+        .modern-menu-content.collapsed .menu-logo-text,
+        .modern-menu-content.collapsed .modern-menu-link span,
+        .modern-menu-content.collapsed .modern-submenu-link span {
+            display: none;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-link,
+        .modern-menu-content.collapsed .modern-submenu-link {
+            justify-content: center;
+            padding: 12px 8px;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-link i,
+        .modern-menu-content.collapsed .modern-submenu-link i {
+            margin-right: 0 !important;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-arrow {
+            display: none;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-header {
+            padding: 1rem 0.5rem;
+            justify-content: center;
+            position: relative;
+            height: 81px;
+        }
+
+        .modern-menu-content.collapsed .menu-controls {
+            position: static;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .modern-menu-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modern-menu-logo b {
+            color: var(--color-highlight-blue);
+            text-shadow: 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .modern-menu-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .modern-menu-nav {
+            padding: 10px 0 12px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+        }
+
+        /* 隐藏横向滚动条，避免误触 */
+        .modern-menu-content, .modern-menu-nav {
+            overflow-x: hidden;
+        }
+
+        .modern-menu-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modern-menu-item { margin: 0; }
+
+        .modern-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-menu-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .modern-menu-link:hover::before { left: 100%; }
+
+        .modern-menu-link:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(25, 111, 166, 0.03) 100%);
+            color: var(--color-highlight-blue);
+            border-left-color: var(--color-highlight-blue);
+            transform: translateX(5px);
+        }
+
+        .modern-menu-link i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .modern-menu-link:hover i { transform: scale(1.1); }
+
+        .modern-menu-link span {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .modern-menu-arrow {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            color: #999;
+        }
+
+        .modern-menu-arrow.expanded { transform: rotate(90deg); color: var(--color-highlight-blue); }
+
+        .modern-submenu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(25, 111, 166, 0.04) 0%, rgba(16, 73, 145, 0.01) 100%);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .modern-submenu.expanded { max-height: 300px; }
+
+        .modern-submenu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 30px 12px 69px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .modern-submenu-link:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.06) 0%, rgba(25, 111, 166, 0.02) 100%);
+            color: var(--color-highlight-blue);
+            border-left-color: var(--color-highlight-blue);
+        }
+
+        .modern-submenu-link i { width: 20px; margin-right: 12px; font-size: 16px; }
+
+        /* 菜单项图标颜色 - 统一设计 */
+        .modern-menu-item i {
+            color: #6b7280 !important;
+            transition: color 0.3s ease;
+        }
+
+        .modern-menu-link:hover i {
+            color: var(--color-highlight-blue) !important;
+            text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        /* 子菜单图标颜色 - 统一设计 */
+        .modern-submenu i {
+            color: #6b7280 !important;
+            transition: color 0.3s ease;
+        }
+
+        .modern-submenu-link:hover i {
+            color: var(--color-highlight-blue) !important;
+            text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .modern-menu-content { width: 78vw; max-width: 320px; }
+            .modern-menu-toggle {
+                top: 0.75rem; /* 与移动端导航栏padding一致 */
+                bottom: auto;
+                left: 12px;
+                padding: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .modern-menu-header {
+                padding: 0.75rem 1rem;
+                height: 65px;
+            }
+            .modern-menu-logo { font-size: 1.25rem; }
+            .modern-menu-link { padding: 12px 18px; }
+            .modern-submenu-link { padding: 10px 18px 10px 56px; }
+        }
+
+        /* 导出按钮样式 */
+        .export-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .export-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .export-btn:hover:before {
+            left: 100%;
+        }
+
+        .export-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .export-btn i {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .export-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .export-text {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .export-btn {
+                min-width: auto;
+                padding: 10px;
+            }
+            .export-text {
+                display: none;
+            }
+        }
+
+        /* 紧凑型导出按钮样式 */
+        .export-btn-compact {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .export-btn-compact:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.3s;
+        }
+
+        .export-btn-compact:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .export-btn-compact:hover:before {
+            left: 100%;
+        }
+
+        .export-btn-compact:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .export-btn-compact i {
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .export-btn-compact:hover i {
+            transform: scale(1.1);
+        }
+
+        /* 确保按钮高度一致 - 导出按钮已调整为35px匹配搜索按钮 */
+
+        /* Load More按钮样式 */
+        .btn-outline-primary {
+            border-radius: 20px;
+            padding: 8px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局菜单容器 -->
+    <div id="inno-global-menu"></div>
+
+    <!-- Vue App Container -->
+    <div id="app" v-cloak>
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                
+                
+                <p class="text-muted fw-medium">{{ t('loadingDealData') }}</p>
+            </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容区域 -->
+        <div class="container page-container">
+
+            <!-- 页面标题 -->
+            <div class="page-header" data-aos="fade-up">
+                <h1 class="page-title">{{ t('dealIsraelTitle') }}</h1>
+                <p class="page-subtitle">{{ t('dealIsraelSubtitle') }}</p>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="main-content" data-aos="fade-up">
+                <!-- Tab Navigation -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#inv">{{ t('investment') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#ma">{{ t('ma') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#ipo">{{ t('ipo') }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <!-- Investment Tab -->
+                        <div class="tab-pane fade show active" id="inv">
+                            <!-- Search Section -->
+                            <div class="search-section mb-4">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('startDate') }}</label>
+                                            <input type="text" class="form-control" id="start-day" :placeholder="t('startDate')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('endDate') }}</label>
+                                            <input type="text" class="form-control" id="end-day" :placeholder="t('endDate')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('category') }}</label>
+                                            <div class="custom-select" :class="{'loading': categoryData.length === 0}">
+                                                <select class="form-control" v-model="category_inv" v-if="categoryData.length > 0">
+                                                    <option value="">{{ t('allCategories') }}</option>
+                                                    <option v-for="category in categoryData" :key="category" :value="category">{{ category }}</option>
+                                                </select>
+                                                <select v-else class="form-control" disabled>
+                                                    <option>{{ t('loading') }}...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('fundingRound') }}</label>
+                                            <div class="custom-select">
+                                                <select class="form-control" v-model="fr">
+                                                    <option value="">{{ t('allRounds') }}</option>
+                                                    <option v-for="fr in frData" :key="fr" :value="fr">{{ fr }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('minAmount') }}</label>
+                                            <input type="text" class="form-control" id="min-amount" :placeholder="t('minAmount')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('maxAmount') }}</label>
+                                            <input type="text" class="form-control" id="max-amount" :placeholder="t('maxAmount')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('companyName') }}</label>
+                                            <input type="text" class="form-control" v-model="companyName_inv" :placeholder="t('companyName')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">&nbsp;</label>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" class="btn btn-primary flex-grow-1" @click="goInv">
+                                                    <i class="fas fa-search me-2"></i>{{ t('search') }}
+                                                </button>
+                                                <button type="button" class="export-btn-compact flex-shrink-0" @click="ExportResultInv" v-if="fundingData.length > 0" :title="t('exportToExcel')">
+                                                    <i class="fas fa-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Data Table -->
+                            <div class="data-section" :class="{'loading': showFlag && fundingData.length === 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-modern-header">
+                                            <tr>
+                                                <th><i class="fas fa-building me-2"></i>{{ t('company') }}</th>
+                                                <th><i class="fas fa-industry me-2"></i>{{ t('industry') }}</th>
+                                                <th><i class="fas fa-tag me-2"></i>{{ t('fundingRound') }}</th>
+                                                <th><i class="fas fa-dollar-sign me-2"></i>{{ t('amount') }}</th>
+                                                <th><i class="fas fa-calendar me-2"></i>{{ t('date') }}</th>
+                                                <th><i class="fas fa-users me-2"></i>{{ t('investors') }}</th>
+                                                <th><i class="fas fa-globe me-2"></i>{{ t('region') }}</th>
+                                                <th v-if="showNeedTrackFlag"><i class="fas fa-cogs me-2"></i>{{ t('actions') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, index) in fundingData" :key="item._id" :style="{'animation-delay': (index * 0.05) + 's'}">
+                                                <td>
+                                                    <a :href="getLinkUrl(item.company_id, 'Company')" target="_blank" class="company-link">
+                                                        <i class="fas fa-external-link-alt me-1"></i>
+                                                        {{item.company_name}}
+                                                    </a>
+                                                </td>
+                                                <td :title="item.industryStr">{{item.industryStr}}</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">{{item.funding_round}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="fw-bold text-success">{{item.money_raised}}</span>
+                                                </td>
+                                                <td>{{item.announced_on}}</td>
+                                                <td :title="item.investorStr">{{item.investorStr}}</td>
+                                                <td>{{item.country}}</td>
+                                                <td v-if="showNeedTrackFlag">
+                                                    <button class="btn btn-sm btn-outline-primary" @click="openAIInvestmentModal(item._id, item.company_name, 'inv', '')">
+                                                        <i class="fas fa-robot me-1"></i>{{ t('aiAnalysis') }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="fundingData.length === 0 && !showFlag">
+                                                <td :colspan="showNeedTrackFlag ? 8 : 7" class="text-center py-5">
+                                                    <div class="empty-state">
+                                                        <i class="fas fa-search"></i>
+                                                        <h4>{{ t('noDataFound') }}</h4>
+                                                        <p>{{ t('tryDifferentFilters') }}</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Loading Indicator -->
+                                <div class="loading-overlay" v-if="showFlag && fundingData.length === 0">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">{{ t('loading') }}</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">{{ t('loading') }}</p>
+                                </div>
+
+                                <!-- Load More -->
+                                <div class="text-center py-3" v-if="!showFlag && fundingData.length > 0">
+                                    <button type="button" class="btn btn-outline-primary" v-if="scrollFlag" @click="loadMoreInv">
+                                        <i class="fas fa-plus me-2"></i>{{ t('loadMore') }}
+                                    </button>
+                                    <span class="text-muted" v-else>
+                                        <i class="fas fa-check-circle me-2"></i>{{ t('allDataLoaded') }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- M&A Tab -->
+                        <div class="tab-pane fade" id="ma">
+                            <!-- Search Section -->
+                            <div class="search-section mb-4">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('startDate') }}</label>
+                                            <input type="text" class="form-control" id="start-day-ma" :placeholder="t('startDate')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('endDate') }}</label>
+                                            <input type="text" class="form-control" id="end-day-ma" :placeholder="t('endDate')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('category') }}</label>
+                                            <div class="custom-select" :class="{'loading': categoryData.length === 0}">
+                                                <select class="form-control" v-model="category_ma" v-if="categoryData.length > 0">
+                                                    <option value="">{{ t('allCategories') }}</option>
+                                                    <option v-for="category in categoryData" :key="category" :value="category">{{ category }}</option>
+                                                </select>
+                                                <select v-else class="form-control" disabled>
+                                                    <option>{{ t('loading') }}...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('companyName') }}</label>
+                                            <input type="text" class="form-control" v-model="companyName_ma" :placeholder="t('companyName')">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('minPrice') }}</label>
+                                            <input type="text" class="form-control" id="min-price" :placeholder="t('minPrice')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('maxPrice') }}</label>
+                                            <input type="text" class="form-control" id="max-price" :placeholder="t('maxPrice')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">&nbsp;</label>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" class="btn btn-primary flex-grow-1" @click="goMa">
+                                                    <i class="fas fa-search me-2"></i>{{ t('search') }}
+                                                </button>
+                                                <button type="button" class="export-btn-compact flex-shrink-0" @click="ExportResultMa" v-if="acquisitionData.length > 0" :title="t('exportToExcel')">
+                                                    <i class="fas fa-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Data Table -->
+                            <div class="data-section">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-modern-header">
+                                            <tr>
+                                                <th>{{ t('acquiredOrganization') }}</th>
+                                                <th>{{ t('acquiringOrganization') }}</th>
+                                                <th>{{ t('industry') }}</th>
+                                                <th>{{ t('price') }}</th>
+                                                <th>{{ t('date') }}</th>
+                                                <th>{{ t('region') }}</th>
+                                                <th v-if="showNeedTrackFlag">{{ t('actions') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in acquisitionData">
+                                                <td><a :href="'company_profile_israel.html?cId=' + item.acquiree_id" target="_blank">{{item.acquiree_name}}</a></td>
+                                                <td><a :href="'company_profile_israel.html?cId=' + item.acquirer_id" target="_blank">{{item.acquirer_name}}</a></td>
+                                                <td :title="item.industryStr">{{item.industryStr}}</td>
+                                                <td>{{item.price}}</td>
+                                                <td>{{item.announced_on}}</td>
+                                                <td>{{item.acquiree_country}}</td>
+                                                <td v-if="showNeedTrackFlag">
+                                                    <button class="btn btn-sm btn-outline-primary" @click="openAIInvestmentModal(item._id, item.acquiree_name, 'ma', '')">
+                                                        <i class="fas fa-robot me-1"></i>{{ t('aiAnalysis') }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Loading Indicator -->
+                                <div class="text-center py-4" v-if="showFlag">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">{{ t('loading') }}</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">{{ t('loading') }}</p>
+                                </div>
+
+                                <!-- Load More -->
+                                <div class="text-center py-3" v-if="!showFlag && acquisitionData.length > 0">
+                                    <button type="button" class="btn btn-outline-primary" v-if="scrollFlag" @click="loadMoreMa">
+                                        <i class="fas fa-plus me-2"></i>{{ t('loadMore') }}
+                                    </button>
+                                    <span class="text-muted" v-else>
+                                        <i class="fas fa-check-circle me-2"></i>{{ t('allDataLoaded') }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- IPO Tab -->
+                        <div class="tab-pane fade" id="ipo">
+                            <!-- Search Section -->
+                            <div class="search-section mb-4">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('startDate') }}</label>
+                                            <input type="text" class="form-control" id="start-day-ipo" :placeholder="t('startDate')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('endDate') }}</label>
+                                            <input type="text" class="form-control" id="end-day-ipo" :placeholder="t('endDate')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('stockExchange') }}</label>
+                                            <div class="custom-select" :class="{'loading': sesData.length === 0}">
+                                                <select class="form-control" v-model="ses" v-if="sesData.length > 0">
+                                                    <option value="">{{ t('allExchanges') }}</option>
+                                                    <option v-for="exchange in sesData" :key="exchange" :value="exchange.toLowerCase()">{{ exchange }}</option>
+                                                </select>
+                                                <select v-else class="form-control" disabled>
+                                                    <option>{{ t('loading') }}...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">&nbsp;</label>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" class="btn btn-primary flex-grow-1" @click="goIPO">
+                                                    <i class="fas fa-search me-2"></i>{{ t('search') }}
+                                                </button>
+                                                <button type="button" class="export-btn-compact flex-shrink-0" @click="ExportResultIPO" v-if="ipoData.length > 0" :title="t('exportToExcel')">
+                                                    <i class="fas fa-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Table -->
+                            <div class="data-section">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-modern-header">
+                                            <tr>
+                                                <th>{{ t('companyName') }}</th>
+                                                <th>{{ t('stockExchange') }}</th>
+                                                <th>{{ t('stockSymbol') }}</th>
+                                                <th>{{ t('moneyRaised') }}</th>
+                                                <th>{{ t('ipoDate') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in ipoData">
+                                                <td>{{getIPOCompanyName(item)}}</td>
+                                                <td>{{getIPOProperty(item, 'stock_exchange_symbol')}}</td>
+                                                <td>{{getIPOProperty(item, 'stock_symbol')}}</td>
+                                                <td>{{item.Price || 'N/A'}}</td>
+                                                <td>{{getIPOProperty(item, 'went_public_on')}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Loading Indicator -->
+                                <div class="text-center py-4" v-if="showFlag">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">{{ t('loading') }}</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">{{ t('loading') }}</p>
+                                </div>
+
+                                <!-- Load More -->
+                                <div class="text-center py-3" v-if="!showFlag && ipoData.length > 0">
+                                    <button type="button" class="btn btn-outline-primary" v-if="scrollFlag" @click="loadMoreIPO">
+                                        <i class="fas fa-plus me-2"></i>{{ t('loadMore') }}
+                                    </button>
+                                    <span class="text-muted" v-else>
+                                        <i class="fas fa-check-circle me-2"></i>{{ t('allDataLoaded') }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Investment Analysis Modal -->
+    <div class="modal fade" id="aiInvestmentModal" tabindex="-1" aria-labelledby="aiInvestmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aiInvestmentModalLabel">{{ t('aiInvestmentAnalysis') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="overlay">
+                        <div class="text-center">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">{{ t('analyzing') }}</span>
+                            </div>
+                            <p>{{ t('analyzing') }}</p>
+                        </div>
+                    </div>
+                    <div class="analysis-content" style="display: none;">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#aiInvestmentAnswerCN" type="button" role="tab">中文</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#aiInvestmentAnswerEN" type="button" role="tab">English</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade show active" id="aiInvestmentAnswerCN" role="tabpanel"></div>
+                            <div class="tab-pane fade" id="aiInvestmentAnswerEN" role="tabpanel"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="alert alert-warning mb-0" role="alert" style="display: none;">
+                        {{ t('adminOnly') }}
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('close') }}</button>
+                    <button type="button" class="btn btn-primary d-none" id="UnsatisfactoryCN">{{ t('reanalyze') }}</button>
+                    <button type="button" class="btn btn-primary d-none" id="UnsatisfactoryEN">{{ t('retryAnalysis') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Alert for Free Users -->
+        <div class="alert alert-warning alert-dismissible fade show position-fixed top-0 end-0 m-3" style="display: none;" role="alert">
+            <strong>{{ t('warning') }}!</strong> {{ t('exportWarning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.5/base64.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <!-- Axios for HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Vue Resource is not needed with Vue 3, using fetch API instead -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- Excel导出库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <!-- 通用工具函数 -->
+    <script src="common/js/common-utils.js"></script>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="js/deal_israel_vue3.js"></script>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+    </script>
+
+    <!-- Vue App Initialization -->
+    <script>
+        const { createApp } = Vue;
+
+        const DEFAULT_LANG = (localStorage.getItem('inno_lang') || 'zh').toLowerCase();
+        const FALLBACK_I18N = {
+            zh: {
+                loading: '加载中...',
+                loadingMore: '加载更多...',
+                loadMore: '加载更多',
+                allDataLoaded: '已加载全部数据',
+                theEnd: '-- 结束 --',
+                errorOccurred: '出现了一些问题，请',
+                clickRetry: '点击重试',
+                warning: '警告',
+                loadingDealData: '正在加载交易数据...'
+            },
+            en: {
+                loading: 'Loading...',
+                loadingMore: 'Loading more...',
+                loadMore: 'Load More',
+                allDataLoaded: 'All data loaded',
+                theEnd: '-- End --',
+                errorOccurred: 'Some error occurred, please',
+                clickRetry: 'click to retry',
+                warning: 'Warning',
+                loadingDealData: 'Loading deal data...'
+            }
+        };
+
+        createApp({
+            data() {
+                return {
+                    // i18n
+                    currentLang: DEFAULT_LANG,
+                    translations: FALLBACK_I18N[DEFAULT_LANG] || {},
+                    // UI state
+                    loading: true,
+                    // API and basic configuration
+                    country: 'Israel',
+                    startTime: '',
+                    endTime: '',
+                    category: '',
+                    fr: '',
+                    ses: '',
+                    type: 'inv',
+                    // Deal data arrays - initialize as empty arrays to avoid undefined errors
+                    fundingData: [],
+                    acquisitionData: [],
+                    ipoData: [],
+                    countryCode: [],
+                    categoryData: [],
+                    sesData: [],
+                    frData: ['Angel', 'Convertible Note', 'Corporate Round', 'Debt Financing', 'Equity Crowdfunding', 'Grant', 'Initial Coin Offering', 'Non Equity Assistance', 'Post Ipo Debt',
+                        'Post Ipo Equity', 'Post Ipo Secondary', 'Private Equity', 'Product Crowdfunding', 'Secondary Market', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D', 'Series E', 'Series F',
+                        'Series G', 'Series H', 'Series I', 'Undisclosed', 'Venture'],
+                    page: 1,
+                    showFlag: false,
+                    scrollFlag: true,
+                    minAmount: '',
+                    maxAmount: '',
+                    minPrice: '',
+                    maxPrice: '',
+                    countryName: 'Israel',
+                    country_inv: 'Israel',
+                    country_ma: 'Israel',
+                    country_ipo: 'Israel',
+                    countryName_inv: 'Israel',
+                    countryName_ma: 'Israel',
+                    countryName_ipo: 'Israel',
+                    category_inv: '',
+                    category_ma: '',
+                    companyName_inv: '',
+                    companyName_ma: '',
+                    searchType: 'inv',
+                    ipoType: 'ses',
+                    categoryMappingData: [],
+                    subIndustryData: [],
+                    subMaIndustryData: [],
+                    sub_industry: '',
+                    sub_industry_ma: '',
+                    showMoreInv: false,
+                    showMoreMa: false,
+                    showNeedTrackFlag: false,
+                    scrollHtml: '<i class="fa fa-spinner fa-spin"></i> Loading more...',
+                    _isAppInitialized: false,   // 应用初始化完成标志
+                    _isLoadingLock: false      // API调用锁定标志，防止重复调用
+                };
+            },
+            async mounted() {
+                try {
+                    await this.loadI18n();
+
+                    // Initialize the Vue app functionality from deal_israel_vue3.js
+                    if (window.DealIsraelApp) {
+                        window.DealIsraelApp.init(this);
+                    }
+
+                    // Load initial data based on URL parameters first
+                    this.loadInitialData();
+
+                    // Initialize data and filters after URL parameters are loaded
+                    this.initializeApp();
+
+                    // Wait for all initialization to complete
+                    await this.$nextTick();
+
+                    // Setup watchers and mark initialization as complete
+                    setTimeout(() => {
+                        this.setupWatchers();
+                        this._isAppInitialized = true;
+                    }, 300);
+
+                } catch (error) {
+                    console.error('Failed to initialize deal page:', error);
+                } finally {
+                    // Always hide loading regardless of success or error
+                    setTimeout(() => {
+                        this.loading = false;
+                    }, 500);
+                }
+            },
+            beforeUnmount() {
+                // Clean up if needed
+            },
+            methods: {
+                async loadI18n() {
+                    try {
+                        console.log('Loading i18n for language:', this.currentLang);
+                        const res = await axios.get('common/i18n/deal_israel.' + this.currentLang + '.json');
+                        console.log('i18n loaded successfully:', res.data);
+                        this.translations = { ...(FALLBACK_I18N[this.currentLang] || {}), ...(res.data || {}) };
+                    } catch (e) {
+                        console.error('Failed to load i18n:', e);
+                        console.log('Using fallback translations');
+                        this.translations = FALLBACK_I18N[this.currentLang] || {};
+                    }
+                },
+
+                // Initialize application configuration
+                initializeApp() {
+                    // Set up date pickers and form elements
+                    this.$nextTick(() => {
+                        this.InitFilter();
+                        this.initializeTabSwitching();
+                    });
+
+                    // Load configuration data
+                    this.loadConfigData();
+
+                    // Set up scroll event listener for infinite loading
+                    window.addEventListener('scroll', this.scrollFun);
+                },
+
+                // 原生select控件无需特殊初始化
+                initializeNativeSelects() {
+                    // Vue的v-model会自动处理数据绑定，无需额外初始化
+                },
+
+
+                // 原生select使用Vue的v-model，无需额外的watcher
+                setupWatchers() {
+                    // Vue的响应式系统会自动处理数据变化
+                },
+
+                // Initialize tab switching functionality
+                initializeTabSwitching() {
+                    const _self = this;
+                    $('ul.nav a').on('shown.bs.tab', function (e) {
+                        // 原生select无需重新初始化
+
+                        if (e.target.hash == '#inv') {
+                            _self.searchType = 'inv';
+                            _self.page = 1;
+                            _self.fundingData = [];
+                            _self.sub_industry = '';
+                            // 移除自动调用：_self.InitFundingList();
+                            console.log('切换到投资标签，等待用户搜索');
+                        }
+                        if (e.target.hash == '#ma') {
+                            _self.searchType = 'ma';
+                            _self.page = 1;
+                            _self.acquisitionData = [];
+                            // 移除自动调用：_self.InitAcquisitionList();
+                            console.log('切换到并购标签，等待用户搜索');
+                        }
+                        if (e.target.hash == '#ipo') {
+                            _self.searchType = 'ipo';
+                            _self.page = 1;
+                            _self.ipoData = [];
+                            // 移除自动调用：_self.InitIPOList();
+                            console.log('切换到IPO标签，等待用户搜索');
+                        }
+                    });
+                },
+
+                // Load initial data based on URL parameters
+                loadInitialData() {
+                    // Parse URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.startTime = urlParams.get('sd') || '';
+                    this.endTime = urlParams.get('ed') || '';
+                    this.category = urlParams.get('industry') || '';
+                    this.fr = urlParams.get('fr') || '';
+                    this.ses = urlParams.get('ses') || '';
+                    this.type = urlParams.get('type') || 'inv';
+
+                    // Set default dates if not provided (following original logic)
+                    if (!this.startTime || !this.endTime) {
+                        // Set default dates like the original code: 2025-07-01 to 2025-07-31
+                        this.startTime = '2025-07-01';
+                        this.endTime = '2025-07-31';
+                    }
+
+                    // Set date picker values
+                    this.$nextTick(() => {
+                        document.getElementById('start-day').value = this.startTime;
+                        document.getElementById('end-day').value = this.endTime;
+                    });
+
+                    // Load initial data based on type - 页面初始化时默认加载数据
+                    if (this.type === 'inv') {
+                        this.searchType = 'inv';
+                        this.country_inv = this.country;
+                        this.category_inv = this.category;
+                        this.InitFundingList();
+                        console.log('loadInitialData: 投资模式，加载默认数据');
+                    } else if (this.type === 'ma') {
+                        this.searchType = 'ma';
+                        this.country_ma = this.country;
+                        this.category_ma = this.category;
+                        this.InitAcquisitionList();
+                        console.log('loadInitialData: 并购模式，加载默认数据');
+                    } else if (this.type === 'ipo') {
+                        this.searchType = 'ipo';
+                        this.InitIPOList();
+                        console.log('loadInitialData: IPO模式，加载默认数据');
+                    }
+                },
+
+                // Load configuration data
+                loadConfigData() {
+                    const _self = this;
+
+                    // Load category data
+                    axios.get('../data/event_category.json').then(response => {
+                        this.categoryData = response.data;
+                    }).catch(error => {
+                        console.error('Error loading category data:', error);
+                    });
+
+                    // Load category mapping data from 1.json, 2.json, 3.json
+                    axios.get('../data/1.json').then(response => {
+                        response.data.data.items.forEach(item => {
+                            this.categoryMappingData.push(item);
+                        });
+                    }).catch(error => {
+                        console.error('Error loading 1.json:', error);
+                    });
+
+                    axios.get('../data/2.json').then(response => {
+                        response.data.data.items.forEach(item => {
+                            this.categoryMappingData.push(item);
+                        });
+                    }).catch(error => {
+                        console.error('Error loading 2.json:', error);
+                    });
+
+                    axios.get('../data/3.json').then(response => {
+                        response.data.data.items.forEach(item => {
+                            this.categoryMappingData.push(item);
+                        });
+                    }).catch(error => {
+                        console.error('Error loading 3.json:', error);
+                    });
+
+                    // Load stock exchange data
+                    axios.get('../data/stock_exchange_symbol.json').then(response => {
+                        this.sesData = response.data.sort().map(item => item.toUpperCase());
+                    }).catch(error => {
+                        console.error('Error loading stock exchange data:', error);
+                    });
+                },
+
+
+                // Format date helper
+                formatDate(date) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                },
+                t(key) {
+                    return this.translations[key] || key;
+                },
+                async toggleLang() {
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                    // Dispatch language change event for global menu
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
+                    await this.loadI18n();
+                    // Update global menu language
+                    if (window.InnoMenu) {
+                        await window.InnoMenu.setLang(this.currentLang);
+                    }
+                },
+                // Helper method to replace Vue 2 filters
+                getLinkUrl(value, type) {
+                    if (value) {
+                        if (type === 'Person') {
+                            return "person_israel.html?pId=" + value;
+                        } else {
+                            return "company_profile_israel.html?cId=" + value;
+                        }
+                    }
+                    return '#';
+                },
+                // Safe property access methods for IPO data
+                getIPOCompanyName(item) {
+                    try {
+                        return item.relationships.funded_company.item.properties.name || 'N/A';
+                    } catch (e) {
+                        return 'N/A';
+                    }
+                },
+                getIPOProperty(item, propName) {
+                    try {
+                        return item.properties[propName] || 'N/A';
+                    } catch (e) {
+                        return 'N/A';
+                    }
+                },
+
+                // API URL helper method
+                getApiUrl(endpoint) {
+                    return 'https://ai.innonation.io/inno_ai_services/api/' + endpoint;
+                },
+
+                // Get API token from cookie
+                getApiToken() {
+                    return this.getCookie('api_token');
+                },
+
+                // Get cookie value
+                getCookie(name) {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                    return null;
+                },
+
+                // Deal functionality methods
+                goInv() {
+                    console.log('goInv: 用户点击搜索按钮');
+                    this.page = 1;
+                    this.fundingData = [];
+                    this.sub_industry = '';
+                    this.subIndustryData = [];
+                    this.scrollFlag = true; // 重置为true，允许加载更多
+                    this._isLoadingLock = false; // 重置锁定状态
+                    this.minAmount = document.getElementById('min-amount').value;
+                    this.maxAmount = document.getElementById('max-amount').value;
+                    this.InitFundingList();
+                    if (this.category_inv.length > 0) {
+                        this.InitSubIndustryFilter();
+                    }
+                },
+
+                goMa() {
+                    console.log('goMa: 用户点击搜索按钮');
+                    this.page = 1;
+                    this.minPrice = document.getElementById('min-price').value;
+                    this.maxPrice = document.getElementById('max-price').value;
+                    this.acquisitionData = [];
+                    this.sub_industry_ma = '';
+                    this.subMaIndustryData = [];
+                    this.scrollFlag = true; // 重置为true，允许加载更多
+                    this._isLoadingLock = false; // 重置锁定状态
+                    this.InitAcquisitionList();
+                    if (this.category_ma.length > 0) {
+                        this.InitMaSubIndustryFilter();
+                    }
+                },
+
+                goIPO() {
+                    console.log('goIPO: 用户点击搜索按钮');
+                    this.page = 1;
+                    this.ipoData = [];
+                    this.scrollFlag = true; // 重置为true，允许加载更多
+                    this._isLoadingLock = false; // 重置锁定状态
+                    this.InitIPOList();
+                },
+
+                // API Methods for data loading
+                InitFundingList() {
+                    // 防重复调用检查
+                    if (this._isLoadingLock || this.showFlag) {
+                        console.log('InitFundingList: 阻止重复调用');
+                        return;
+                    }
+
+                    this._isLoadingLock = true; // 设置锁定
+                    console.log('InitFundingList: 开始调用，页码:', this.page);
+
+                    // Get date values from DOM, but fall back to the data values if DOM is empty
+                    const domStartDate = document.getElementById('start-day').value;
+                    const domEndDate = document.getElementById('end-day').value;
+
+                    this.startTime = domStartDate || this.startTime || '2025-07-01';
+                    this.endTime = domEndDate || this.endTime || '2025-07-31';
+                    let url = `Funding/Search?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&country=${this.countryName_inv}&industry=${this.category_inv}&fr=${this.fr}&sub_industry=${this.sub_industry}&company=${this.companyName_inv}`;
+
+                    if (this.minAmount) {
+                        url += `&amount_min=${this.minAmount}`;
+                    }
+                    if (this.maxAmount) {
+                        url += `&amount_max=${this.maxAmount}`;
+                    }
+
+                    this.showFlag = true;
+                    this.scrollFlag = false;
+
+                    // Add authentication headers if available
+                    const config = {
+                        headers: {}
+                    };
+
+                    const apiToken = this.getApiToken();
+                    if (apiToken) {
+                        config.headers['Authorization'] = 'Bearer ' + apiToken;
+                    }
+
+                    axios.get(this.getApiUrl(url), config).then(response => {
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            response.data.Data.data.forEach(item => {
+                                const investorArr = [];
+                                item.URL = 'javascript:;';
+                                if (item.source === 'cb') {
+                                    item.URL = `company_profile_israel.html?cId=${item.company_id}`;
+                                    item.detailURL = `funding_round_details_israel.html?id=${item._id}`;
+                                    item.investors.forEach(investor => {
+                                        investorArr.push(investor.name);
+                                    });
+                                }
+                                if (item.source === 'kr') {
+                                    item.URL = `startup_israel.html?id=${item.company_id}`;
+                                    item.detailURL = `startup_funding_details.html?id=${item.company_id}&round=${btoa(item.funding_round)}&time=${btoa(item.announced_on)}`;
+                                    item.investors.forEach(investor => {
+                                        investorArr.push(investor.name);
+                                    });
+                                }
+                                item.industryStr = item.industry.join(', ');
+                                item.investorStr = investorArr.join(', ');
+                                item.money_raised_accurate = (item.money_raised == null || item.money_raised === '') ? '0' : item.money_raised;
+                                item.money_raised = (item.money_raised == null || item.money_raised === '') ? '—' : '$' + this.formatNumber(item.money_raised);
+                                this.fundingData.push(item);
+                            });
+
+                            this.scrollFlag = true;
+                            if (this.page === response.data.Data.total_pages) {
+                                this.scrollFlag = false;
+                            }
+                        }
+                        this.showFlag = false;
+                        this._isLoadingLock = false; // 释放锁定
+                        console.log('InitFundingList: 调用完成');
+                    }).catch(error => {
+                        console.error('InitFundingList: 调用失败', error);
+                        this.showFlag = false;
+                        this._isLoadingLock = false; // 释放锁定
+                    });
+                },
+
+                InitAcquisitionList() {
+                    // 防重复调用检查
+                    if (this._isLoadingLock || this.showFlag) {
+                        console.log('InitAcquisitionList: 阻止重复调用');
+                        return;
+                    }
+
+                    this._isLoadingLock = true; // 设置锁定
+                    console.log('InitAcquisitionList: 开始调用，页码:', this.page);
+
+                    // Get date values from DOM, but fall back to the data values if DOM is empty
+                    const domStartDate = document.getElementById('start-day-ma').value;
+                    const domEndDate = document.getElementById('end-day-ma').value;
+
+                    this.startTime = domStartDate || this.startTime || '2025-07-01';
+                    this.endTime = domEndDate || this.endTime || '2025-07-31';
+                    let url = `Acquisition/SearchOpen?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&country=${this.countryName_ma}&industry=${this.category_ma}&sub_industry=${this.sub_industry_ma}&company=${this.companyName_ma}`;
+
+                    if (this.minPrice) {
+                        url += `&amount_min=${this.minPrice}`;
+                    }
+                    if (this.maxPrice) {
+                        url += `&amount_max=${this.maxPrice}`;
+                    }
+
+                    this.showFlag = true;
+                    this.scrollFlag = false;
+
+                    // Add authentication headers if available
+                    const config = {
+                        headers: {}
+                    };
+
+                    const apiToken = this.getApiToken();
+                    if (apiToken) {
+                        config.headers['Authorization'] = 'Bearer ' + apiToken;
+                    }
+
+                    axios.get(this.getApiUrl(url), config).then(response => {
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            response.data.Data.data.forEach(item => {
+                                item.industryStr = item.acquiree_industry.join(', ');
+                                item.price_accurate = (item.price == null || item.price === '') ? '0' : item.price;
+                                item.price = (item.price == null || item.price === '') ? '—' : '$' + this.formatNumber(item.price);
+                                item.acquiree_id = item.acquiree_uuid;
+                                item.acquirer_id = item.acquirer_uuid;
+                                this.acquisitionData.push(item);
+                            });
+
+                            this.scrollFlag = true;
+                            if (this.page === response.data.Data.total_pages) {
+                                this.scrollFlag = false;
+                            }
+                        }
+                        this.showFlag = false;
+                        this._isLoadingLock = false; // 释放锁定
+                        console.log('InitAcquisitionList: 调用完成');
+                    }).catch(error => {
+                        console.error('InitAcquisitionList: 调用失败', error);
+                        this.showFlag = false;
+                        this._isLoadingLock = false; // 释放锁定
+                    });
+                },
+
+                InitIPOList() {
+                    // 防重复调用检查
+                    if (this._isLoadingLock || this.showFlag) {
+                        console.log('InitIPOList: 阻止重复调用');
+                        return;
+                    }
+
+                    this._isLoadingLock = true; // 设置锁定
+                    console.log('InitIPOList: 开始调用，页码:', this.page);
+
+                    // Get date values from DOM, but fall back to the data values if DOM is empty
+                    const domStartDate = document.getElementById('start-day-ipo').value;
+                    const domEndDate = document.getElementById('end-day-ipo').value;
+
+                    this.startTime = domStartDate || this.startTime || '2025-07-01';
+                    this.endTime = domEndDate || this.endTime || '2025-07-31';
+                    let url = `IPO/SearchOpen?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&ses=${this.ses}&country=${this.countryName_ipo}`;
+
+                    this.showFlag = true;
+                    this.scrollFlag = false;
+
+                    // Add authentication headers if available
+                    const config = {
+                        headers: {}
+                    };
+
+                    const apiToken = this.getApiToken();
+                    if (apiToken) {
+                        config.headers['Authorization'] = 'Bearer ' + apiToken;
+                    }
+
+                    axios.get(this.getApiUrl(url), config).then(response => {
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            response.data.Data.data.forEach(item => {
+                                item.Price_accurate = (item.properties.money_raised_usd == null) ? '0' : item.properties.money_raised_usd;
+                                item.Price = (item.properties.money_raised_usd == null) ? '—' : '$' + this.formatNumber(item.properties.money_raised_usd);
+                                this.ipoData.push(item);
+                            });
+
+                            this.scrollFlag = true;
+                            if (this.page === response.data.Data.total_pages) {
+                                this.scrollFlag = false;
+                            }
+                        }
+                        this.showFlag = false;
+                        this._isLoadingLock = false; // 释放锁定
+                        console.log('InitIPOList: 调用完成');
+                    }).catch(error => {
+                        console.error('InitIPOList: 调用失败', error);
+                        this.showFlag = false;
+                        this._isLoadingLock = false; // 释放锁定
+                    });
+                },
+
+                // Excel导出相关功能
+                ExportResultInv() {
+                    if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
+                        alert('导出功能仅对付费用户开放');
+                        return;
+                    }
+
+                    if (this.fundingData.length > 0) {
+                        const exportData = [];
+                        this.fundingData.forEach(item => {
+                            const newItem = {
+                                Name: item.company_name,
+                                FundingStatus: item.funding_round,
+                                Industry: item.industry ? item.industry.join(', ') : '',
+                                Investors: item.investors ? (Array.isArray(item.investors) ? item.investors.map(inv => inv.name || inv).join(', ') : item.investors) : '',
+                                MoneyRaised: item.money_raised_accurate || item.money_raised || 0,
+                                Date: item.announced_on,
+                                Region: item.country
+                            };
+                            if (common.userGroup && common.userGroup.toLowerCase() == 'admin') {
+                                newItem.CompanyID = item._id;
+                                newItem.CompanyURL = "https://ai.innonation.io/dashboard/" + (item.URL || '').replace('html','aspx');
+                                newItem.FundingRoundURL = "https://ai.innonation.io/dashboard/" + (item.detailURL || '').replace('html', 'aspx');
+                            }
+                            exportData.push(newItem);
+                        });
+                        this.exportToExcel(exportData, "Investment_Search_Result.xlsx");
+                    }
+                },
+
+                ExportResultMa() {
+                    if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
+                        alert('导出功能仅对付费用户开放');
+                        return;
+                    }
+
+                    if (this.acquisitionData.length > 0) {
+                        const exportData = [];
+                        this.acquisitionData.forEach(item => {
+                            const newItem = {
+                                Acquired_Organization: item.acquiree_name,
+                                Acquiring_Organization: item.acquirer_name,
+                                Industry: item.acquiree_industry ? item.acquiree_industry.join(', ') : '',
+                                Pricing_$: item.price_accurate || item.price || 0,
+                                Date: item.announced_on,
+                                Region: item.acquiree_country
+                            };
+                            if (common.userGroup && common.userGroup.toLowerCase() == 'admin') {
+                                newItem.AcquiredOrgURL = "https://ai.innonation.io/dashboard/company_profile_israel.aspx?cId=" + item.acquiree_id;
+                                newItem.AcquiringOrgURL = "https://ai.innonation.io/dashboard/company_profile_israel.aspx?cId=" + item.acquirer_id;
+                                newItem.AcquisitionDetailURL = "https://ai.innonation.io/dashboard/acquisition_details_israel.aspx?id=" + item._id;
+                            }
+                            exportData.push(newItem);
+                        });
+                        this.exportToExcel(exportData, "Acquisition_Search_Result.xlsx");
+                    }
+                },
+
+                ExportResultIPO() {
+                    if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
+                        alert('导出功能仅对付费用户开放');
+                        return;
+                    }
+
+                    if (this.ipoData.length > 0) {
+                        const exportData = [];
+                        this.ipoData.forEach(item => {
+                            const newItem = {
+                                Company_Name: item.relationships?.funded_company?.item?.properties?.name || '',
+                                Stock_Exchange: item.properties?.stock_exchange_symbol || '',
+                                Stock_Symbol: item.properties?.stock_symbol || '',
+                                MoneyRaised_$: item.Price_accurate || 0,
+                                IPO_Date: item.properties?.went_public_on || ''
+                            };
+                            exportData.push(newItem);
+                        });
+                        this.exportToExcel(exportData, "IPO_Search_Result.xlsx");
+                    }
+                },
+
+                // 核心导出功能
+                exportToExcel(data, fileName) {
+                    if (!data || data.length === 0) {
+                        alert('没有数据可导出');
+                        return;
+                    }
+
+                    // 获取列标题
+                    const keys = Object.keys(data[0]);
+                    const firstRow = {};
+                    keys.forEach(key => {
+                        firstRow[key] = key;
+                    });
+
+                    // 将标题行插入到数据开头
+                    const exportData = [firstRow, ...data];
+
+                    // 转换数据为Excel格式
+                    const sheetsData = exportData.map((item, rowIndex) => {
+                        return keys.map((key, columnIndex) => {
+                            return {
+                                value: item[key],
+                                position: (columnIndex > 25 ? this.getCharCol(columnIndex) : String.fromCharCode(65 + columnIndex)) + (rowIndex + 1),
+                            };
+                        });
+                    }).flat();
+
+                    const content = {};
+                    sheetsData.forEach(item => {
+                        content[item.position] = { v: item.value };
+                    });
+
+                    const coordinate = Object.keys(content);
+                    const workBook = {
+                        SheetNames: ["SMART_MATCH"],
+                        Sheets: {
+                            "SMART_MATCH": Object.assign({}, content, { "!ref": coordinate[0] + ":" + coordinate[coordinate.length - 1] }),
+                        }
+                    };
+
+                    const excelData = XLSX.write(workBook, { bookType: "xlsx", bookSST: false, type: "binary" });
+                    const blob = new Blob([this.string2ArrayBuffer(excelData)], { type: "application/octet-stream" });
+                    saveAs(blob, fileName);
+                },
+
+                // 辅助函数：字符串转ArrayBuffer
+                string2ArrayBuffer(s) {
+                    const buf = new ArrayBuffer(s.length);
+                    const view = new Uint8Array(buf);
+                    for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                    return buf;
+                },
+
+                // 辅助函数：获取Excel列名
+                getCharCol(n) {
+                    let s = "";
+                    let m = 0;
+                    while (n > 0) {
+                        m = n % 26 + 1;
+                        s = String.fromCharCode(m + 64) + s;
+                        n = (n - m) / 26;
+                    }
+                    return s;
+                },
+
+                // Load More功能
+                loadMoreInv() {
+                    if (!this.scrollFlag || this.showFlag || this._isLoadingLock) {
+                        return;
+                    }
+                    console.log('loadMoreInv: 用户点击加载更多');
+                    this.page++;
+                    this.InitFundingList();
+                },
+
+                loadMoreMa() {
+                    if (!this.scrollFlag || this.showFlag || this._isLoadingLock) {
+                        return;
+                    }
+                    console.log('loadMoreMa: 用户点击加载更多');
+                    this.page++;
+                    this.InitAcquisitionList();
+                },
+
+                loadMoreIPO() {
+                    if (!this.scrollFlag || this.showFlag || this._isLoadingLock) {
+                        return;
+                    }
+                    console.log('loadMoreIPO: 用户点击加载更多');
+                    this.page++;
+                    this.InitIPOList();
+                },
+
+                // Format large numbers
+                formatNumber(num) {
+                    if (num >= 1000000000) {
+                        return (num / 1000000000).toFixed(1) + 'B';
+                    } else if (num >= 1000000) {
+                        return (num / 1000000).toFixed(1) + 'M';
+                    } else if (num >= 1000) {
+                        return (num / 1000).toFixed(1) + 'K';
+                    }
+                    return num.toString();
+                },
+
+                // Initialize sub-industry filter for Investment tab
+                InitSubIndustryFilter() {
+                    const _self = this;
+                    this.sub_industry = '';
+                    this.subIndustryData = [];
+
+                    $.each(this.categoryMappingData, function (index, item) {
+                        if ($.inArray(this.category_inv, item.properties.category_groups) > -1) {
+                            this.subIndustryData.push(item.properties.name);
+                        }
+                    }.bind(this));
+                },
+
+                // Initialize sub-industry filter for M&A tab
+                InitMaSubIndustryFilter() {
+                    const _self = this;
+                    this.sub_industry_ma = '';
+                    this.subMaIndustryData = [];
+
+                    $.each(this.categoryMappingData, function (index, item) {
+                        if ($.inArray(this.category_ma, item.properties.category_groups) > -1) {
+                            this.subMaIndustryData.push(item.properties.name);
+                        }
+                    }.bind(this));
+                },
+
+                // Scroll function for infinite loading
+                scrollFun() {
+                    // 完全禁用滚动加载功能，防止自动API调用
+                    // 用户明确要求只在点击搜索时调用API，不需要滚动加载
+                    console.log('scrollFun: 滚动加载已禁用，仅支持手动搜索');
+                    return;
+
+                    /* 原滚动加载逻辑已禁用
+                    if (this.showFlag || this._isLoadingLock) {
+                        return;
+                    }
+
+                    const winH = $(window).height();
+                    const pageH = $(document).height();
+                    const scrollT = $(window).scrollTop();
+                    const resultH = (pageH - winH - scrollT) / winH;
+
+                    if (resultH < 0.02) {
+                        if (this.scrollFlag && !this.showFlag && !this._isLoadingLock) {
+                            console.log('scrollFun: 触发滚动加载，页码:', this.page + 1);
+                            this.scrollFlag = false;
+                            this.page++;
+                            if (this.searchType == 'inv') {
+                                this.InitFundingList();
+                            } else if (this.searchType == 'ma') {
+                                this.InitAcquisitionList();
+                            } else if (this.searchType == 'ipo') {
+                                this.InitIPOList();
+                            }
+                        }
+                    }
+                    */
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

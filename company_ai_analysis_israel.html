@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>公司AI分析 - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <!-- 页面特定样式 -->
+    <link rel="stylesheet" href="css/company_ai_analysis_israel.css">
+
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+
+        /* 语言切换按钮 */
+        .language-switch {
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-white);
+            color: var(--text-color);
+        }
+
+        .language-switch:hover {
+            background-color: var(--color-light-blue);
+        }
+
+
+       
+
+        /* 页面容器 */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* 卡片样式 */
+        .analysis-card {
+            background-color: var(--background-white);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-base);
+            overflow: hidden;
+        }
+
+        .analysis-card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            background: linear-gradient(135deg, var(--color-light-blue) 0%, var(--background-white) 100%);
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--color-brand-blue);
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* 表单样式 */
+        .form-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: start;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .form-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                gap: 2rem;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .required-star {
+            color: var(--error-color);
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--background-white);
+            color: var(--text-color);
+            transition: all var(--transition-base);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-brand-blue);
+            box-shadow: 0 0 0 3px rgba(25, 111, 166, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* 文件上传样式 */
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 160px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--background-white);
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .file-upload-wrapper:hover,
+        .file-upload-wrapper.dragover {
+            border-color: var(--color-brand-blue);
+            background-color: var(--color-light-blue);
+        }
+
+        .file-upload-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-content {
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--color-brand-blue);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .selected-file-container {
+            background: var(--background-light);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .file-info i {
+            color: var(--color-brand-blue);
+            font-size: 1.25rem;
+        }
+
+        .delete-file-btn {
+            background: none;
+            border: none;
+            color: var(--error-color);
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-base);
+        }
+
+        .delete-file-btn:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        /* 表单组样式优化 */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 希伯来语选项的特殊布局 */
+        .hebrew-selection-group {
+            background: var(--background-light);
+            padding: 1.25rem;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .hebrew-selection-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .hebrew-selection-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin: 0;
+            min-width: 120px;
+        }
+
+        .hebrew-select {
+            min-width: 80px;
+        }
+
+        .helper-text {
+            font-size: 0.875rem;
+            color: var(--light-text);
+            line-height: 1.4;
+            margin: 0;
+            padding-left: 0;
+        }
+
+        /* 提交按钮区域 */
+        .submit-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 按钮样式 */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-deep-blue) 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--color-deep-blue) 0%, var(--color-brand-blue) 100%);
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 介绍文字样式 */
+        .intro-section {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-white) 100%);
+            border-radius: var(--border-radius-lg);
+            border-left: 4px solid var(--color-brand-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(25, 111, 166, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .intro-section h3 {
+            color: var(--color-brand-blue);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .intro-section h3 i {
+            font-size: 1.1rem;
+        }
+
+        .intro-section p {
+            margin-bottom: 1.25rem;
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .intro-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .intro-section strong {
+            color: var(--color-deep-blue);
+            font-weight: 600;
+        }
+
+        /* 加载状态 */
+        .loading-container {
+            margin-top: 2rem;
+            padding: 3rem;
+            background: var(--background-white);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .loading-spinner .dot {
+            width: 12px;
+            height: 12px;
+            background: var(--color-brand-blue);
+            border-radius: 50%;
+            animation: bounce 0.6s alternate infinite;
+        }
+
+        .loading-spinner .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-spinner .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+
+        .loading-text {
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        /* 结果展示 */
+        .result-container {
+            margin-top: 2rem;
+            background: var(--background-white);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .results-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 0;
+        }
+
+        .result-panel {
+            padding: 2rem;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .result-panel:last-child {
+            border-right: none;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--color-brand-blue);
+        }
+
+        .result-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            transition: all var(--transition-base);
+        }
+
+        .result-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--color-brand-blue);
+            min-width: 100px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .result-content {
+            color: var(--text-color);
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        /* 通知样式 */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .notification {
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            box-shadow: var(--card-shadow);
+            animation: slideInRight 0.3s ease;
+        }
+
+        .notification.success {
+            background-color: #f0f9eb;
+            color: var(--success-color);
+            border: 1px solid #b3e19d;
+        }
+
+        .notification.error {
+            background-color: #fef0f0;
+            color: var(--error-color);
+            border: 1px solid #fbc4c4;
+        }
+
+        .notification i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Vue 隐藏 */
+        [v-cloak] {
+            display: none !important;
+        }
+
+        /* 页面初始加载样式增强 */
+        .spinner-border {
+            width: 3rem !important;
+            height: 3rem !important;
+            border-width: 0.3em !important;
+        }
+
+        .text-primary {
+            color: var(--color-brand-blue) !important;
+        }
+
+        /* 加载遮罩动画 */
+        .loading-overlay-enter-active {
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay-leave-active {
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay-enter-from,
+        .loading-overlay-leave-to {
+            opacity: 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+
+            .page-container {
+                padding: 0 0.75rem;
+            }
+
+            .card-header,
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .hebrew-selection-group {
+                padding: 1rem;
+            }
+
+            .hebrew-selection-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .hebrew-selection-label {
+                min-width: auto;
+            }
+
+            .intro-section {
+                padding: 1.75rem;
+            }
+
+            .intro-section h3 {
+                font-size: 1.125rem;
+            }
+
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .results-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .result-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .result-panel:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* 小屏幕优化 */
+        @media (max-width: 480px) {
+            .card-header,
+            .card-body {
+                padding: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .hebrew-selection-group {
+                padding: 0.875rem;
+            }
+
+            .intro-section {
+                padding: 1.25rem;
+            }
+
+            .btn-primary {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局菜单挂载点 -->
+    <div id="inno-global-menu"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                INNONATION <b>AI</b>
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <div class="language-switch" @click="toggleLang">
+                    <i class="fa-solid fa-globe"></i>
+                    <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Vue 应用挂载点 -->
+    <div id="app" v-cloak>
+        <!-- 初始加载状态 -->
+        <div v-if="pageLoading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="spinner-border text-primary mb-3" role="status" style="color: var(--color-brand-blue) !important;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="text-muted fw-medium">
+                    {{ currentLang === 'cn' ? '正在加载页面...' : 'Loading page...' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="page-container">
+                <!-- 分析卡片 -->
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <h1 class="card-title">
+                            <i class="fas fa-brain"></i>
+                            {{ currentLang === 'cn' ? '公司智能分析报告' : 'AI Powered Company Analysis Report' }}
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-section">
+                            <!-- 表单区域 -->
+                            <div class="form-area">
+                                <form @submit.prevent="analyze('CompanyAIAnalysisSplit')">
+                                    <!-- 公司名称 -->
+                                    <div class="form-group">
+                                        <label for="company_name">
+                                            {{ currentLang === 'cn' ? '公司名称' : 'Company Name' }}
+                                            <span class="required-star">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="company_name"
+                                            v-model="company_name"
+                                            required
+                                            :placeholder="currentLang === 'cn' ? '请输入公司名称' : 'Enter company name'"
+                                        >
+                                    </div>
+
+                                    <!-- 希伯来语输出选项 -->
+                                    <div class="hebrew-selection-group">
+                                        <div class="hebrew-selection-row">
+                                            <label for="output_hebrew" class="hebrew-selection-label">
+                                                {{ currentLang === 'cn' ? '希伯来语输出' : 'Hebrew Output' }}
+                                            </label>
+                                            <select class="form-control hebrew-select" id="output_hebrew" v-model="output_hebrew">
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="helper-text">
+                                            {{ currentLang === 'cn' ? '结果包含中文和英文，如需希伯来语版本请选择YES。' : 'Result is in Chinese and English, please choose YES if you also need in Hebrew version.' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- 公司介绍 -->
+                                    <div class="form-group">
+                                        <label for="company_introduction">
+                                            {{ currentLang === 'cn' ? '公司相关素材（推荐）' : 'Company Materials (Recommend)' }}
+                                        </label>
+                                        <textarea
+                                            class="form-control"
+                                            id="company_introduction"
+                                            v-model="company_introcution"
+                                            rows="6"
+                                            :placeholder="currentLang === 'cn' ? '请输入公司介绍、产品信息或其他相关材料...' : 'Enter company introduction, product information or other relevant materials...'"
+                                        ></textarea>
+                                    </div>
+
+                                    <!-- 文件上传 -->
+                                    <div class="form-group">
+                                        <label for="file-upload">
+                                            {{ currentLang === 'cn' ? '上传公司相关附件（可选）' : 'Upload company file（Optional）' }}
+                                        </label>
+                                        <div class="file-upload-wrapper" id="upload-wrapper">
+                                            <input
+                                                type="file"
+                                                class="file-upload-input"
+                                                id="file-upload"
+                                                @change="onFileSelected"
+                                                accept=".txt,.doc,.docx,.pdf"
+                                            >
+                                            <div class="file-upload-content" v-if="!selectedFile">
+                                                <i class="fas fa-cloud-upload upload-icon"></i>
+                                                <div class="upload-text">
+                                                    {{ currentLang === 'cn' ? '点击或拖拽文件到此处' : 'Click or drag files here' }}
+                                                </div>
+                                                <div class="upload-hint">
+                                                    {{ currentLang === 'cn' ? '支持 .txt, .doc, .docx, .pdf 格式' : 'Support .txt, .doc, .docx, .pdf formats' }}
+                                                </div>
+                                            </div>
+                                            <div v-if="selectedFile" class="selected-file-container">
+                                                <div class="file-info">
+                                                    <i class="fas fa-file-text"></i>
+                                                    <span class="file-name">{{ selectedFile.name }}</span>
+                                                </div>
+                                                <button type="button"
+                                                        class="delete-file-btn"
+                                                        @click.prevent.stop="deleteFile"
+                                                        :title="currentLang === 'cn' ? '删除文件' : 'Delete file'">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- URL输入 -->
+                                    <div class="form-group">
+                                        <label for="URL_official_web">
+                                            {{ currentLang === 'cn' ? '公司网站链接（可选）' : 'Company website link (Optional)' }}
+                                        </label>
+                                        <input
+                                            type="url"
+                                            class="form-control"
+                                            id="URL_official_web"
+                                            v-model="URL_official_web"
+                                            :placeholder="currentLang === 'cn' ? 'https://example.com' : 'https://example.com'"
+                                        >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="URL_anylink">
+                                            {{ currentLang === 'cn' ? '相关链接（可选）' : 'Related link (Optional)' }}
+                                        </label>
+                                        <input
+                                            type="url"
+                                            class="form-control"
+                                            id="URL_anylink"
+                                            v-model="URL_anylink"
+                                            :placeholder="currentLang === 'cn' ? '新闻报道、介绍文章等链接' : 'News articles, introduction links, etc.'"
+                                        >
+                                    </div>
+
+                                    <!-- 提交按钮 -->
+                                    <div class="submit-section">
+                                        <button type="submit" class="btn btn-primary" :disabled="loading">
+                                            <span v-if="loading">
+                                                <i class="fas fa-spinner fa-spin"></i>
+                                                {{ currentLang === 'cn' ? '分析中...' : 'Analyzing...' }}
+                                            </span>
+                                            <span v-else>
+                                                <i class="fas fa-rocket"></i>
+                                                {{ currentLang === 'cn' ? '开始分析' : 'Start Analysis' }}
+                                            </span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 介绍区域 -->
+                            <div class="intro-section">
+                                <h3>
+                                    <i class="fas fa-lightbulb"></i>
+                                    {{ currentLang === 'cn' ? '工具介绍' : 'About This Tool' }}
+                                </h3>
+                                <p>
+                                    {{ currentLang === 'cn'
+                                        ? '公司简介生成器是一款智能工具，帮助您快速生成高质量、多语言版本的公司简介，适用于需要简短而专业的公司介绍的使用场景（如演讲、报告、官网等）。'
+                                        : 'The company profile generator is an intelligent tool that helps you quickly generate high-quality company profiles in multiple languages. It is applicable to usage scenarios where brief yet professional company introductions are needed (such as in speeches, reports, official websites, etc.).'
+                                    }}
+                                </p>
+
+                                <h4 style="color: var(--color-deep-blue); font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 1rem 0;">
+                                    {{ currentLang === 'cn' ? '使用方式：' : 'How to Use:' }}
+                                </h4>
+
+                                <p>
+                                    <strong>
+                                        {{ currentLang === 'cn'
+                                            ? '1. 直接输入：'
+                                            : '1. Direct Input:'
+                                        }}
+                                    </strong>
+                                    {{ currentLang === 'cn'
+                                        ? '输入公司名称和相关材料到文本框中。'
+                                        : 'Enter the company name and paste relevant materials into the text box.'
+                                    }}
+                                </p>
+                                <p>
+                                    <strong>
+                                        {{ currentLang === 'cn'
+                                            ? '2. 上传文档：'
+                                            : '2. Upload Documents:'
+                                        }}
+                                    </strong>
+                                    {{ currentLang === 'cn'
+                                        ? '支持上传PDF、Word等文档，自动提取并优化内容。'
+                                        : 'Upload files to extract company information and refine content.'
+                                    }}
+                                </p>
+                                <p>
+                                    <strong>
+                                        {{ currentLang === 'cn'
+                                            ? '3. 提供链接：'
+                                            : '3. Submit Links:'
+                                        }}
+                                    </strong>
+                                    {{ currentLang === 'cn'
+                                        ? '提供公司网站、新闻报道等链接，自动提取关键信息。'
+                                        : 'Provide company websites or news links for automatic information extraction.'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 加载状态 -->
+                        <div v-if="loading" class="loading-container">
+                            <div class="loading-spinner">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                            <div class="loading-text">
+                                {{ currentLang === 'cn' ? '正在分析公司信息...' : 'Analyzing company information...' }}
+                            </div>
+                        </div>
+
+                        <!-- 结果展示 -->
+                        <div v-if="isResultDisplayed" class="result-container">
+                            <div class="results-wrapper">
+                                <div class="result-panel">
+                                    <h4 class="panel-title">中文结果</h4>
+                                    <div class="panel-content" v-html="chineseResult"></div>
+                                </div>
+                                <div class="result-panel">
+                                    <h4 class="panel-title">English Result</h4>
+                                    <div class="panel-content" v-html="englishResult"></div>
+                                </div>
+                                <div class="result-panel" v-if="hebrewResult">
+                                    <h4 class="panel-title">תוצאה בעברית</h4>
+                                    <div class="panel-content" v-html="hebrewResult"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知容器 -->
+    <div id="notification-container"></div>
+
+    <!-- JavaScript 库 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <!-- 页面逻辑 -->
+    <script>
+        const { createApp } = Vue;
+
+        // API 请求重试函数
+        const makeAnalysisRequestWithRetry = async (url, formData, maxRetries = 5) => {
+            for (let retry = 0; retry < maxRetries; retry++) {
+                try {
+                    const response = await axios({
+                        method: 'post',
+                        url: url,
+                        data: formData,
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                        timeout: 600000
+                    });
+
+                    return response;
+                } catch (error) {
+                    if (retry === maxRetries - 1) {
+                        throw error;
+                    }
+
+                    const retryDelay = Math.min(2000 * Math.pow(2, retry), 30000);
+                    const loadingText = app.currentLang === 'cn'
+                        ? `请求重试中 (${retry + 1}/${maxRetries})...`
+                        : `Retrying request (${retry + 1}/${maxRetries})...`;
+
+                    document.querySelector('.loading-text').textContent = loadingText;
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                }
+            }
+        };
+
+        const app = createApp({
+            data() {
+                return {
+                    currentLang: 'cn',
+                    pageLoading: true,  // 页面初始加载状态
+                    URL_official_web: '',
+                    company_name: '',
+                    company_introcution: '',
+                    URL_anylink: '',
+                    output_hebrew: 'no',
+                    loading: false,     // 分析过程加载状态
+                    isResultDisplayed: false,
+                    selectedFile: null,
+                    chineseResult: '',
+                    englishResult: '',
+                    hebrewResult: '',
+                    // API 域名配置
+                    APIDomain: 'https://ai.innonation.io/inno_ai_services'
+                }
+            },
+
+            mounted() {
+                // 模拟页面加载过程
+                this.initializePage();
+            },
+
+            methods: {
+                async initializePage() {
+                    try {
+                        // 初始化语言
+                        this.currentLang = localStorage.getItem('inno_lang') || 'cn';
+                        document.getElementById('lang-text').textContent = this.currentLang === 'cn' ? '中文' : 'EN';
+
+                        // 等待DOM完全加载
+                        await this.$nextTick();
+
+                        // 初始化文件上传
+                        this.initializeFileUpload();
+
+                        // 初始化 AOS 动画
+                        AOS.init({
+                            duration: 800,
+                            easing: 'ease-in-out',
+                            once: true
+                        });
+
+                        // 确保全局菜单已初始化
+                        await this.initializeGlobalMenu();
+
+                        // 模拟加载时间，让用户看到loading效果
+                        await new Promise(resolve => setTimeout(resolve, 800));
+
+                        // 页面加载完成
+                        this.pageLoading = false;
+
+                        // 确保页面滚动到顶部
+                        this.$nextTick(() => {
+                            window.scrollTo(0, 0);
+                        });
+
+                    } catch (error) {
+                        console.error('Page initialization failed:', error);
+                        // 即使出错也要隐藏loading
+                        this.pageLoading = false;
+                    }
+                },
+
+                async initializeGlobalMenu() {
+                    return new Promise((resolve) => {
+                        // 给菜单组件一点时间加载
+                        setTimeout(() => {
+                            if (window.InnoGlobalMenu) {
+                                console.log('Initializing InnoGlobalMenu...');
+                                window.InnoGlobalMenu.init().then(() => {
+                                    console.log('InnoGlobalMenu initialized successfully');
+                                    resolve();
+                                }).catch((error) => {
+                                    console.error('InnoGlobalMenu initialization failed:', error);
+                                    // 如果自动初始化失败，尝试手动重新初始化
+                                    setTimeout(() => {
+                                        window.InnoGlobalMenu.init().catch(console.error);
+                                    }, 1000);
+                                    resolve(); // 不阻塞页面加载
+                                });
+                            } else {
+                                console.warn('InnoGlobalMenu not available');
+                                resolve();
+                            }
+                        }, 100);
+                    });
+                },
+
+                toggleLang() {
+                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                    document.getElementById('lang-text').textContent = this.currentLang === 'cn' ? '中文' : 'EN';
+                },
+
+                initializeFileUpload() {
+                    const wrapper = document.getElementById('upload-wrapper');
+                    if (!wrapper) return;
+
+                    wrapper.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        wrapper.classList.add('dragover');
+                    });
+
+                    wrapper.addEventListener('dragleave', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        wrapper.classList.remove('dragover');
+                    });
+
+                    wrapper.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        wrapper.classList.remove('dragover');
+
+                        const file = e.dataTransfer.files[0];
+                        if (file) {
+                            const allowedTypes = ['.txt', '.doc', '.docx', '.pdf'];
+                            const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+
+                            if (allowedTypes.includes(fileExtension)) {
+                                this.selectedFile = file;
+                                const fileInput = document.getElementById('file-upload');
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(file);
+                                fileInput.files = dataTransfer.files;
+                            }
+                        }
+                    });
+                },
+
+                onFileSelected(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.selectedFile = file;
+                        document.getElementById('upload-wrapper').classList.remove('dragover');
+                    }
+                },
+
+                deleteFile() {
+                    this.selectedFile = null;
+                    const fileInput = document.getElementById('file-upload');
+                    if (fileInput) {
+                        fileInput.value = '';
+                    }
+                },
+
+                async analyze(apiName) {
+                    this.loading = true;
+                    this.isResultDisplayed = false;
+                    this.chineseResult = '';
+                    this.englishResult = '';
+                    this.hebrewResult = '';
+
+                    // 验证公司名称
+                    if (!this.company_name.trim()) {
+                        document.getElementById('company_name').style.borderColor = 'var(--error-color)';
+                        this.loading = false;
+                        await this.showNotification(
+                            this.currentLang === 'cn' ? '公司名必须填写' : 'Company name is required',
+                            'error'
+                        );
+                        return;
+                    } else {
+                        document.getElementById('company_name').style.borderColor = '';
+                    }
+
+                    // 检查至少有一个数据来源
+                    const hasUrl = this.URL_official_web?.trim() || this.URL_anylink?.trim();
+                    const hasIntro = this.company_introcution?.trim();
+                    const hasFile = this.selectedFile;
+
+                    if (!hasUrl && !hasIntro && !hasFile) {
+                        this.loading = false;
+                        await this.showNotification(
+                            this.currentLang === 'cn'
+                                ? '请至少提供以下一项：\n1. 公司相关素材\n2. 上传公司相关附件\n3. 网络连接'
+                                : 'Please provide at least one of the following:\n1. Company materials\n2. Upload company files\n3. Network links',
+                            'error'
+                        );
+
+                        // 标记为空的输入为红色
+                        if (!hasUrl) {
+                            document.getElementById('URL_official_web').style.borderColor = 'var(--error-color)';
+                            document.getElementById('URL_anylink').style.borderColor = 'var(--error-color)';
+                        }
+                        if (!hasIntro) {
+                            document.getElementById('company_introduction').style.borderColor = 'var(--error-color)';
+                        }
+                        if (!hasFile) {
+                            document.getElementById('upload-wrapper').style.borderColor = 'var(--error-color)';
+                        }
+                        return;
+                    }
+
+                    // 重置输入框样式
+                    document.getElementById('URL_official_web').style.borderColor = '';
+                    document.getElementById('URL_anylink').style.borderColor = '';
+                    document.getElementById('company_introduction').style.borderColor = '';
+                    document.getElementById('upload-wrapper').style.borderColor = '';
+
+                    try {
+                        const formData = new FormData();
+                        formData.append('URL_official_web', this.URL_official_web);
+                        formData.append('company_name', this.company_name);
+                        formData.append('company_introcution', this.company_introcution);
+                        formData.append('URL_anylink', this.URL_anylink);
+                        formData.append('Other_Language', this.output_hebrew);
+
+                        if (this.selectedFile) {
+                            formData.append('upload', this.selectedFile);
+                        }
+
+                        const url = this.APIDomain + '/api/AI/' + apiName;
+                        const response = await makeAnalysisRequestWithRetry(url, formData);
+
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            const obj = response.data.Data;
+
+                            this.chineseResult = `
+                                <div class="result-item">
+                                    <span class="result-label">公司名：</span>
+                                    <span class="result-content">${this.company_name}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">细分领域：</span>
+                                    <span class="result-content">${obj.Company_focus_cn || '未知'}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">简要描述：</span>
+                                    <span class="result-content">${obj.Chinese_short || '暂无数据'}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">公司介绍：</span>
+                                    <span class="result-content">${obj.Chinese_long || '暂无数据'}</span>
+                                </div>`;
+
+                            this.englishResult = `
+                                <div class="result-item">
+                                    <span class="result-label">Company:</span>
+                                    <span class="result-content">${this.company_name}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Focus:</span>
+                                    <span class="result-content">${obj.Company_focus_en || 'Unknown'}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Brief:</span>
+                                    <span class="result-content">${obj.English_short || 'No data available'}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Company Profile:</span>
+                                    <span class="result-content">${obj.English_long || 'No data available'}</span>
+                                </div>`;
+
+                            if (obj.Hebrew_short && obj.Hebrew_short.trim()) {
+                                this.hebrewResult = `
+                                <div class="result-item">
+                                    <span class="result-label">חֶברָה:</span>
+                                    <span class="result-content">${this.company_name}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">מוֹקֵד:</span>
+                                    <span class="result-content">${obj.Company_focus_Hebrew || 'לא ידוע'}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">קָצָר:</span>
+                                    <span class="result-content">${obj.Hebrew_short}</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">פרופיל חברה:</span>
+                                    <span class="result-content">${obj.Hebrew_long || 'אין נתונים זמינים'}</span>
+                                </div>`;
+                            }
+
+                            this.isResultDisplayed = true;
+                            this.$nextTick(() => {
+                                this.scrollToBottom();
+                            });
+                        } else {
+                            await this.showNotification(
+                                response.data.Message || (this.currentLang === 'cn' ? '未知错误' : 'Unknown error'),
+                                'error'
+                            );
+                        }
+                    } catch (error) {
+                        console.error('Analysis failed:', error);
+                        let errorMsg;
+                        if (error.code === 'ECONNABORTED') {
+                            errorMsg = this.currentLang === 'cn' ? '请求超时，请稍后重试' : 'Request timeout, please try again later';
+                        } else if (error.response) {
+                            errorMsg = this.currentLang === 'cn' ? `请求失败: ${error.response.status}` : `Request failed: ${error.response.status}`;
+                        } else if (error.request) {
+                            errorMsg = this.currentLang === 'cn' ? '网络连接失败，请检查网络' : 'Network connection failed, please check your network';
+                        } else {
+                            errorMsg = this.currentLang === 'cn' ? '请求发生错误：' + (error.message || '未知错误') : 'Request error: ' + (error.message || 'Unknown error');
+                        }
+                        await this.showNotification(errorMsg, 'error');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                scrollToBottom() {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: document.body.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                },
+
+                async showNotification(message, type) {
+                    const container = document.getElementById('notification-container');
+
+                    const notification = document.createElement('div');
+                    notification.className = 'notification ' + type;
+
+                    const icon = document.createElement('i');
+                    icon.className = 'fas ' + (type === 'success' ? 'fa-check-circle' :
+                        type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
+                    notification.appendChild(icon);
+
+                    const text = document.createElement('span');
+                    text.textContent = message;
+                    notification.appendChild(text);
+
+                    container.appendChild(notification);
+
+                    setTimeout(function () {
+                        notification.style.animation = 'fadeOut 0.5s ease-out';
+                        setTimeout(function () {
+                            if (container.contains(notification)) {
+                                container.removeChild(notification);
+                            }
+                        }, 500);
+                    }, type === 'error' ? 4000 : 3000);
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>

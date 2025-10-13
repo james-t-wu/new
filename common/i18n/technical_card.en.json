@@ -1,0 +1,21 @@
+{
+    "title": "Smart Match Tech Encyclopedia",
+    "searchPlaceholder": "Search technology keywords...",
+    "searchButton": "Search Technology",
+    "checkingCompanies": "Checking Israeli companies related to displayed technology...",
+    "searchingText": "Checking Israeli companies related to displayed technology...",
+    "noResults": "No related technology found",
+    "loading": "Loading...",
+    "error": "Loading failed, please try again",
+    "techCardTitle": "Technology Card",
+    "techExplanation": "Technology Explanation",
+    "relatedCompanies": "Related Companies",
+    "viewDetails": "View Details",
+    "startAnalysis": "Start Analysis",
+    "aiAnalysis": "AI Analysis",
+    "aiAnalysisDesc": "Get AI-driven technology insights",
+    "chineseAnalysis": "Chinese Analysis",
+    "englishAnalysis": "English Analysis",
+    "aiAnalyzing": "AI is analyzing...",
+    "aiAnalysisReport": "AI Analysis Report"
+}

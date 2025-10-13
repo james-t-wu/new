@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>融资轮详情 - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+    <link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- 页面特定样式 -->
+    <link rel="stylesheet" href="css/funding_round_details_israel.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(25, 111, 166, 0.1);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #196fa6 !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand b {
+            color: #104991;
+        }
+
+        /* 语言切换按钮 */
+        .language-switch {
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-white);
+            color: var(--text-color);
+            height: 40px;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .language-switch:hover {
+            background-color: var(--color-light-blue);
+        }
+
+        /* 页面容器 */
+        .page-container {
+            padding-top: 100px;
+            padding-bottom: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 卡片标题 */
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title i {
+            color: var(--color-brand-blue);
+        }
+
+        /* Vue隐藏未编译模板 */
+        [v-cloak] {
+            display: none;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--light-text);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局菜单挂载点 -->
+    <div id="inno-global-menu"></div>
+
+    <!-- Vue 应用挂载点 -->
+    <div id="app" v-cloak>
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                
+                
+                <p class="text-muted fw-medium">{{ t('loading') || 'Loading funding round details...' }}</p>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="container page-container">
+
+            <!-- 融资轮基本信息卡片 -->
+            <div class="funding-details-card" data-aos="fade-up">
+                <div class="funding-header">
+                    <div class="funding-logo"
+                         :class="{ 'gradient-bg': !normalizeLogoUrl(fundingRoundData.Image) }"
+                         :style="normalizeLogoUrl(fundingRoundData.Image) ? `background-image: url('${normalizeLogoUrl(fundingRoundData.Image)}')` : ''">
+                        <span v-if="!normalizeLogoUrl(fundingRoundData.Image)">
+                            {{ getInitials(fundingRoundData.Name) }}
+                        </span>
+                    </div>
+                    <div class="funding-title-container">
+                        <h2 style="text-transform: capitalize;">{{ fundingRoundData.Series }} - {{ fundingRoundData.Name }}</h2>
+                        <p class="funding-subtitle">{{ t('pageTitle') }}</p>
+                    </div>
+                </div>
+
+                <!-- 融资轮详细信息 -->
+                <div class="info-row">
+                    <div class="info-label">{{ t('organizationName') }}:</div>
+                    <div class="info-value">
+                        <div class="company-link-container">
+                            <div class="company-mini-logo"
+                                 :class="{ 'gradient-bg': !normalizeLogoUrl(fundingRoundData.Image) }"
+                                 :style="normalizeLogoUrl(fundingRoundData.Image) ? `background-image: url('${normalizeLogoUrl(fundingRoundData.Image)}')` : ''">
+                                <span v-if="!normalizeLogoUrl(fundingRoundData.Image)">
+                                    {{ getInitials(fundingRoundData.Name) }}
+                                </span>
+                            </div>
+                            <a :href="getCompanyLink()" target="_blank" class="company-name-link">
+                                {{ fundingRoundData.Name }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('announcedDate') }}:</div>
+                    <div class="info-value">{{ formatDate(fundingRoundData.properties?.announced_on) }}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('fundingType') }}:</div>
+                    <div class="info-value" style="text-transform: capitalize;">{{ fundingRoundData.Series }}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('fundingStage') }}:</div>
+                    <div class="info-value" style="text-transform: capitalize;">{{ fundingRoundData.Stage }}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('moneyRaised') }}:</div>
+                    <div class="info-value highlight">{{ fundingRoundData.Price }}</div>
+                </div>
+            </div>
+
+            <!-- 领投方卡片 -->
+            <div v-if="fundingRoundData.ShowLeadInvestors" class="funding-details-card" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-star"></i>
+                    {{ t('leadInvestor') }}
+                </h3>
+                <div class="lead-investors-grid">
+                    <a v-for="investor in leadInvestors"
+                       :key="investor.uuid"
+                       :href="investor.link"
+                       target="_blank"
+                       class="investor-card text-decoration-none">
+                        <div class="investor-logo"
+                             :class="{ 'gradient-bg': !normalizeLogoUrl(investor.profile_image_url) }"
+                             :style="normalizeLogoUrl(investor.profile_image_url) ? `background-image: url('${normalizeLogoUrl(investor.profile_image_url)}')` : ''">
+                            <span v-if="!normalizeLogoUrl(investor.profile_image_url)">
+                                {{ getInitials(investor.Name) }}
+                            </span>
+                        </div>
+                        <div class="investor-name">{{ investor.Name }}</div>
+                        <div class="investor-description" v-if="investor.investors_description">
+                            {{ investor.investors_description }}
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 投资方列表卡片 -->
+            <div v-if="fundingRoundData.Investments && fundingRoundData.Investments.length > 0"
+                 class="funding-details-card"
+                 data-aos="fade-up"
+                 data-aos-delay="200">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-users"></i>
+                    {{ t('investors') }} ({{ fundingRoundData.Investments.length }})
+                </h3>
+                <div class="investors-table">
+                    <div class="investor-list-item" v-for="investor in fundingRoundData.Investments" :key="investor.uuid">
+                        <div class="investor-info">
+                            <a :href="investor.link" target="_blank" class="text-decoration-none d-flex align-items-center gap-3 flex-1">
+                                <div class="investor-list-logo"
+                                     :class="{ 'gradient-bg': !normalizeLogoUrl(investor.profile_image_url) }"
+                                     :style="normalizeLogoUrl(investor.profile_image_url) ? `background-image: url('${normalizeLogoUrl(investor.profile_image_url)}')` : ''">
+                                    <span v-if="!normalizeLogoUrl(investor.profile_image_url)">
+                                        {{ getInitials(investor.Name) }}
+                                    </span>
+                                </div>
+                                <span class="investor-list-name">{{ investor.Name }}</span>
+                            </a>
+                        </div>
+                        <div class="partner-name" v-if="investor.PartnerName">
+                            {{ investor.PartnerName }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新闻列表卡片 -->
+            <div v-if="fundingRoundData.relationships?.news?.paging?.total_items > 0"
+                 class="funding-details-card"
+                 data-aos="fade-up"
+                 data-aos-delay="300">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-newspaper"></i>
+                    {{ t('news') }} ({{ fundingRoundData.relationships.news.paging.total_items }})
+                </h3>
+                <div class="news-list">
+                    <div class="news-list-item" v-for="newsItem in fundingRoundData.relationships.news.items" :key="newsItem.uuid">
+                        <div class="news-date">{{ formatDate(newsItem.properties.posted_on) }}</div>
+                        <div class="news-content">
+                            <a :href="newsItem.properties.url" target="_blank" class="news-title">
+                                {{ newsItem.properties.title }}
+                            </a>
+                        </div>
+                        <div class="news-actions" v-if="showOperationNewsFlag">
+                            <i class="fas fa-edit news-action-btn"
+                               @click="openUpdateNewsModal(newsItem.uuid, newsItem.properties.url, newsItem.properties.title, newsItem.properties.posted_on)"
+                               title="Edit"></i>
+                            <i class="fas fa-trash-alt news-action-btn delete"
+                               @click="openDeleteNewsModal(newsItem.uuid)"
+                               title="Delete"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4" v-if="fundingRoundData.relationships.news.paging.total_items > 10">
+                    <a href="javascript:;" class="view-all-btn">
+                        {{ t('viewAll') }}
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 创建新闻模态框 -->
+        <div class="modal fade" id="createNewsModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ t('createNews') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{ t('title') }}</label>
+                            <input type="text" class="form-control" v-model="createForm.title" :placeholder="t('enterTitle')">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ t('url') }}</label>
+                            <input type="text" class="form-control" v-model="createForm.url" :placeholder="t('enterURL')">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ t('date') }}</label>
+                            <input type="date" class="form-control" v-model="createForm.date">
+                        </div>
+                        <div v-if="createForm.error" class="warning-message">
+                            {{ createForm.error }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="handleCreateNews" :disabled="createForm.loading">
+                            <span v-if="createForm.loading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('create') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 更新新闻模态框 -->
+        <div class="modal fade" id="updateNewsModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ t('updateNews') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{ t('title') }}</label>
+                            <input type="text" class="form-control" v-model="updateForm.title" :placeholder="t('enterTitle')">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ t('url') }}</label>
+                            <input type="text" class="form-control" v-model="updateForm.url" :placeholder="t('enterURL')">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ t('date') }}</label>
+                            <input type="date" class="form-control" v-model="updateForm.date">
+                        </div>
+                        <div v-if="updateForm.error" class="warning-message">
+                            {{ updateForm.error }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="handleUpdateNews" :disabled="updateForm.loading">
+                            <span v-if="updateForm.loading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('update') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 删除新闻模态框 -->
+        <div class="modal fade" id="deleteNewsModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ t('confirmDelete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ t('confirmDeleteMessage') }}</p>
+                        <div v-if="deleteForm.error" class="warning-message">
+                            {{ deleteForm.error }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('cancel') }}</button>
+                        <button type="button" class="btn btn-danger" @click="handleDeleteNews" :disabled="deleteForm.loading">
+                            <span v-if="deleteForm.loading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('delete') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS 动画 -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <!-- Vue 应用逻辑 -->
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    loading: true,
+                    currentLang: 'zh',
+                    translations: {},
+                    fundingRoundData: {
+                        Series: '',
+                        Name: '',
+                        Stage: '',
+                        Price: '—',
+                        Image: '',
+                        properties: {},
+                        relationships: {
+                            funded_organization: { item: { properties: {}, type: '' } },
+                            investments: { items: [] },
+                            news: { items: [], paging: { total_items: 0 } }
+                        },
+                        Investments: [],
+                        ShowLeadInvestors: false
+                    },
+                    showOperationNewsFlag: false,
+                    cId: '',
+                    frId: '',
+                    createForm: {
+                        title: '',
+                        url: '',
+                        date: '',
+                        error: '',
+                        loading: false
+                    },
+                    updateForm: {
+                        id: '',
+                        title: '',
+                        url: '',
+                        date: '',
+                        error: '',
+                        loading: false
+                    },
+                    deleteForm: {
+                        id: '',
+                        error: '',
+                        loading: false
+                    }
+                }
+            },
+
+            computed: {
+                leadInvestors() {
+                    return (this.fundingRoundData.Investments || []).filter(inv => inv.properties?.is_lead_investor);
+                }
+            },
+
+            methods: {
+                // 国际化翻译
+                t(key) {
+                    return this.translations[key] || key;
+                },
+
+                // 切换语言
+                async toggleLang() {
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                    await this.loadTranslations();
+                },
+
+                // 加载翻译
+                async loadTranslations() {
+                    try {
+                        const response = await fetch(`common/i18n/funding_round_details_israel.${this.currentLang}.json`);
+                        this.translations = await response.json();
+                    } catch (error) {
+                        console.error('Failed to load translations:', error);
+                    }
+                },
+
+                // 获取 URL 参数
+                getUrlParam(name) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(name);
+                },
+
+                // 获取首字母
+                getInitials(name) {
+                    if (!name) return '?';
+                    const words = name.trim().split(' ');
+                    if (words.length >= 2) {
+                        return (words[0][0] + words[1][0]).toUpperCase();
+                    }
+                    return name.substring(0, 2).toUpperCase();
+                },
+
+                // 标准化 Logo URL（处理 Crunchbase 图片路径）
+                normalizeLogoUrl(value) {
+                    if (!value) return '';
+                    try {
+                        if (value.indexOf('/image/t_api_images/') > -1)
+                            return value.replace('/image/t_api_images', 'https://images.crunchbase.com/image/upload');
+                        if (value.indexOf('res.cloudinary.com/crunchbase-production') > -1)
+                            return value.replace('res.cloudinary.com/crunchbase-production', 'images.crunchbase.com');
+                        if (value.indexOf('/res_image') > -1)
+                            return value.replace('/res_image', 'https://images.crunchbase.com/image');
+                        return value;
+                    } catch(e) {
+                        return value;
+                    }
+                },
+
+                // 格式化日期
+                formatDate(dateString) {
+                    if (!dateString) return this.t('na');
+                    const date = new Date(dateString);
+                    if (isNaN(date.getTime())) return this.t('na');
+                    return date.toISOString().split('T')[0];
+                },
+
+                // 获取公司链接
+                getCompanyLink() {
+                    const item = this.fundingRoundData.relationships?.funded_organization?.item;
+                    if (!item) return 'javascript:;';
+
+                    const uuid = item.uuid;
+                    const type = item.type;
+
+                    if (type === 'Person') {
+                        return `person_israel.html?pId=${uuid}`;
+                    }
+                    return `company_profile_israel.html?cId=${uuid}`;
+                },
+
+                // 转换融资阶段
+                convertStage(type, series) {
+                    if (series == null) {
+                        if (type === 'seed' || type === 'angel') {
+                            return 'Seed Round';
+                        }
+                        return type;
+                    } else {
+                        if (series === 'A' || series === 'B') {
+                            return 'Early Stage Venture';
+                        }
+                        return 'Late Stage Venture';
+                    }
+                },
+
+                // 格式化金额
+                nFormatter(num, digits) {
+                    if (!num || num === 0) return '—';
+
+                    const lookup = [
+                        { value: 1, symbol: '' },
+                        { value: 1e3, symbol: 'K' },
+                        { value: 1e6, symbol: 'M' },
+                        { value: 1e9, symbol: 'B' },
+                        { value: 1e12, symbol: 'T' }
+                    ];
+
+                    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+                    const item = lookup.slice().reverse().find(item => num >= item.value);
+
+                    return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
+                },
+
+                // 初始化融资轮数据
+                async initFundingRound() {
+                    this.loading = true;
+                    try {
+                        const apiDomain = 'https://ai.innonation.io/inno_ai_services';
+                        const url = `${apiDomain}/api/Company/GetFundingDetail?frId=${this.frId}`;
+
+                        const response = await axios.get(url);
+
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            const data = response.data.Data;
+                            this.fundingRoundData = data;
+                            this.cId = data.relationships.funded_organization.item.uuid;
+
+                            // 处理融资系列和阶段
+                            const fundingType = data.properties.funding_type || '';
+                            const series = data.properties.series;
+
+                            this.fundingRoundData.Series = fundingType.replace(/_/g, ' ') +
+                                (series ? ` Series ${series}` : '');
+                            this.fundingRoundData.Stage = this.convertStage(fundingType, series);
+
+                            // 处理名称
+                            const item = data.relationships.funded_organization.item;
+                            if (item.properties.name) {
+                                this.fundingRoundData.Name = item.properties.name;
+                            } else {
+                                let name = '';
+                                if (item.properties.first_name) name += item.properties.first_name;
+                                if (item.properties.last_name) name += ' ' + item.properties.last_name;
+                                this.fundingRoundData.Name = name.trim();
+                            }
+
+                            // 处理图片
+                            this.fundingRoundData.Image = item.properties.profile_image_url;
+
+                            // 处理金额
+                            const moneyRaised = data.properties.money_raised_usd;
+                            this.fundingRoundData.Price = (moneyRaised == null || moneyRaised === '')
+                                ? '—'
+                                : '$' + this.nFormatter(moneyRaised, 2);
+
+                            // 处理投资方
+                            if (data.relationships.investments) {
+                                this.fundingRoundData.Investments = data.relationships.investments.items || [];
+                                this.fundingRoundData.ShowLeadInvestors = false;
+
+                                this.fundingRoundData.Investments.forEach(item => {
+                                    if (item.properties.is_lead_investor) {
+                                        this.fundingRoundData.ShowLeadInvestors = true;
+                                    }
+
+                                    const investor = item.relationships.investors.item || item.relationships.investors;
+                                    item.profile_image_url = investor.properties?.profile_image_url || investor.profile_image_url;
+                                    item.investors_type = investor.type;
+                                    item.investors_description = investor.properties?.description || investor.description;
+
+                                    // 处理投资方名称
+                                    if (investor.properties?.name || investor.name) {
+                                        item.Name = investor.properties?.name || investor.name;
+                                    } else {
+                                        let name = '';
+                                        const props = investor.properties || investor;
+                                        if (props.first_name) name += props.first_name;
+                                        if (props.last_name) name += ' ' + props.last_name;
+                                        item.Name = name.trim();
+                                    }
+
+                                    // 设置链接
+                                    item.link = 'javascript:;';
+                                    if (investor.type === 'Organization') {
+                                        item.link = `company_profile_israel.html?cId=${investor.uuid}`;
+                                    } else if (investor.type === 'Person') {
+                                        item.link = `person_israel.html?pId=${investor.uuid}`;
+                                    }
+
+                                    // 处理合伙人信息
+                                    const partners = item.relationships.partners?.items || item.relationships.partners;
+                                    if (partners && partners.length > 0) {
+                                        const partner = partners[0];
+                                        if (partner.properties?.name) {
+                                            item.PartnerName = partner.properties.name;
+                                        } else {
+                                            let pName = '';
+                                            if (partner.properties?.first_name) pName += partner.properties.first_name;
+                                            if (partner.properties?.last_name) pName += ' ' + partner.properties.last_name;
+                                            item.PartnerName = pName.trim();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Failed to load funding round data:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                // 打开创建新闻模态框
+                openCreateNewsModal() {
+                    this.createForm = {
+                        title: '',
+                        url: '',
+                        date: '',
+                        error: '',
+                        loading: false
+                    };
+                    new bootstrap.Modal(document.getElementById('createNewsModal')).show();
+                },
+
+                // 处理创建新闻
+                async handleCreateNews() {
+                    this.createForm.loading = true;
+                    this.createForm.error = '';
+
+                    try {
+                        const apiDomain = 'https://israel.innonation.com';
+                        const response = await axios.post(
+                            `${apiDomain}/api/Company/InsertNews`,
+                            {
+                                title: this.createForm.title,
+                                url: this.createForm.url,
+                                posted_on: this.createForm.date,
+                                cId: this.cId
+                            },
+                            {
+                                headers: { 'UserId': localStorage.getItem('userId') || '' }
+                            }
+                        );
+
+                        if (response.data.ReturnCode === 0) {
+                            bootstrap.Modal.getInstance(document.getElementById('createNewsModal')).hide();
+                            window.location.reload();
+                        } else {
+                            this.createForm.error = response.data.Message;
+                        }
+                    } catch (error) {
+                        this.createForm.error = error.message;
+                    } finally {
+                        this.createForm.loading = false;
+                    }
+                },
+
+                // 打开更新新闻模态框
+                openUpdateNewsModal(id, url, title, date) {
+                    this.updateForm = {
+                        id: id,
+                        title: title,
+                        url: url,
+                        date: date,
+                        error: '',
+                        loading: false
+                    };
+                    new bootstrap.Modal(document.getElementById('updateNewsModal')).show();
+                },
+
+                // 处理更新新闻
+                async handleUpdateNews() {
+                    this.updateForm.loading = true;
+                    this.updateForm.error = '';
+
+                    try {
+                        const apiDomain = 'https://israel.innonation.com';
+                        const response = await axios.post(
+                            `${apiDomain}/api/Company/UpdateFundingRoundNews`,
+                            {
+                                id: this.updateForm.id,
+                                title: this.updateForm.title,
+                                url: this.updateForm.url,
+                                posted_on: this.updateForm.date,
+                                cId: this.cId,
+                                collectionId: this.frId,
+                                collection: 'cb_funding_round_details'
+                            },
+                            {
+                                headers: { 'UserId': localStorage.getItem('userId') || '' }
+                            }
+                        );
+
+                        if (response.data.ReturnCode === 0) {
+                            bootstrap.Modal.getInstance(document.getElementById('updateNewsModal')).hide();
+                            window.location.reload();
+                        } else {
+                            this.updateForm.error = response.data.Message;
+                        }
+                    } catch (error) {
+                        this.updateForm.error = error.message;
+                    } finally {
+                        this.updateForm.loading = false;
+                    }
+                },
+
+                // 打开删除新闻模态框
+                openDeleteNewsModal(id) {
+                    this.deleteForm = {
+                        id: id,
+                        error: '',
+                        loading: false
+                    };
+                    new bootstrap.Modal(document.getElementById('deleteNewsModal')).show();
+                },
+
+                // 处理删除新闻
+                async handleDeleteNews() {
+                    this.deleteForm.loading = true;
+                    this.deleteForm.error = '';
+
+                    try {
+                        const apiDomain = 'https://israel.innonation.com';
+                        const response = await axios.post(
+                            `${apiDomain}/api/Company/DeleteFundingRoundNews`,
+                            {
+                                id: this.deleteForm.id,
+                                cId: this.cId,
+                                collectionId: this.frId,
+                                collection: 'cb_funding_round_details'
+                            },
+                            {
+                                headers: { 'UserId': localStorage.getItem('userId') || '' }
+                            }
+                        );
+
+                        if (response.data.ReturnCode === 0) {
+                            bootstrap.Modal.getInstance(document.getElementById('deleteNewsModal')).hide();
+                            window.location.reload();
+                        } else {
+                            this.deleteForm.error = response.data.Message;
+                        }
+                    } catch (error) {
+                        this.deleteForm.error = error.message;
+                    } finally {
+                        this.deleteForm.loading = false;
+                    }
+                }
+            },
+
+            async mounted() {
+                // 初始化 AOS 动画
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    offset: 100
+                });
+
+                // 获取语言设置
+                this.currentLang = localStorage.getItem('inno_lang') || 'zh';
+
+                // 加载翻译
+                await this.loadTranslations();
+
+                // 获取融资轮 ID
+                this.frId = this.getUrlParam('id');
+
+                // 检查用户权限
+                const userGroup = localStorage.getItem('userGroup') || '';
+                if (userGroup.toLowerCase() === 'admin') {
+                    this.showOperationNewsFlag = true;
+                }
+
+                // 初始化数据
+                if (this.frId) {
+                    await this.initFundingRound();
+                }
+
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>AI Search - Innonation</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- Frameworks and Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Common Styles -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- Page-specific Styles -->
+    <link rel="stylesheet" href="css/ai_search_israel.css">
+
+</head>
+<body>
+    <!-- Global Menu -->
+    <div id="inno-global-menu"></div>
+
+    <div id="app" v-cloak>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ t(currentLang === 'zh' ? 'EN' : 'ZH') }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container page-container">
+            <div class="row main-layout">
+                <div class="col-lg-7 col-md-12">
+                    <div class="chat-wrapper">
+                        <header class="chat-header">
+                            <h5 class="chat-title">{{ t('smart-match-ai-assistant') }}</h5>
+                            <button class="new-chat-btn" @click="startNewQuestion" :disabled="isThinking">
+                                <i class="fas fa-plus"></i>
+                                <span>{{ t('new-chat') }}</span>
+                            </button>
+                        </header>
+                        <div class="chat-container" ref="chatContainer">
+                            <div v-for="(message, index) in messages" :key="index" :class="['message', message.type + '-message']">
+                                <div v-if="message.type === 'ai'" class="avatar ai-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div v-if="message.type === 'ai'" class="message-content" v-html="message.content"></div>
+                                <div v-if="message.type === 'question'" @click="handleQuickQuestion(message.content)" class="quick-question-btn" v-html="message.content"></div>
+                                <div v-if="message.type === 'user'" class="message-content" v-html="message.content"></div>
+                                <div v-if="message.type === 'user'" class="avatar user-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" v-model="userInput" @keyup.enter="sendMessage" :placeholder="inputPlaceholder" :disabled="isThinking">
+                            <button class="send-btn" @click="sendMessage" :disabled="isThinking || !userInput.trim()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12">
+                    <div class="info-panel">
+                        <div class="text-center mb-3">
+                            <img src="https://innonation.oss-cn-beijing.aliyuncs.com/report/img/assistant.png" alt="Assistant" class="assistant-img">
+                            <h5 class="mt-2">{{ t('small-assistant') }}</h5>
+                        </div>
+                        <p class="mb-3">{{ t('assistant-welcome') }} <i class="fa fa-search ms-1"></i></p>
+                        <p><b>{{ t('assistant-function') }}</b></p>
+                        <ul>
+                            <li>{{ t('assistant-function1') }}</li>
+                            <li>{{ t('assistant-function2') }}</li>
+                            <li>{{ t('assistant-function3') }}</li>
+                        </ul>
+                        <p class="mt-3"><b>{{ t('assistant-ask') }}</b></p>
+                        <ul>
+                            <li>{{ t('assistant-ask1') }}</li>
+                            <li>{{ t('assistant-ask2') }}</li>
+                            <li>{{ t('assistant-ask3') }}</li>
+                            <li>{{ t('assistant-ask4') }}</li>
+                        </ul>
+                        <p class="mt-3" v-html="t('link-to-search')"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <script>
+    // 确保菜单按钮隐藏逻辑正常工作
+    document.addEventListener('DOMContentLoaded', function() {
+        // 等待菜单初始化完成
+        setTimeout(() => {
+            const menuContainer = document.querySelector('#inno-global-menu');
+            const toggleBtn = menuContainer?.querySelector('.modern-menu-toggle');
+            const modal = menuContainer?.querySelector('.modern-menu-modal');
+
+            if (toggleBtn && modal) {
+                // 监听菜单状态变化
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const isActive = modal.classList.contains('active');
+                            toggleBtn.style.display = isActive ? 'none' : '';
+                        }
+                    });
+                });
+
+                observer.observe(modal, { attributes: true });
+            }
+        }, 1000);
+    });
+    </script>
+
+    <script>
+        const { createApp, nextTick } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    currentLang: localStorage.getItem('inno_lang') || 'zh',
+                    translations: {},
+                    messages: [],
+                    userInput: '',
+                    isThinking: false,
+                    isTyping: false,
+                    inputPlaceholder: '',
+                    apiDomain: 'https://ai.innonation.io/inno_ai_services',
+                    currentConversationId: null,
+                    isNewConversation: true
+                }
+            },
+            async mounted() {
+                await this.loadI18n();
+                this.setInitialMessages();
+                // 设置输入框焦点
+                this.$nextTick(() => {
+                    const input = document.querySelector('input[type="text"]');
+                    if (input) input.focus();
+                });
+            },
+            methods: {
+                async loadI18n() {
+                    try {
+                        const response = await axios.get('../data/locale.json');
+                        // 根据当前语言选择正确的翻译对象
+                        const langKey = this.currentLang === 'zh' ? 'cn' : 'en';
+                        this.translations = response.data[langKey] || {};
+                        this.inputPlaceholder = this.t('assistant-ask');
+                    } catch (error) {
+                        console.error('Failed to load i18n:', error);
+                        // 设置默认翻译
+                        this.translations = {};
+                    }
+                },
+                t(key) {
+                    return this.translations[key] || key;
+                },
+                async toggleLang() {
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
+                    await this.loadI18n();
+                    this.startNewQuestion();
+                },
+                setInitialMessages() {
+                    this.messages = [
+                        { type: 'ai', content: this.t('ai-greeting') },
+                        { type: 'question', content: this.t('ai-question1') },
+                        { type: 'question', content: this.t('ai-question2') },
+                    ];
+                },
+                async sendMessage() {
+                    if (!this.userInput.trim() || this.isThinking || this.isTyping) return;
+
+                    const userMessage = this.userInput;
+                    this.messages.push({ type: 'user', content: userMessage });
+                    this.userInput = '';
+                    this.scrollToBottom();
+                    this.getAIResponse(userMessage);
+                },
+                startNewQuestion() {
+                    this.messages = [];
+                    this.setInitialMessages();
+                    this.currentConversationId = null;
+                    this.isNewConversation = true;
+                },
+                handleQuickQuestion(question) {
+                    this.userInput = question;
+                    this.sendMessage();
+                },
+                scrollToBottom() {
+                    nextTick(() => {
+                        const container = this.$refs.chatContainer;
+                        if (container) {
+                            container.scrollTop = container.scrollHeight;
+                        }
+                    });
+                },
+                formatMessage(text) {
+                    // 处理代码块 ```code```
+                    text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+
+                    // 处理行内代码 `code`
+                    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+                    // 处理粗体 **text** 或 __text__
+                    text = text.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+
+                    // 处理斜体 *text* 或 _text_ (避免与列表符号冲突)
+                    text = text.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>');
+                    text = text.replace(/(?<!_)_([^_\n]+)_(?!_)/g, '<em>$1</em>');
+
+                    // 处理标题 (支持 h1 到 h6)
+                    text = text.replace(/^(#{1,6})\s+(.*?)$/gm, function (match, hashes, content) {
+                        const level = hashes.length;
+                        return `<h${level}>${content}</h${level}>`;
+                    });
+
+                    // 处理有序列表
+                    text = text.replace(/^\d+\.\s+(.*?)$/gm, '<li>$1</li>');
+
+                    // 处理无序列表
+                    text = text.replace(/^[\*\-\+]\s+(.*?)$/gm, '<li>$1</li>');
+
+                    // 将连续的 <li> 标签包装在 <ul> 中
+                    text = text.replace(/(<li>.*?<\/li>)(\s*<li>.*?<\/li>)*/g, function(match) {
+                        return '<ul>' + match + '</ul>';
+                    });
+
+                    // 处理 Markdown 格式的链接
+                    text = text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+                    // 处理删除线
+                    text = text.replace(/~~(.*?)~~/g, '<del>$1</del>');
+
+                    // 处理水平线
+                    text = text.replace(/^(?:[-*_]){3,}$/gm, '<hr>');
+
+                    // 处理引用
+                    text = text.replace(/^>\s+(.*?)$/gm, '<blockquote>$1</blockquote>');
+
+                    // 替换换行符为 HTML 换行
+                    text = text.replace(/\n/g, '<br>');
+
+                    return text;
+                },
+                typeMessage(message, messageIndex) {
+                    let i = 0;
+                    const self = this;
+
+                    function type() {
+                        if (i < message.length) {
+                            // 直接更新messages数组中的内容，确保响应式更新
+                            self.messages[messageIndex].content = message.substring(0, i + 1);
+                            i++;
+                            self.scrollToBottom();
+                            setTimeout(type, 20);
+                        } else {
+                            self.isTyping = false;
+                            self.scrollToBottom();
+                        }
+                    }
+                    type();
+                },
+                getUserId() {
+                    // 如果已有用户ID，从localStorage获取
+                    let userId = localStorage.getItem('chatUserId');
+                    if (!userId) {
+                        // 如果没有，生成新的ID并保存
+                        userId = 'user_' + new Date().getTime() + '_' + Math.random().toString(36).substr(2, 9);
+                        localStorage.setItem('chatUserId', userId);
+                    }
+                    return userId;
+                },
+                handleError(message) {
+                    this.messages.pop();
+                    this.isThinking = false;
+                    this.messages.push({
+                        type: 'ai',
+                        content: message
+                    });
+                    this.scrollToBottom();
+                },
+                async getAIResponse(question) {
+                    this.isThinking = true;
+                    
+                    // 添加Thinking消息
+                    const thinkingMessage = {
+                        type: 'ai',
+                        content: '<div class="thinking">Thinking<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>'
+                    };
+                    this.messages.push(thinkingMessage);
+                    this.scrollToBottom();
+
+                    try {
+                        // 使用fetch API，与原页面保持一致
+                        const response = await fetch(`${this.apiDomain}/api/AI/ChatForSearchCompanyAgent?prompt=${encodeURIComponent(question)}`);
+                        const data = await response.json();
+
+                        // 移除Thinking消息
+                        this.messages.pop();
+                        this.isThinking = false;
+
+                        if (data.ReturnCode === 0) {
+                            this.isTyping = true;
+                            const aiMessage = {
+                                type: 'ai',
+                                content: ''
+                            };
+                            this.messages.push(aiMessage);
+                            this.scrollToBottom();
+
+                            // 格式化响应数据
+                            const formattedResponse = this.formatMessage(data.Data);
+                            // 获取刚添加的消息索引
+                            const messageIndex = this.messages.length - 1;
+                            this.typeMessage(formattedResponse, messageIndex);
+                        } else {
+                            this.handleError(this.currentLang === 'zh' ?
+                                '抱歉，发生了一些错误，请稍后再试。' :
+                                'Sorry, an error occurred. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('API调用错误:', error);
+                        this.messages.pop();
+                        this.isThinking = false;
+                        this.handleError(this.currentLang === 'zh' ?
+                            '抱歉，服务器连接出现问题，请稍后再试。' :
+                            'Sorry, server connection failed. Please try again later.');
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+.modern-menu-toggle {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 24px !important;
+    z-index: 1049 !important;
+    color: var(--color-brand-blue) !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    padding: 8px !important;
+    border-radius: 8px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: none !important;
+    border: none !important;
+}
+
+.modern-menu-toggle:hover {
+    color: var(--color-highlight-blue) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3) !important;
+    text-shadow: 0 0 2px rgba(14, 165, 233, 0.15) !important;
+}
+
+.modern-menu-modal {
+    z-index: 1035 !important;
+}
+
+/* 当菜单激活时隐藏按钮 */
+#inno-global-menu .modern-menu-modal.active + .modern-menu-toggle {
+    display: none !important;
+}
+
+/* PC端悬停提示边框 */
+@media (min-width: 769px) {
+    .modern-menu-toggle::after {
+        content: '' !important;
+        position: absolute !important;
+        top: -2px !important;
+        left: -2px !important;
+        right: -2px !important;
+        bottom: -2px !important;
+        border: 2px solid transparent !important;
+        border-radius: 10px !important;
+        transition: all 0.3s ease !important;
+        pointer-events: none !important;
+    }
+
+    .modern-menu-toggle:hover::after {
+        border-color: rgba(14, 165, 233, 0.3) !important;
+        animation: pulse 1.5s infinite !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .modern-menu-toggle {
+        top: 0.75rem !important;
+        left: 12px !important;
+        font-size: 20px !important;
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}

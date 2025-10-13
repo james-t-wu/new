@@ -1,0 +1,280 @@
+/* Company AI Analysis Israel - Modern Design System Styles */
+
+/* 页面特定的扩展样式 */
+.analysis-card {
+    position: relative;
+    overflow: visible;
+}
+
+.analysis-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--color-brand-blue), var(--color-highlight-blue), var(--color-deep-blue));
+    border-radius: var(--border-radius-lg);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.analysis-card:hover::after {
+    opacity: 0.1;
+}
+
+/* 表单增强样式 */
+.form-control:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(25, 111, 166, 0.15);
+}
+
+.form-control::placeholder {
+    color: var(--light-text);
+    opacity: 0.7;
+}
+
+/* 文件上传增强动画 */
+.file-upload-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(25, 111, 166, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.file-upload-wrapper:hover::before {
+    left: 100%;
+}
+
+/* 按钮增强效果 */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+/* 结果面板渐变边框 */
+.result-panel {
+    position: relative;
+}
+
+.result-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-brand-blue), var(--color-highlight-blue));
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.result-container:hover .result-panel::before {
+    opacity: 1;
+}
+
+/* 特殊卡片样式 */
+.intro-section {
+    position: relative;
+}
+
+.intro-section::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(135deg, var(--color-brand-blue), var(--color-highlight-blue));
+    border-radius: 2px;
+}
+
+/* 加载动画增强 */
+.loading-container {
+    position: relative;
+}
+
+.loading-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(25, 111, 166, 0.05) 0%, transparent 70%);
+    border-radius: var(--border-radius-lg);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+/* 结果项悬停效果 */
+.result-item {
+    position: relative;
+}
+
+.result-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: var(--color-brand-blue);
+    transition: width var(--transition-base);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.result-item:hover::before {
+    width: 4px;
+}
+
+.result-item:hover .result-label {
+    color: var(--color-deep-blue);
+}
+
+/* 输入焦点增强 */
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    transition: all var(--transition-base);
+}
+
+.form-control:focus + label,
+.form-control:not(:placeholder-shown) + label {
+    color: var(--color-brand-blue);
+}
+
+/* 选择框样式增强 */
+select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem 1.25rem;
+    padding-right: 2.5rem;
+}
+
+/* 通知样式增强 */
+.notification {
+    border-left: 4px solid;
+}
+
+.notification.success {
+    border-left-color: var(--success-color);
+}
+
+.notification.error {
+    border-left-color: var(--error-color);
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .analysis-card {
+        margin: 0 0.5rem;
+    }
+
+    .form-row {
+        gap: 1rem;
+    }
+
+    .input-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .main-label {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .helper-text {
+        width: 100%;
+        text-align: left;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #e2e8f0;
+        --light-text: #94a3b8;
+        --background-light: #1e293b;
+        --background-white: #334155;
+        --border-color: #475569;
+    }
+
+    .navbar {
+        background: rgba(30, 41, 59, 0.95);
+        border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+    }
+
+    .form-control {
+        background-color: var(--background-white);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    .analysis-card,
+    .result-container,
+    .loading-container {
+        background-color: var(--background-white);
+        border-color: var(--border-color);
+    }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+    .form-control:focus {
+        border-width: 3px;
+    }
+
+    .btn-primary {
+        border: 2px solid var(--color-deep-blue);
+    }
+
+    .result-item {
+        border: 1px solid var(--border-color);
+    }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

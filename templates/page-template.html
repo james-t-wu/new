@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>页面标题 - Innonation AI</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="页面描述">
+    <meta name="keywords" content="INNONATION AI, 人工智能, 商业智能">
+    <meta name="author" content="INNONATION AI">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="页面标题 - Innonation AI">
+    <meta property="og:description" content="页面描述">
+    <meta property="og:image" content="">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="页面标题 - Innonation AI">
+    <meta property="twitter:description" content="页面描述">
+    <meta property="twitter:image" content="">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+    <link rel="apple-touch-icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- Preconnect to improve performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- External CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Project Common Styles -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+    <link rel="stylesheet" href="common/css/utilities.css">
+
+    <!-- Page Specific Styles -->
+    <style>
+        /* 页面特定样式 */
+        .main-content {
+            padding-top: var(--navbar-height);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: var(--gradient-light);
+            padding: var(--spacing-2xl) 0;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--text-color);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .section-title {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-color);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .main-content {
+                padding-top: calc(var(--navbar-height) - 10px);
+            }
+
+            .page-header {
+                padding: var(--spacing-xl) 0;
+            }
+
+            .page-title {
+                font-size: var(--font-size-3xl);
+            }
+
+            .content-section {
+                padding: var(--spacing-xl) 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单挂载点 -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="loading-spinner loading-spinner-lg mb-3"></div>
+                <div class="text-muted">{{ loadingMessage }}
+            </div>
+        </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    INNONATION <b>AI</b>
+                </a>
+
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <!-- 语言切换 -->
+                    <div class="language-switch" @click="toggleLanguage">
+                        <i class="fas fa-globe"></i>
+                        <span>{{ currentLanguage === 'zh' ? '中文' : 'English' }}</span>
+                    </div>
+
+                    <!-- 其他导航项可在此添加 -->
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 页面头部 -->
+            <header class="page-header" data-aos="fade-down">
+                <div class="container">
+                    <h1 class="page-title">页面标题</h1>
+                    <p class="page-subtitle">
+                        页面副标题或描述信息，可以简要介绍页面的主要功能和用途。
+                    </p>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <section class="content-section">
+                <div class="container">
+                    <!-- 示例内容区域 -->
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <div class="inno-card" data-aos="fade-up">
+                                <div class="inno-card-header">
+                                    <h2 class="inno-card-title">
+                                        <i class="fas fa-lightbulb text-primary me-2"></i>
+                                        示例内容区域
+                                    </h2>
+                                    <div class="inno-card-actions">
+                                        <button class="btn btn-outline btn-sm" @click="refreshContent">
+                                            <i class="fas fa-refresh"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="inno-card-body">
+                                    <p>这是一个页面模板示例。您可以在这里添加具体的页面内容。</p>
+
+                                    <!-- 错误状态 -->
+                                    <div v-if="error" class="alert alert-danger" role="alert">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {{ error }}
+                                        <button class="btn btn-sm btn-outline-danger ms-2" @click="clearError">
+                                            重试
+                                        </button>
+                                    </div>
+
+                                    <!-- 数据展示区域 -->
+                                    <div v-if="data && data.length" class="mt-4">
+                                        <h3 class="h5 mb-3">数据列表</h3>
+                                        <div class="list-group">
+                                            <div v-for="(item, index) in data"
+                                                 :key="index"
+                                                 class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>{{ item.name || item.title || `Item ${index + 1}` }}</span>
+                                                <span class="badge badge-primary">{{ item.status || 'Active' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 空状态 -->
+                                    <div v-else-if="!loading && !error" class="text-center py-5 text-muted">
+                                        <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
+                                        <p>暂无数据</p>
+                                        <button class="btn btn-primary" @click="loadData">
+                                            <i class="fas fa-plus me-1"></i>
+                                            加载数据
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="inno-card-footer">
+                                    <small class="text-muted">
+                                        最后更新：{{ lastUpdated || '未知' }}
+                                    </small>
+                                    <div class="ms-auto">
+                                        <button class="btn btn-primary btn-sm" @click="performAction">
+                                            <i class="fas fa-cog me-1"></i>
+                                            执行操作
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 其他内容区域可在此添加 -->
+
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="bg-light py-4 mt-5">
+            <div class="container text-center">
+                <div class="text-muted">
+                    <small>© {{ currentYear }} INNONATION AI. All rights reserved.</small>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Dependencies -->
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios for HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- AOS Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- Project Common Scripts -->
+    <script src="common/js/common-utils.js"></script>
+    <script src="common/js/api-client.js"></script>
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <!-- Page Script -->
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    // 页面状态
+                    loading: false,
+                    error: null,
+                    loadingMessage: '加载中...',
+
+                    // 数据
+                    data: [],
+                    lastUpdated: null,
+
+                    // 语言和国际化
+                    currentLanguage: InnoUtils.I18n.getCurrentLanguage(),
+
+                    // 其他状态
+                    currentYear: new Date().getFullYear()
+                }
+            },
+
+            computed: {
+                // 计算属性示例
+                hasData() {
+                    return this.data && this.data.length > 0;
+                }
+            },
+
+            methods: {
+                // API调用示例
+                async loadData() {
+                    this.loading = true;
+                    this.error = null;
+                    this.loadingMessage = '正在加载数据...';
+
+                    try {
+                        // 示例API调用
+                        const response = await ApiClient.get('/api/data', {
+                            page: 1,
+                            limit: 10
+                        });
+
+                        this.data = response.data || [];
+                        this.lastUpdated = InnoUtils.Format.date(new Date(), 'YYYY-MM-DD HH:mm:ss');
+
+                        if (this.data.length === 0) {
+                            InnoUtils.Notification.info('没有找到数据');
+                        } else {
+                            InnoUtils.Notification.success(`成功加载 ${this.data.length} 条数据`);
+                        }
+
+                    } catch (error) {
+                        console.error('Load data error:', error);
+                        this.error = ApiClient.handleError(error, false).message;
+                        InnoUtils.Notification.error('数据加载失败');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                // 清除错误
+                clearError() {
+                    this.error = null;
+                    this.loadData(); // 重新加载数据
+                },
+
+                // 刷新内容
+                async refreshContent() {
+                    await this.loadData();
+                },
+
+                // 执行操作示例
+                async performAction() {
+                    try {
+                        this.loading = true;
+                        this.loadingMessage = '正在处理...';
+
+                        // 模拟API调用
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+
+                        InnoUtils.Notification.success('操作执行成功');
+
+                        // 刷新数据
+                        await this.loadData();
+
+                    } catch (error) {
+                        console.error('Action error:', error);
+                        InnoUtils.Notification.error('操作执行失败');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                // 语言切换
+                toggleLanguage() {
+                    const newLang = InnoUtils.I18n.toggleLanguage();
+                    this.currentLanguage = newLang;
+
+                    // 通知全局菜单更新语言
+                    if (window.InnoGlobalMenu) {
+                        window.InnoGlobalMenu.switchLanguage(newLang);
+                    }
+
+                    InnoUtils.Notification.info(`语言已切换为${newLang === 'zh' ? '中文' : 'English'}`);
+                },
+
+                // 处理页面错误
+                handleError(error) {
+                    console.error('Page error:', error);
+                    this.error = error.message || '发生未知错误';
+                }
+            },
+
+            // 错误处理
+            errorCaptured(err, vm, info) {
+                console.error('Vue error captured:', err, info);
+                this.handleError(err);
+                return false;
+            },
+
+            // 组件生命周期
+            async mounted() {
+                try {
+                    // 初始化AOS动画
+                    AOS.init({
+                        duration: 800,
+                        easing: 'ease-in-out',
+                        once: true,
+                        offset: 100
+                    });
+
+                    // 初始页面数据加载
+                    // await this.loadData();
+
+                    console.log('Page initialized successfully');
+
+                } catch (error) {
+                    console.error('Page initialization error:', error);
+                    this.handleError(error);
+                }
+            },
+
+            // 组件卸载时清理
+            beforeUnmount() {
+                // 清理定时器、事件监听器等
+                if (this.refreshTimer) {
+                    clearInterval(this.refreshTimer);
+                }
+            }
+
+        }).mount('#app');
+    </script>
+
+    <!-- Page specific additional scripts can be added here -->
+</body>
+</html>

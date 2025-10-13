@@ -1,0 +1,3156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>公司详情 - Innonation</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Company Profile (New Israel) - Extracted Styles */
+:root {
+	--primary-blue: #1e40af;
+	--secondary-blue: #3b82f6;
+	--accent-orange: #f59e0b;
+	--success-green: #10b981;
+	--warning-yellow: #f59e0b;
+	--error-red: #ef4444;
+	--dark-gray: #1f2937;
+	--light-gray: #f9fafb;
+	--border-gray: #e5e7eb;
+
+	/* 主色调 - 使用统一的CSS变量命名 */
+	--color-brand-blue: #196fa6;
+	--color-deep-blue: #104991;
+	--color-highlight-blue: #0ea5e9;
+	--color-action-blue: #196fa6;
+	--color-light-blue: #f4f8fb;
+
+	/* 文字颜色 */
+	--text-color: #1e293b;
+	--light-text: #64748b;
+
+	/* 背景颜色 */
+	--background-light: #f8fbfd;
+	--background-white: #ffffff;
+
+	/* 强调和状态颜色 */
+	--accent-color: #f39c12;
+	--success-color: #27ae60;
+	--warning-color: #f59e0b;
+	--error-color: #e74c3c;
+	--info-color: #8e44ad;
+
+	/* 阴影效果 */
+	--card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+	/* 边框和间距 */
+	--border-color: #e2e8f0;
+	--border-radius: 0.5rem;
+	--border-radius-lg: 0.75rem;
+	--border-radius-xl: 1rem;
+
+	/* 过渡动画 */
+	--transition-base: 0.2s ease-in-out;
+	--transition-slow: 0.3s ease-in-out;
+}
+
+body {
+	font-family: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+	color: var(--text-color);
+	background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+	line-height: 1.6;
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+}
+
+
+/* 语言切换按钮 */
+.language-switch {
+	cursor: pointer;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 500;
+	border: 1px solid var(--border-color);
+	background-color: var(--background-white);
+	color: var(--text-color);
+	height: 40px; /* 固定高度确保对齐 */
+	min-width: 60px;
+	justify-content: center;
+}
+
+.language-switch:hover {
+	background-color: var(--color-light-blue);
+}
+
+
+/* 卡片样式 */
+.card {
+	background-color: var(--background-white);
+	border-radius: var(--border-radius-lg);
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	transition: all var(--transition-base);
+	position: relative;
+	overflow: hidden;
+}
+
+.card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--color-brand-blue), var(--color-deep-blue));
+	opacity: 0;
+	transition: opacity var(--transition-base);
+}
+
+
+
+.card:hover {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+	transform: translateY(-1px);
+	border-color: rgba(25, 111, 166, 0.15);
+}
+
+.card:hover::before {
+	opacity: 1;
+}
+
+.card-header {
+	padding: 1.5rem;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	background: rgba(248, 250, 252, 0.5);
+	position: relative;
+}
+
+.card-header h5 {
+	margin: 0;
+	color: var(--text-color);
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.card-header h5 i {
+	color: var(--color-brand-blue);
+	font-size: 1.1em;
+}
+
+.card-body {
+	padding: 1.5rem;
+}
+
+.badge {
+    padding: 0.375rem 0.75rem;
+    font-weight: 500;
+    font-size: 0.75rem;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+}
+
+/* 按钮样式 */
+.btn-primary {
+	background-color: var(--color-brand-blue);
+	border-color: var(--color-brand-blue);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: var(--border-radius);
+	font-weight: 500;
+	transition: all var(--transition-base);
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-primary:hover {
+	background-color: var(--color-deep-blue);
+	border-color: var(--color-deep-blue);
+	color: white;
+	box-shadow: var(--hover-shadow);
+}
+
+.btn-secondary {
+	background-color: var(--background-white);
+	border: 1px solid var(--border-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border-radius: var(--border-radius);
+	font-weight: 500;
+	transition: all var(--transition-base);
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-secondary:hover {
+	background-color: var(--background-light);
+	color: var(--text-color);
+}
+
+.modern-card {
+	background: white;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.modern-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--color-brand-blue), var(--color-deep-blue));
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.modern-card:hover {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+	transform: translateY(-1px);
+	border-color: rgba(25, 111, 166, 0.15);
+}
+
+.modern-card:hover::before {
+	opacity: 1;
+}
+
+.gradient-bg { background: linear-gradient(135deg, #196fa6, #104991); }
+
+.glass-effect {
+	background: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 状态徽章样式 */
+.status-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	border: 1px solid;
+	transition: all var(--transition-base);
+}
+
+.status-badge-green {
+	background-color: rgb(16 185 129 / 0.1);
+	color: var(--success-color);
+	border-color: rgb(16 185 129 / 0.2);
+}
+
+.status-badge-red {
+	background-color: rgb(239 68 68 / 0.1);
+	color: var(--error-color);
+	border-color: rgb(239 68 68 / 0.2);
+}
+
+.status-badge-purple {
+	background-color: rgb(139 92 246 / 0.1);
+	color: var(--info-color);
+	border-color: rgb(139 92 246 / 0.2);
+}
+
+.status-badge-blue {
+	background-color: rgb(37 99 235 / 0.1);
+	color: var(--color-brand-blue);
+	border-color: rgb(37 99 235 / 0.2);
+}
+
+.status-active {
+	background-color: rgb(16 185 129 / 0.1);
+	color: #10b981;
+	border-color: rgb(16 185 129 / 0.2);
+}
+
+.status-acquired {
+	background-color: rgb(139 92 246 / 0.1);
+	color: #8b5cf6;
+	border-color: rgb(139 92 246 / 0.2);
+}
+
+.status-closed {
+	background-color: rgb(239 68 68 / 0.1);
+	color: #ef4444;
+	border-color: rgb(239 68 68 / 0.2);
+}
+
+/* 头像样式 */
+.avatar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-weight: 600;
+	color: white;
+	background: linear-gradient(135deg, var(--color-brand-blue), var(--color-deep-blue));
+	box-shadow: 0 4px 15px rgba(25, 111, 166, 0.3);
+}
+
+.avatar-lg {
+	width: 4rem;
+	height: 4rem;
+	font-size: 1.125rem;
+}
+
+.btn-modern {
+	padding: 12px 24px;
+	border-radius: 12px;
+	font-weight: 600;
+	transition: all 0.3s ease;
+	border: none;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.btn-primary {
+	background: linear-gradient(135deg, #196fa6, #104991);
+	color: white;
+}
+
+.btn-primary:hover {
+	background: linear-gradient(135deg, #2085c7, #196fa6);
+	transform: translateY(-2px);
+	box-shadow: 0 10px 25px rgba(25, 111, 166, 0.3);
+}
+
+.btn-secondary {
+	background: #f8fafc;
+	color: #374151;
+	border: 1px solid #e5e7eb;
+}
+
+.btn-secondary:hover {
+	background: #f1f5f9;
+	border-color: #d1d5db;
+}
+
+.info-row {
+	display: grid;
+	grid-template-columns: 140px 1fr;
+	gap: 12px;
+	align-items: start;
+	padding: 16px 0;
+	border-bottom: 1px solid #f3f4f6;
+}
+
+.info-row:last-child {
+	border-bottom: none;
+}
+
+.info-label {
+	color: #6b7280;
+	font-weight: 500;
+	font-size: 0.875rem;
+}
+
+.info-value {
+	color: #1f2937;
+	font-weight: 600;
+	word-break: break-word;
+	font-size: 0.875rem;
+	overflow-wrap: anywhere;
+}
+
+
+
+/* 公司Logo样式 - 使用background-image */
+.company-logo {
+	width: 120px;
+	height: 120px;
+	border-radius: var(--border-radius-lg);
+	background: transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 24px;
+	font-weight: bold;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	overflow: hidden;
+}
+
+.company-logo.gradient-bg {
+	background: linear-gradient(135deg, #196fa6, #104991);
+}
+
+.company-logo img {
+	display: none; /* 隐藏img标签，使用background-image */
+}
+
+.company-logo .logo-text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+}
+
+.team-member {
+	background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+	border-radius: 16px;
+	padding: 20px;
+	transition: all 0.3s ease;
+	border: 1px solid #f3f4f6;
+	position: relative;
+	overflow: hidden;
+}
+
+.team-member::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--color-brand-blue), var(--color-deep-blue));
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.team-member:hover {
+	background: white;
+	box-shadow: 0 2px 8px rgba(25, 111, 166, 0.12);
+	transform: translateY(-1px);
+	border-color: rgba(25, 111, 166, 0.15);
+}
+
+.team-member:hover::before {
+	opacity: 1;
+}
+
+/* 悬停效果 */
+.hover-bg-light:hover {
+	background-color: #e9ecef !important;
+}
+
+/* 页面布局样式 */
+.page-container {
+	padding: 1.5rem 1.5rem 4rem;
+}
+
+
+/* 详情页布局 - 左右结构 */
+.detail-layout {
+	display: grid !important;
+	grid-template-columns: 1fr !important;
+	gap: 2rem !important;
+	width: 100% !important;
+}
+
+@media (min-width: 1024px) {
+	.detail-layout {
+		grid-template-columns: 2fr 1fr !important;
+		gap: 2rem !important;
+	}
+}
+
+.detail-main {
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 1.5rem !important;
+	width: 100% !important;
+}
+
+.detail-sidebar {
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 1.5rem !important;
+	width: 100% !important;
+}
+
+
+
+/* 公司信息网格容器 */
+.company-info-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+/* 单行信息项 */
+.info-row-single {
+	width: 100%;
+}
+
+/* 双行信息项 */
+.info-row-double {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+}
+
+/* 信息项样式 - 使用更精确的对齐 */
+.info-item {
+	display: grid;
+	grid-template-columns: 140px 1fr;
+	gap: 1rem;
+	align-items: start;
+	padding: 0.25rem 0;
+}
+
+.info-label {
+	font-weight: 500;
+	color: var(--dark-gray);
+	grid-column: 1;
+	text-align: left;
+	padding-right: 0;
+}
+
+.info-value {
+	color: var(--dark-gray);
+	grid-column: 2;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+	line-height: 1.5;
+}
+
+/* 融资金额特殊样式 */
+.funding-amount {
+	color: var(--success-color);
+	font-weight: 700;
+	font-size: 18px;
+}
+
+@media (max-width: 768px) {
+	.info-row-double {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.info-item {
+		grid-template-columns: 120px 1fr;
+		gap: 0.75rem;
+	}
+}
+
+/* 图表容器样式 */
+.chart-container {
+	height: 300px;
+	position: relative;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+
+	.detail-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Vue 隐藏指令 */
+[v-cloak] {
+	display: none;
+}
+
+/* 页面增强动画效果 */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideInRight {
+	from {
+		opacity: 0;
+		transform: translateX(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.card {
+	animation: fadeInUp 0.6s ease forwards;
+}
+
+.detail-sidebar .card {
+	animation: slideInRight 0.6s ease forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+
+/* 按钮光泽效果 */
+.btn-primary::before,
+.btn-secondary::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+	transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before,
+.btn-secondary:hover::before {
+	left: 100%;
+}
+
+.btn-primary,
+.btn-secondary {
+	position: relative;
+	overflow: hidden;
+}
+
+/* AI Analysis 卡片样式 */
+.ai-analysis-icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 80px;
+	height: 80px;
+	margin: 0 auto;
+	background: linear-gradient(135deg, rgba(25, 111, 166, 0.1), rgba(16, 73, 145, 0.1));
+	border-radius: 50%;
+	border: 2px solid rgba(25, 111, 166, 0.2);
+	position: relative;
+	overflow: hidden;
+}
+
+.ai-analysis-icon::before {
+	content: '';
+	position: absolute;
+	top: -50%;
+	left: -50%;
+	width: 200%;
+	height: 200%;
+	background: conic-gradient(from 0deg, transparent, rgba(25, 111, 166, 0.1), transparent);
+	animation: rotate 3s linear infinite;
+}
+
+.ai-analysis-icon i {
+	color: var(--color-brand-blue);
+	text-shadow: 0 2px 4px rgba(25, 111, 166, 0.2);
+	position: relative;
+	z-index: 1;
+}
+
+@keyframes rotate {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+/* 右侧边栏优化 - 移除额外margin，使用统一的gap间距 */
+
+/* 新闻和联系信息并排容器 */
+.news-contact-container {
+    display: flex !important;
+    gap: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.news-contact-container .news-card {
+    flex: 3 !important;
+    margin: 0 !important;
+}
+
+.news-contact-container .contact-card {
+    flex: 2 !important;
+    margin: 0 !important;
+}
+
+/* 移动端垂直堆叠 */
+@media (max-width: 768px) {
+    .news-contact-container {
+        flex-direction: column !important;
+    }
+
+    .news-contact-container .news-card,
+    .news-contact-container .contact-card {
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* 快速统计卡片增强 */
+.detail-sidebar .card-body .d-flex {
+	background: linear-gradient(135deg, rgba(25, 111, 166, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+	border: 1px solid rgba(25, 111, 166, 0.1);
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.detail-sidebar .card-body .d-flex::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(25, 111, 166, 0.1), transparent);
+	transition: left 0.5s ease;
+}
+
+.detail-sidebar .card-body .d-flex:hover::before {
+	left: 100%;
+}
+
+.detail-sidebar .card-body .d-flex:hover {
+	transform: translateX(5px);
+	box-shadow: 0 4px 15px rgba(25, 111, 166, 0.15);
+	border-color: rgba(25, 111, 166, 0.2);
+}
+
+/* 新闻项增强 */
+.hover-bg-light {
+	background: linear-gradient(135deg, rgba(25, 111, 166, 0.03) 0%, rgba(255, 255, 255, 0.9) 100%);
+	border: 1px solid rgba(25, 111, 166, 0.05);
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.hover-bg-light::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(25, 111, 166, 0.08), transparent);
+	transition: left 0.5s ease;
+}
+
+.hover-bg-light:hover::before {
+	left: 100%;
+}
+
+.hover-bg-light:hover {
+	background: white;
+	transform: translateX(5px);
+	box-shadow: 0 4px 15px rgba(25, 111, 166, 0.1);
+	border-color: rgba(25, 111, 166, 0.15);
+}
+
+/* 表格增强样式 */
+.table {
+	border-radius: var(--border-radius-lg);
+	overflow: hidden;
+	box-shadow: none;
+}
+
+.table-hover tbody tr:hover {
+	background-color: rgba(25, 111, 166, 0.05);
+	transform: scale(1.01);
+	transition: all 0.2s ease;
+}
+
+.table thead th {
+	background: linear-gradient(135deg, rgba(25, 111, 166, 0.08) 0%, rgba(16, 73, 145, 0.03) 100%);
+	border-bottom: 2px solid rgba(25, 111, 166, 0.1);
+	font-weight: 600;
+	color: var(--text-color);
+	text-transform: uppercase;
+	font-size: 0.85rem;
+	letter-spacing: 0.5px;
+}
+
+.table td {
+	vertical-align: middle;
+	border-bottom: 1px solid rgba(25, 111, 166, 0.08);
+	font-size: 0.875rem;
+}
+
+.table td a {
+	color: var(--color-light-blue);
+	text-decoration: none;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+/* .table td a:hover {
+	color: var(--color-light-blue);
+	text-decoration: none;
+} */
+
+/* ===== 链接样式统一 ===== */
+.link-primary,
+.text-primary.text-decoration-none,
+.text-primary:not(.btn):not(.spinner-border) {
+	color: var(--color-brand-blue) !important;
+	text-decoration: none !important;
+	transition: all 0.2s ease !important;
+}
+
+/* 链接保持 font-weight: 500，标题保持原有权重 */
+.link-primary,
+.text-primary.text-decoration-none,
+.text-primary:not(.btn):not(.spinner-border):not(.fw-semibold) {
+	font-weight: 500 !important;
+}
+
+.link-primary:hover,
+.text-primary.text-decoration-none:hover,
+.text-primary:not(.btn):not(.spinner-border):hover {
+	color: var(--color-highlight-blue) !important;
+	text-shadow: 0 0 2px rgba(14, 165, 233, 0.15) !important;
+	text-decoration: none !important;
+}
+
+/* 按钮组增强 */
+.btn-group .btn {
+	border-color: rgba(25, 111, 166, 0.2);
+	transition: all 0.2s ease;
+}
+
+.btn-group .btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(25, 111, 166, 0.2);
+}
+
+.btn-outline-primary {
+	border-color: var(--color-brand-blue);
+	color: var(--color-brand-blue);
+}
+
+.btn-outline-primary:hover {
+	background-color: var(--color-brand-blue);
+	border-color: var(--color-brand-blue);
+	color: white;
+}
+
+/* Navbar按钮统一高度 */
+nav .btn {
+	padding: 0.5rem 1rem !important;
+	height: 38px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.875rem;
+	line-height: 1;
+}
+
+/* INNONATION Global Menu - common styles */
+
+/* 现代化菜单按钮 - 仅三条杠图标 */
+.modern-menu-toggle {
+	position: fixed;
+	top: 1rem; /* 与导航栏padding一致 */
+	left: 24px;
+	z-index: 1049;
+	color: var(--color-brand-blue);
+	font-size: 24px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	padding: 8px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.9);
+	backdrop-filter: blur(10px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+}
+
+.modern-menu-toggle:hover {
+	color: var(--color-highlight-blue);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+	text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+}
+
+/* PC端悬停提示 */
+@media (min-width: 769px) {
+	.modern-menu-toggle::after {
+		content: '';
+		position: absolute;
+		top: -2px;
+		left: -2px;
+		right: -2px;
+		bottom: -2px;
+		border: 2px solid transparent;
+		border-radius: 10px;
+		transition: all 0.3s ease;
+		pointer-events: none;
+	}
+
+	.modern-menu-toggle:hover::after {
+		border-color: rgba(14, 165, 233, 0.3);
+		animation: pulse 1.5s infinite;
+	}
+}
+
+@keyframes pulse {
+	0% { transform: scale(1); opacity: 1; }
+	50% { transform: scale(1.05); opacity: 0.7; }
+	100% { transform: scale(1); opacity: 1; }
+}
+
+/* 菜单模态框 */
+/* 侧边栏菜单（遮罩层样式已移除） */
+
+.modern-menu-content {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 320px;
+	max-width: 90%;
+	background: white;
+	border-radius: 0;
+	box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+	border-right: 1px solid #e5e7eb;
+	transform: translateX(-100%);
+	transition: all 0.3s ease;
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+	z-index: 1050;
+}
+
+.modern-menu-modal.active .modern-menu-content {
+	transform: translateX(0);
+}
+
+/* 页面内容适配 - 菜单展开时推动页面内容 */
+body.menu-active {
+	margin-left: 320px;
+	transition: margin-left 0.3s ease;
+}
+
+body.menu-active.menu-collapsed {
+	margin-left: 80px;
+}
+
+/* 菜单激活时隐藏顶部导航栏品牌名称 */
+body.menu-active .navbar-brand {
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease;
+}
+
+/* 移动端不推动页面内容 */
+@media (max-width: 768px) {
+	body.menu-active {
+		margin-left: 0;
+	}
+
+	body.menu-active.menu-collapsed {
+		margin-left: 0;
+	}
+
+	/* 移动端菜单激活时仍显示品牌名称（因为菜单是覆盖式的） */
+	body.menu-active .navbar-brand {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.modern-menu-header {
+	background: linear-gradient(135deg, #196fa6 0%, #104991 100%);
+	color: white;
+	padding: 1rem 1.5rem;
+	text-align: left;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 81px;
+}
+
+.menu-controls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.modern-menu-collapse,
+.modern-menu-close {
+	background: none;
+	border: none;
+	color: white;
+	font-size: 18px;
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+}
+
+.modern-menu-collapse:hover,
+.modern-menu-close:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transform: scale(1.05);
+}
+
+.modern-menu-collapse {
+	transition: transform 0.3s ease;
+}
+
+.modern-menu-collapse.rotated {
+	transform: rotate(180deg);
+}
+
+/* 折叠状态样式 */
+.modern-menu-content.collapsed {
+	width: 80px;
+}
+
+.modern-menu-content.collapsed .menu-logo-text,
+.modern-menu-content.collapsed .modern-menu-link span,
+.modern-menu-content.collapsed .modern-submenu-link span {
+	display: none;
+}
+
+.modern-menu-content.collapsed .modern-menu-link,
+.modern-menu-content.collapsed .modern-submenu-link {
+	justify-content: center;
+	padding: 12px 8px;
+}
+
+.modern-menu-content.collapsed .modern-menu-link i,
+.modern-menu-content.collapsed .modern-submenu-link i {
+	margin-right: 0 !important;
+}
+
+.modern-menu-content.collapsed .modern-menu-arrow {
+	display: none;
+}
+
+.modern-menu-content.collapsed .modern-menu-header {
+	padding: 1rem 0.5rem;
+	justify-content: center;
+	position: relative;
+	height: 81px;
+}
+
+.modern-menu-content.collapsed .menu-controls {
+	position: static;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+/* 旧的 .modern-menu-close 样式已移至新的控制区域 */
+
+.modern-menu-logo {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 0;
+}
+
+.modern-menu-logo b {
+	color: var(--color-highlight-blue);
+	text-shadow: 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+.modern-menu-subtitle {
+	font-size: 14px;
+	opacity: 0.9;
+	font-weight: 300;
+}
+
+.modern-menu-nav {
+	padding: 10px 0 12px;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-width: thin;
+}
+
+/* 隐藏横向滚动条，避免误触 */
+.modern-menu-content, .modern-menu-nav {
+	overflow-x: hidden;
+}
+
+.modern-menu-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.modern-menu-item { margin: 0; }
+
+.modern-menu-link {
+	display: flex;
+	align-items: center;
+	padding: 15px 30px;
+	color: #333;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border-left: 4px solid transparent;
+	position: relative;
+	overflow: hidden;
+}
+
+.modern-menu-link::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+	transition: left 0.5s ease;
+}
+
+.modern-menu-link:hover::before { left: 100%; }
+
+.modern-menu-link:hover {
+	background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(25, 111, 166, 0.03) 100%);
+	color: var(--color-highlight-blue);
+	border-left-color: var(--color-highlight-blue);
+	transform: translateX(5px);
+}
+
+.modern-menu-link i {
+	width: 24px;
+	margin-right: 15px;
+	font-size: 18px;
+	text-align: center;
+	transition: transform 0.3s ease;
+}
+
+.modern-menu-link:hover i { transform: scale(1.1); }
+
+.modern-menu-link span {
+	flex: 1;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.modern-menu-arrow {
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.3s ease;
+	color: #999;
+}
+
+.modern-menu-arrow.expanded { transform: rotate(90deg); color: var(--color-highlight-blue); }
+
+.modern-submenu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	background: linear-gradient(135deg, rgba(25, 111, 166, 0.04) 0%, rgba(16, 73, 145, 0.01) 100%);
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease;
+}
+
+.modern-submenu.expanded { max-height: 300px; }
+
+.modern-submenu-link {
+	display: flex;
+	align-items: center;
+	padding: 12px 30px 12px 69px;
+	color: #666;
+	text-decoration: none;
+	font-size: 14px;
+	transition: all 0.3s ease;
+	border-left: 4px solid transparent;
+}
+
+.modern-submenu-link:hover {
+	background: linear-gradient(135deg, rgba(14, 165, 233, 0.06) 0%, rgba(25, 111, 166, 0.02) 100%);
+	color: var(--color-highlight-blue);
+	border-left-color: var(--color-highlight-blue);
+}
+
+.modern-submenu-link i { width: 20px; margin-right: 12px; font-size: 16px; }
+
+/* 菜单底部样式已移除 */
+
+/* 模态框动画 */
+.modal.fade.show {
+	animation: fadeIn 0.3s ease;
+}
+
+.modal-dialog {
+	animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(50px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+/* Modal backdrop and container fixes */
+.modal.d-block {
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	overflow-x: hidden !important;
+	overflow-y: auto !important;
+	z-index: 1050 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	padding: 1.75rem 0 !important;
+}
+
+.modal-dialog-centered {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.modal-dialog {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.modal-content {
+	border: none;
+	border-radius: 16px;
+	overflow: hidden; /* 防止内容溢出造成白边 */
+	position: relative;
+	margin: 0; /* 确保没有额外margin */
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - 1rem);
+}
+
+.modal-header {
+	background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-deep-blue) 100%);
+	color: white;
+	border-radius: 0; /* 移除圆角，由modal-content的overflow处理 */
+	padding: 1.75rem 2rem;
+	border-bottom: none;
+	margin: 0; /* 确保header顶部没有空隙 */
+	flex-shrink: 0; /* 防止header被压缩 */
+}
+
+.modal-header .modal-title {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-light-blue)
+}
+
+.modal-header .btn-close {
+	filter: brightness(0) invert(1);
+	opacity: 0.8;
+	transition: opacity 0.2s;
+}
+
+.modal-header .btn-close:hover {
+	opacity: 1;
+}
+
+.modal-body {
+	padding: 2rem;
+	overflow-y: auto;
+	flex: 1 1 auto; /* 根据内容自适应，但可以增长 */
+	min-height: 0; /* 允许flex子元素缩小 */
+}
+
+/* Modal Loading Overlay */
+.modal-loading-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.95);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+	backdrop-filter: blur(2px);
+}
+
+.modal-loading-overlay .text-center {
+	padding: 2rem;
+}
+
+.modal-footer {
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+	padding: 1.5rem 2rem;
+	background-color: #f8f9fa;
+	flex-shrink: 0; /* 防止footer被压缩 */
+	margin: 0; /* 确保footer底部没有空隙 */
+}
+
+/* Toast动画 */
+.toast {
+	animation: slideInRight 0.3s ease;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	border: none;
+	border-radius: var(--border-radius);
+}
+
+@keyframes slideInRight {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.toast-header {
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
+	border-bottom: none;
+	padding: 0.75rem 1rem;
+}
+
+.toast-body {
+	padding: 1rem;
+	color: var(--text-color);
+	font-weight: 500;
+}
+
+/* 表单增强 */
+.form-label {
+	font-weight: 600;
+	color: var(--text-color);
+	margin-bottom: 0.625rem;
+	font-size: 0.9375rem; /* 15px */
+}
+
+.form-control {
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	padding: 0.75rem 1rem;
+	font-size: 0.9375rem; /* 15px */
+	transition: all var(--transition-base);
+	line-height: 1.5;
+}
+
+.form-control:focus {
+	border-color: var(--color-brand-blue);
+	box-shadow: 0 0 0 0.2rem rgba(25, 111, 166, 0.15);
+	outline: none;
+}
+
+.form-control::placeholder {
+	color: #9ca3af;
+	opacity: 1;
+}
+
+/* 模态框内的row间距 */
+.modal-body .row.g-3 {
+	row-gap: 1.25rem !important;
+}
+
+/* Textarea特殊样式 */
+.form-control[rows] {
+	resize: vertical;
+	min-height: 100px;
+}
+
+/* 模态框按钮样式 */
+.modal-footer .btn {
+	padding: 0.625rem 1.5rem;
+	font-size: 0.9375rem;
+	font-weight: 500;
+}
+
+.modal-footer .btn-primary {
+	background: linear-gradient(135deg, var(--color-brand-blue), var(--color-deep-blue));
+	border: none;
+}
+
+.modal-footer .btn-primary:hover:not(:disabled) {
+	background: linear-gradient(135deg, var(--color-deep-blue), var(--color-brand-blue));
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(25, 111, 166, 0.3);
+}
+
+.modal-footer .btn-secondary {
+	background-color: #6c757d;
+	border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+	background-color: #5a6268;
+	transform: translateY(-1px);
+}
+
+/* 菜单项图标颜色 - 统一设计 */
+.modern-menu-item i {
+	color: #6b7280 !important;
+	transition: color 0.3s ease;
+}
+
+.modern-menu-link:hover i {
+	color: var(--color-highlight-blue) !important;
+	text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+}
+
+/* 子菜单图标颜色 - 统一设计 */
+.modern-submenu i {
+	color: #6b7280 !important;
+	transition: color 0.3s ease;
+}
+
+.modern-submenu-link:hover i {
+	color: var(--color-highlight-blue) !important;
+	text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+}
+
+/* 融资轮次标签样式 - 与 deal_israel.html 保持一致 */
+.funding-round-badge {
+	display: inline-block;
+	padding: 0.25rem 0.75rem;
+	border-radius: 0.25rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	background-color: #6c757d;
+	color: white;
+	border: none;
+	transition: all 0.2s ease;
+	text-decoration: none;
+	white-space: nowrap;
+	letter-spacing: 0.5px;
+}
+
+.funding-round-badge:hover {
+	background-color: #5a6268;
+	color: white;
+	text-decoration: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+	.modern-menu-content { width: 78vw; max-width: 320px; }
+	.modern-menu-toggle {
+		top: 0.75rem; /* 与移动端导航栏padding一致 */
+		bottom: auto;
+		left: 12px;
+		padding: 0;
+		width: 40px;
+		height: 40px;
+		border-radius: 8px;
+		font-size: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.modern-menu-header {
+		padding: 0.75rem 1rem;
+		height: 65px;
+	}
+	.modern-menu-logo { font-size: 1.25rem; }
+	.modern-menu-link { padding: 12px 18px; }
+	.modern-submenu-link { padding: 10px 18px 10px 56px; }
+}
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单挂载点（公共组件渲染） -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="text-muted fw-medium">{{ t('updating') }}</p>
+            </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm" @click="openEditModal">
+                        <i class="fas fa-pen"></i> {{ t('edit') }}
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" @click="openEditDescModal">
+                        <i class="fas fa-file-alt"></i> {{ t('editDescription') }}
+                    </button>
+                    <button class="btn btn-primary btn-sm" @click="openCreateNewsModal">
+                        <i class="fas fa-plus"></i> {{ t('createNews') }}
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容区域 -->
+        <div class="container page-container">
+
+            <!-- 主要内容 -->
+            <div class="detail-layout">
+                 <!-- 左侧主要信息 -->
+                 <div class="detail-main">
+                     <!-- 公司概览与详情合并卡片 -->
+                     <div class="card" data-aos="fade-up">
+                         <div class="card-body">
+                             <!-- 公司名称和Logo -->
+                             <div class="d-flex align-items-center gap-4 mb-4">
+                                 <div class="company-logo" :class="{ 'gradient-bg': !companyLogo }" :style="companyLogo ? `background-image: url('${companyLogo}')` : ''">
+                                     <span v-if="!companyLogo" class="logo-text">
+                                         {{ getInitials(companyProfile?.properties?.name) }}
+                                     </span>
+                                 </div>
+                                <div>
+                                    <h2 class="mb-1">{{ companyProfile?.properties?.name || t('companyName') }}</h2>
+                                    <div v-if="companyProfile?.properties?.focus_en" class="mb-2 text-muted" style="font-size: 0.875rem;">
+                                        {{ companyProfile.properties.focus_en }}
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <span v-if="shouldShowStatus()" class="status-badge" :class="getStatusClass()">
+                                        {{ getStatusText() }}
+                                    </span>
+                                </div>
+                            </div>
+                         </div>
+
+                             <!-- 核心信息 -->
+                             <div class="company-info-grid mb-4">
+                                 <div class="info-row-single">
+                                     <div class="info-item">
+                                         <span class="info-label">{{ t('industry') }}</span>
+                                         <span class="info-value">{{ companyProfile?.Industry || t('na') }}</span>
+                                     </div>
+                                 </div>
+
+                                <div class="info-row-single">
+                                    <div class="info-item">
+                                        <span class="info-label">{{ t('website') || 'Website' }}</span>
+                                        <span class="info-value">
+                                            <a v-if="companyProfile?.properties?.homepage_url" :href="companyProfile.properties.homepage_url" target="_blank" class="text-primary text-decoration-none">
+                                                {{ companyProfile.properties.homepage_url }}
+                                            </a>
+                                            <span v-else>{{ t('na') }}</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                 <div class="info-row-double">
+                                     <div class="info-item">
+                                         <span class="info-label">{{ t('companySize') }}</span>
+                                         <span class="info-value">{{ companyProfile?.Size || t('na') }}</span>
+                                     </div>
+                                     <div class="info-item">
+                                         <span class="info-label">{{ t('foundedDate') }}</span>
+                                         <span class="info-value">{{ formatDate(companyProfile?.properties?.founded_on) }}</span>
+                                     </div>
+                                 </div>
+
+                                 <div class="info-row-single">
+                                     <div class="info-item">
+                                         <span class="info-label">{{ t('totalFunding') }}</span>
+                                         <span class="funding-amount">{{ formatCurrency(totalFundAmount) }}</span>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- 公司描述 -->
+                             <div v-if="companyProfile?.Description" class="mt-4 pt-4 border-top">
+                                 <h6 class="mb-3">{{ t('companyDetails') }}</h6>
+                                 <div class="text-muted lh-base" style="font-size: 0.875rem;" v-html="companyProfile.Description"></div>
+                             </div>
+                         </div>
+                     </div>
+
+                    <!-- 融资轮次卡片 -->
+                    <div v-if="fundingData.length > 0" class="card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    {{ t('fundingRounds') }}
+                                    <span class="text-muted fw-normal ms-2" style="font-size: 1rem;">({{ fundingTotal }})</span>
+                                </h5>
+                                        <!-- <a
+                                            :href="`funding_rounds_israel.html?id=${cId}&companyName=${companyName}`"
+                                            target="_blank"
+                                    class="btn btn-outline-primary btn-sm"
+                                        >
+                                    {{ t('viewAll') }}
+                                        </a> -->
+                                    </div>
+                        </div>
+                        <div class="card-body">
+                                    <!-- Funding Chart -->
+                            <div v-if="FRXData.length > 0" class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0">{{ t('fundingOverview') }}</h6>
+                                    <div class="btn-group" role="group">
+                                        <button @click="setChartMode('series')" class="btn btn-sm" :class="chartMode === 'series' ? 'btn-primary' : 'btn-outline-primary'">
+                                            {{ t('bySeries') }}
+                                                </button>
+                                        <button @click="setChartMode('year')" class="btn btn-sm" :class="chartMode === 'year' ? 'btn-primary' : 'btn-outline-primary'">
+                                            {{ t('byYear') }}
+                                                </button>
+                                        <button @click="setChartMode('investor')" class="btn btn-sm" :class="chartMode === 'investor' ? 'btn-primary' : 'btn-outline-primary'">
+                                            {{ t('topInvestors') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                <div class="chart-container">
+                                    <canvas id="fundingChart" class="w-100 h-100"></canvas>
+                                    <div v-if="chartLoading" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center rounded">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                                    <!-- Funding Table -->
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>{{ t('date') }}</th>
+                                            <th>{{ t('round') }}</th>
+                                            <th>{{ t('amount') }}</th>
+                                            <th>{{ t('leadInvestor') }}</th>
+                                            <th>{{ t('investors') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                        <tr v-for="round in fundingData.slice(0, 5)" :key="round.uuid">
+                                            <td>{{ round.Date }}</td>
+                                            <td>
+                                                        <a
+                                                            :href="`funding_round_details_israel.html?id=${round.uuid}`"
+                                                            target="_blank"
+                                                    class="text-decoration-none"
+                                                        >
+                                                            <span class="badge bg-secondary">{{ round.Series }}</span>
+                                                        </a>
+                                                    </td>
+                                            <td>{{ round.Currency }}</td>
+                                            <td>{{ round.Name }}</td>
+                                            <td>{{ round.relationships?.investments?.items?.length || 0 }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                            </div>
+                                    </div>
+                                </div>
+
+                    <!-- 收购事件卡片 -->
+                    <div v-if="acquisitionData.length > 0" class="card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    {{ t('acquisitions') }}
+                                    <span class="text-muted fw-normal ms-2" style="font-size: 1rem;">({{ acquisitionTotal }})</span>
+                                </h5>
+                                        <!-- <a
+                                            :href="`acquisitions_israel.html?id=${cId}&companyName=${companyName}`"
+                                            target="_blank"
+                                    class="btn btn-outline-primary btn-sm"
+                                        >
+                                    {{ t('viewAll') }}
+                                        </a> -->
+                                    </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                                                        <thead class="table-light">
+                                        <tr>
+                                            <th>{{ t('date') }}</th>
+                                            <th>{{ t('acquirer') }}</th>
+                                            <th>{{ t('acquiredCompany') }}</th>
+                                            <th>{{ t('amount') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                        <tr v-for="acquisition in acquisitionData.slice(0, 5)" :key="acquisition.uuid">
+                                            <td>{{ acquisition.Date }}</td>
+                                            <td>
+                                                <a
+                                                    v-if="acquisition.acquirer_name && acquisition.acquirer_uuid"
+                                                    :href="`company_profile_new_israel.html?cId=${acquisition.acquirer_uuid}`"
+                                                    target="_blank"
+                                                    class="text-primary text-decoration-none"
+                                                >
+                                                    {{ acquisition.acquirer_name }}
+                                                </a>
+                                                <span v-else-if="acquisition.acquirer_name">{{ acquisition.acquirer_name }}</span>
+                                                <span v-else class="text-muted">—</span>
+                                            </td>
+                                            <td>
+                                                        <a
+                                                            :href="getAcquisitionLink(acquisition)"
+                                                            target="_blank"
+                                                    class="text-primary text-decoration-none"
+                                                        >
+                                                            {{ acquisition.acquiree_name }}
+                                                        </a>
+                                                    </td>
+                                            <td>{{ acquisition.Amount }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>
+
+                 <!-- 右侧边栏 -->
+                 <div class="detail-sidebar">
+                     <!-- 公司技术 -->
+                     <div v-if="companyProfile?.TechName || companyProfile?.TechDescription" class="card" data-aos="fade-up" data-aos-delay="100">
+                         <div class="card-header">
+                             <h5 class="mb-0">{{ t('companyTech') }}</h5>
+                         </div>
+                         <div class="card-body">
+                             <div v-if="companyProfile?.TechName" class="mb-3">
+                                 <h6 class="text-primary fw-semibold">{{ companyProfile.TechName }}</h6>
+                             </div>
+                            <div v-if="companyProfile?.TechDescription" class="text-muted lh-base" style="font-size: 0.875rem;">
+                                {{ companyProfile.TechDescription }}
+                            </div>
+                         </div>
+                     </div>
+
+                     <!-- AI Analysis 卡片 -->
+                     <div v-if="!companyProfile?.properties?.is_closed" class="card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-body text-center">
+                            <div class="mb-3" style="font-size: 3rem; color: var(--color-brand-blue);">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h6 class="mb-3">AI Analysis</h6>
+                            <p class="text-muted small mb-3">Get AI-powered insights about this company</p>
+                        <button
+                            @click="openAIAnalysis"
+                                class="btn btn-primary w-100"
+                        >
+                                Start
+                        </button>
+                    </div>
+                            </div>
+
+                    <!-- 最新新闻 -->
+                    <div v-if="newsData.length > 0" class="card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    {{ t('latestNews') }}
+                                </h5>
+                                <!-- <a
+                                    :href="`news_israel.html?id=${cId}&companyName=${companyName}`"
+                                                    target="_blank"
+                                    class="btn btn-outline-primary btn-sm"
+                                                >
+                                    {{ t('viewAll') }}
+                                                </a> -->
+                                                </div>
+                                                </div>
+                        <div class="card-body">
+                            <div
+                                v-for="news in newsData.slice(0, 3)"
+                                :key="news.uuid"
+                                class="p-3 bg-light rounded mb-3 hover-bg-light"
+                            >
+                                <a
+                                    :href="news.url"
+                                                    target="_blank"
+                                    class="text-decoration-none text-dark fw-medium d-block mb-2"
+                                    style="line-height: 1.4; font-size: 0.875rem;"
+                                >
+                                    {{ news.title }}
+                                </a>
+                                <small class="text-muted">{{ formatDate(news.Date) }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                     <!-- 联系信息 -->
+                     <div class="card" data-aos="fade-up" data-aos-delay="400">
+                         <div class="card-header">
+                             <h5 class="mb-0">{{ t('contactInfo') }}</h5>
+                         </div>
+                         <div class="card-body">
+                             <!-- 总部地址 -->
+                             <div v-if="companyProfile?.Location" class="mb-3">
+                                 <h6 class="text-muted mb-1">{{ t('headquarters') }}</h6>
+                                 <p class="mb-0" style="font-size: 0.875rem;">{{ formatLocation(companyProfile?.Location) }}</p>
+                             </div>
+
+                             <!-- 联系方式 -->
+                             <div class="mb-3">
+                                 <h6 class="text-muted mb-1">{{ t('contactInfo') }}</h6>
+                                <div class="info-value" style="font-size: 0.875rem;">
+                                    <div v-if="companyProfile?.properties?.contact_email" class="mb-2">
+                                        <i class="fas fa-envelope me-2"></i>
+                                        <a :href="'mailto:' + companyProfile.properties.contact_email" class="text-primary text-decoration-none">
+                                            {{ companyProfile.properties.contact_email }}
+                                        </a>
+                                    </div>
+                                    <div v-if="companyProfile?.properties?.phone_number">
+                                        <i class="fas fa-phone me-2"></i>
+                                        {{ companyProfile.properties.phone_number }}
+                                    </div>
+                                </div>
+                             </div>
+
+                             <!-- 社交媒体 -->
+                             <div v-if="companyProfile?.Social">
+                                 <h6 class="text-muted mb-1">{{ t('socialMedia') }}</h6>
+                                 <div class="info-value" style="font-size: 0.875rem;" v-html="companyProfile.Social"></div>
+                             </div>
+                         </div>
+                     </div>
+                         </div>
+                        </div>
+                    </div>
+
+        <!-- AI Analysis Modal -->
+        <div v-if="showAIModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ t('aiAnalysisReport') }}</h5>
+                        <button type="button" class="btn-close" @click="showAIModal = false"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="aiAnalysisLoading" class="text-center py-5">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                    </div>
+                            <p class="text-muted fw-medium">{{ t('aiAnalyzing') }}</p>
+                        </div>
+                        <div v-else-if="aiAnalysis">
+                            <div class="mb-4">
+                                <h6 class="fw-semibold text-dark mb-3">{{ t('chineseAnalysis') }}</h6>
+                                <div class="bg-light p-4 rounded" v-html="aiAnalysis.analysisCN"></div>
+                        </div>
+                        <div>
+                                <h6 class="fw-semibold text-dark mb-3">{{ t('englishAnalysis') }}</h6>
+                                <div class="bg-light p-4 rounded" v-html="aiAnalysis.analysis"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div v-if="showEditModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 1200px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-edit me-2"></i>{{ t('editCompany') }}</h5>
+                        <button type="button" class="btn-close" @click="closeEditModal"></button>
+                    </div>
+                    <div class="modal-body" style="position: relative;">
+                        <!-- Loading Overlay -->
+                        <div v-if="editLoading" class="modal-loading-overlay">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted fw-medium">{{ t('updating') }}</p>
+                            </div>
+                        </div>
+                        <!-- Form Content (always present) -->
+                        <div :style="{ opacity: editLoading ? 0.3 : 1, pointerEvents: editLoading ? 'none' : 'auto' }">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('homepageUrl') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.homepage_url">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('foundedOn') }}</label>
+                                    <input type="date" class="form-control" v-model="editForm.founded_on">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('minEmployees') }}</label>
+                                    <input type="number" class="form-control" v-model="editForm.num_employees_min">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('maxEmployees') }}</label>
+                                    <input type="number" class="form-control" v-model="editForm.num_employees_max">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('focusCN') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.focus_cn">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('focusEN') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.focus_en">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('country') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.country">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('region') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.region">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('city') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.city">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('street') }}</label>
+                                    <input type="text" class="form-control" v-model="editForm.street">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('companyStatus') }}</label>
+                                    <select class="form-control" v-model="editForm.company_status">
+                                        <option value="">{{ t('pleaseSelect') }}</option>
+                                        <option value="stopped">{{ t('statusStopped') }}</option>
+                                        <option value="site_closed">{{ t('statusSiteClosed') }}</option>
+                                        <option value="site_not_verified">{{ t('statusSiteNotVerified') }}</option>
+                                        <option value="no_site">{{ t('statusNoSite') }}</option>
+                                        <option value="merge">{{ t('statusMerge') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('isClosed') }}</label>
+                                    <select class="form-control" v-model="editForm.is_closed">
+                                        <option value="false">{{ t('no') }}</option>
+                                        <option value="true">{{ t('yes') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div v-if="editError" class="alert alert-danger mt-3" role="alert">
+                                {{ editError }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="closeEditModal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="saveCompanyUpdate" :disabled="editLoading">
+                            <span v-if="editLoading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('save') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Description Modal -->
+        <div v-if="showEditDescModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 1200px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>{{ t('editDescription') }}</h5>
+                        <button type="button" class="btn-close" @click="closeEditDescModal"></button>
+                    </div>
+                    <div class="modal-body" style="position: relative;">
+                        <!-- Loading Overlay -->
+                        <div v-if="descLoading" class="modal-loading-overlay">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted fw-medium">{{ t('updating') }}</p>
+                            </div>
+                        </div>
+                        <!-- Form Content (always present) -->
+                        <div :style="{ opacity: descLoading ? 0.3 : 1, pointerEvents: descLoading ? 'none' : 'auto' }">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('contactEmail') }}</label>
+                                    <input type="email" class="form-control" v-model="descForm.contact_email" :placeholder="t('enterContactEmail')">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ t('phoneNumber') }}</label>
+                                    <input type="text" class="form-control" v-model="descForm.phone_number" :placeholder="t('enterPhoneNumber')">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">{{ t('shortDescription') }}</label>
+                                    <input type="text" class="form-control" v-model="descForm.short_description" :placeholder="t('enterShortDescription')">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">{{ t('description') }}</label>
+                                    <textarea class="form-control" rows="6" v-model="descForm.description" :placeholder="t('enterDescription')"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">{{ t('shortDescriptionCN') }}</label>
+                                    <input type="text" class="form-control" v-model="descForm.short_description_cn" :placeholder="t('enterShortDescriptionCN')">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">{{ t('descriptionCN') }}</label>
+                                    <textarea class="form-control" rows="6" v-model="descForm.description_cn" :placeholder="t('enterDescriptionCN')"></textarea>
+                                </div>
+                            </div>
+                            <div v-if="descError" class="alert alert-danger mt-3" role="alert">
+                                {{ descError }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="closeEditDescModal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="saveDescriptionUpdate" :disabled="descLoading">
+                            <span v-if="descLoading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('save') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create News Modal -->
+        <div v-if="showCreateNewsModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-newspaper me-2"></i>{{ t('createNews') }}</h5>
+                        <button type="button" class="btn-close" @click="closeCreateNewsModal"></button>
+                    </div>
+                    <div class="modal-body" style="position: relative;">
+                        <!-- Loading Overlay -->
+                        <div v-if="newsLoading" class="modal-loading-overlay">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted fw-medium">{{ t('creating') }}</p>
+                            </div>
+                        </div>
+                        <!-- Form Content (always present) -->
+                        <div :style="{ opacity: newsLoading ? 0.3 : 1, pointerEvents: newsLoading ? 'none' : 'auto' }">
+                            <div class="mb-3">
+                                <label class="form-label">{{ t('title') }}</label>
+                                <input type="text" class="form-control" v-model="newsForm.title" :placeholder="t('enterTitle')">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{ t('url') }}</label>
+                                <input type="url" class="form-control" v-model="newsForm.url" :placeholder="t('enterUrl')">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{ t('date') }}</label>
+                                <input type="date" class="form-control" v-model="newsForm.posted_on">
+                            </div>
+                            <div v-if="newsError" class="alert alert-danger" role="alert">
+                                {{ newsError }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="closeCreateNewsModal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="saveNews" :disabled="newsLoading">
+                            <span v-if="newsLoading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('create') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div v-if="showToast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11000;">
+            <div class="toast show" role="alert">
+                <div class="toast-header" :class="toastType === 'success' ? 'bg-success text-white' : 'bg-danger text-white'">
+                    <i :class="toastType === 'success' ? 'fas fa-check-circle me-2' : 'fas fa-exclamation-circle me-2'"></i>
+                    <strong class="me-auto">{{ toastType === 'success' ? t('success') : t('error') }}</strong>
+                    <button type="button" class="btn-close btn-close-white" @click="showToast = false"></button>
+                </div>
+                <div class="toast-body">
+                    {{ toastMessage }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script src="common/js/common-utils.js"></script>
+    <script src="common/js/api-client.js"></script>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <script>
+
+// Initialize AOS animations
+AOS.init({
+	duration: 800,
+	easing: 'ease-in-out',
+	once: true
+});
+
+// Vue App
+// 修正语言代码：'cn' -> 'zh'
+let savedLang = localStorage.getItem('inno_lang') || 'zh';
+if (savedLang === 'cn') {
+	savedLang = 'zh';
+	localStorage.setItem('inno_lang', 'zh');
+}
+const DEFAULT_LANG = savedLang;
+const FALLBACK_I18N = {
+	zh: { loadingCompanyInfo: '正在加载公司信息...' },
+	en: { loadingCompanyInfo: 'Loading company info...' }
+};
+const { createApp } = Vue;
+
+createApp({
+	data() {
+		return {
+			// i18n
+			currentLang: DEFAULT_LANG,
+			translations: FALLBACK_I18N[DEFAULT_LANG] || {},
+			// Company data
+			cId: this.getUrlParam('cId') || '4117c2a737664095e483ccf813ca31ac',
+			companyName: '',
+			companyProfile: null,
+			companyLogo: '',
+			currentTeamData: [],
+			fundingData: [],
+			fundingTotal: 0,
+			acquisitionData: [],
+			acquisitionTotal: 0,
+			newsData: [],
+			NewsTotal: 0,
+
+			totalFundAmount: 0,
+			// Chart data
+			FRXData: [],
+			FRYData: [],
+			fundingChartInstance: null,
+			chartMode: 'series',
+			chartLoading: false,
+			isCreatingChart: false,
+			fundingByYear: [],
+			seriesDistribution: [],
+			topInvestors: [],
+			// UI state
+			loading: true,
+			showAIModal: false,
+			aiAnalysisLoading: false,
+			aiAnalysis: null,
+			canEdit: false, // 将在 mounted() 中根据用户登录状态设置
+			// Tabs configuration (not used)
+			tabs: [],
+			// Edit modal
+			showEditModal: false,
+			editLoading: false,
+			editError: '',
+			editForm: {
+				homepage_url: '',
+				founded_on: '',
+				num_employees_min: '',
+				num_employees_max: '',
+				focus_cn: '',
+				focus_en: '',
+				country: '',
+				region: '',
+				city: '',
+				street: '',
+				company_status: '',
+				is_closed: false
+			},
+			// Edit Description modal
+			showEditDescModal: false,
+			descLoading: false,
+			descError: '',
+			descForm: {
+				contact_email: '',
+				phone_number: '',
+				short_description: '',
+				description: '',
+				short_description_cn: '',
+				description_cn: ''
+			},
+			// Create News modal
+			showCreateNewsModal: false,
+			newsLoading: false,
+			newsError: '',
+			newsForm: {
+				title: '',
+				url: '',
+				posted_on: ''
+			},
+			// Toast notification
+			showToast: false,
+			toastType: 'success',
+			toastMessage: '',
+			// Location data
+			country: '',
+			region: '',
+			city: '',
+			street: ''
+		}
+	},
+	async mounted() {
+		// 立即滚动到顶部，防止浏览器自动恢复滚动位置
+		if ('scrollRestoration' in history) {
+			history.scrollRestoration = 'manual';
+		}
+		window.scrollTo(0, 0);
+		document.documentElement.scrollTop = 0;
+		document.body.scrollTop = 0;
+
+		await this.loadI18n();
+		await this.initData();
+
+		// 检查用户是否已登录（有有效的API token）
+		this.canEdit = !!this.getApiToken();
+
+		// 最终确保页面在顶部
+		this.$nextTick(() => {
+			setTimeout(() => {
+				window.scrollTo(0, 0);
+				document.documentElement.scrollTop = 0;
+				document.body.scrollTop = 0;
+			}, 100);
+		});
+	},
+	methods: {
+		// URL parameter helper
+		getUrlParam(name) {
+			const urlParams = new URLSearchParams(window.location.search);
+			return urlParams.get(name);
+		},
+		// i18n helpers
+		async loadI18n() {
+			try {
+				const res = await axios.get('common/i18n/company_profile_new_israel.' + this.currentLang + '.json');
+				this.translations = { ...(FALLBACK_I18N[this.currentLang] || {}), ...(res.data || {}) };
+			} catch (e) {
+				console.error('Failed to load i18n file:', e);
+				this.translations = FALLBACK_I18N[this.currentLang] || {};
+			}
+		},
+		t(key) { return this.translations[key] || key; },
+		async toggleLang() {
+			this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+			localStorage.setItem('inno_lang', this.currentLang);
+			window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
+			await this.loadI18n();
+		},
+		// Initialize data - 只调用GetDetailInfo
+		async initData() {
+			try {
+				await this.loadCompanyProfile();
+			} catch (error) {
+				console.error('Failed to load data:', error);
+			} finally {
+				this.loading = false;
+				// 确保页面显示在顶部
+				this.$nextTick(() => {
+					window.scrollTo(0, 0);
+				});
+			}
+		},
+		// API base URL
+		getApiUrl(endpoint) { return `https://ai.innonation.io/inno_ai_services/api/Company/${endpoint}`; },
+		// Get API token from cookie
+		getApiToken() {
+			return this.getCookie('api_token');
+		},
+		// Get cookie value
+		getCookie(name) {
+			const value = `; ${document.cookie}`;
+			const parts = value.split(`; ${name}=`);
+			if (parts.length === 2) return parts.pop().split(';').shift();
+			return null;
+		},
+		// Load company profile - 参考原始脚本，只调用GetDetailInfo
+		async loadCompanyProfile() {
+			try {
+				// Prepare headers with authentication
+				const config = {
+					headers: {}
+				};
+
+				// Add authentication token if available
+				const apiToken = this.getApiToken();
+				if (apiToken) {
+					config.headers['Authorization'] = 'Bearer ' + apiToken;
+				}
+
+				const response = await axios.get(this.getApiUrl(`GetDetailInfo?cId=${this.cId}`), config);
+				if (response.data.ReturnCode === 0) {
+					const data = response.data.Data;
+					this.companyProfile = data.data;
+
+					if (!this.companyProfile) {
+						console.error('No company profile data received');
+						return;
+					}
+
+					this.companyName = this.companyProfile?.properties?.name || '';
+					const url = this.companyProfile?.properties?.profile_image_url;
+					this.companyLogo = url && typeof url === 'string' && url.trim() ? this.normalizeLogoUrl(url) : '';
+
+					// 团队数据(保留兼容)
+					this.currentTeamData = [];
+					if (this.companyProfile.relationships?.featured_team?.items && this.companyProfile.relationships.featured_team.paging.total_items > 0) {
+						this.currentTeamData = this.companyProfile.relationships.featured_team.items;
+					} else if (this.companyProfile.relationships?.current_team?.items && this.companyProfile.relationships.current_team.items.length > 0) {
+						this.currentTeamData = this.companyProfile.relationships.current_team.items;
+					}
+
+					if (this.currentTeamData && this.currentTeamData.length > 0) {
+						this.currentTeamData.forEach(member => {
+							const p = member.relationships?.person?.item || member.relationships?.person;
+							if (p) {
+								member.Name = p.properties.name || `${p.properties.first_name || ''} ${p.properties.last_name || ''}`.trim();
+								member.Title = member.properties.title;
+								member.Bio = p.properties.bio || p.properties.short_description || p.properties.description;
+								member.URL = p.uuid ? `person_israel.html?pId=${p.uuid}` : p.properties.linkedin || '#';
+							}
+						});
+					}
+
+					// 融资数据
+					if (this.companyProfile.relationships?.funding_rounds?.items && this.companyProfile.relationships.funding_rounds.items.length > 0) {
+						this.fundingData = this.companyProfile.relationships.funding_rounds.items;
+						this.fundingTotal = this.companyProfile.relationships.funding_rounds.paging.total_items;
+						this.fundingData.forEach(round => {
+							round.Date = this.formatMonthStr(round.properties.announced_on);
+							round.Currency = round.properties.money_raised_usd ? `$${this.nFormatter(round.properties.money_raised_usd, 2)}` : '—';
+							round.Series = round.properties.series ? `Series ${round.properties.series}` : round.properties.funding_type?.replace(/_/g, ' ');
+							if (round.relationships?.investments?.items) {
+								const leadInvestors = round.relationships.investments.items
+									.filter(inv => inv.properties.is_lead_investor)
+									.map(inv => {
+										const inNode = inv.relationships?.investors?.item || inv.relationships?.investors;
+										return inNode?.properties?.name || '';
+									})
+									.filter(Boolean);
+								round.Name = leadInvestors.length > 0 ? leadInvestors.join(', ') : '—';
+							}
+						});
+						this.totalFundAmount = this.fundingData.reduce((t, r) => t + (r.properties.money_raised_usd || 0), 0);
+						this.FRXData = this.fundingData.map(f => f.Date);
+						this.FRYData = this.fundingData.map(f => Number(f.properties.money_raised_usd || 0));
+					} else {
+						this.fundingData = [];
+						this.fundingTotal = 0;
+						this.totalFundAmount = 0;
+						this.FRXData = [];
+						this.FRYData = [];
+					}
+
+					// 收购(主动+被收购)
+					const rel = this.companyProfile.relationships || {};
+					this.acquisitionData = [];
+					this.acquisitionTotal = 0;
+
+					if (rel.acquisitions?.items && rel.acquisitions.items.length > 0) {
+						this.acquisitionData = rel.acquisitions.items;
+						this.acquisitionTotal = rel.acquisitions.paging.total_items || 0;
+						this.acquisitionData.forEach(a => {
+							// 被收购公司信息
+							const acqRel = a.relationships?.acquiree;
+							const p = acqRel?.item || acqRel;
+							if (p) {
+								a.acquiree_uuid = p.uuid;
+								a.acquiree_type = p.type;
+								a.profile_image_url = p.properties?.profile_image_url;
+								a.acquiree_name = p.properties?.name;
+								a.acquiree_founded_on = p.properties?.founded_on;
+							}
+
+							// 收购方信息
+							const acquirerRel = a.relationships?.acquirer;
+							const acquirer = acquirerRel?.item || acquirerRel;
+							if (acquirer) {
+								a.acquirer_uuid = acquirer.uuid;
+								a.acquirer_name = acquirer.properties?.name;
+							}
+
+							a.Date = a.properties.announced_on;
+							a.Amount = a.properties.price_usd ? `$${this.nFormatter(a.properties.price_usd)}` : '—';
+						});
+					}
+
+					const acquiredBy = rel.acquired_by?.item || rel.acquired_by?.items?.[0];
+					if (acquiredBy) {
+						const item = {
+							uuid: acquiredBy.uuid,
+							acquiree_name: this.companyProfile?.properties?.name,
+							Date: acquiredBy.properties?.announced_on,
+							Amount: acquiredBy.properties?.price_usd ? `$${this.nFormatter(acquiredBy.properties.price_usd)}` : '—'
+						};
+						const acquirer = acquiredBy.relationships?.acquirer?.item || acquiredBy.relationships?.acquirer;
+						if (acquirer) {
+							item.acquirer_name = acquirer.properties?.name;
+							item.acquirer_uuid = acquirer.uuid;
+						}
+						this.acquisitionData = this.acquisitionData.concat(item);
+						this.acquisitionTotal = this.acquisitionTotal + 1;
+					}
+
+					// 行业
+					if (this.companyProfile.relationships?.categories?.items && this.companyProfile.relationships.categories.items.length > 0) {
+						const industryArr = [];
+						this.companyProfile.relationships.categories.items.forEach(item => {
+							if (item.properties?.category_groups) {
+								item.properties.category_groups.forEach(group => {
+									if (industryArr.indexOf(group) === -1) industryArr.push(group);
+								});
+							}
+						});
+						this.companyProfile.Industry = industryArr.join('/');
+					} else {
+						this.companyProfile.Industry = '';
+					}
+
+					// 总部
+					const hqRel = this.companyProfile.relationships?.headquarters;
+					if (hqRel) {
+						const hqProps = hqRel.item?.properties || (Array.isArray(hqRel.items) && hqRel.items[0]?.properties) || null;
+						if (hqProps) {
+							const arr = [];
+							if (hqProps.street_1) {
+								arr.push(hqProps.street_1);
+								this.street = hqProps.street_1;
+							}
+							if (hqProps.city) {
+								arr.push(hqProps.city);
+								this.city = hqProps.city;
+							}
+							if (hqProps.region && hqProps.region !== hqProps.city) {
+								arr.push(hqProps.region);
+								this.region = hqProps.region;
+							}
+							if (hqProps.country) {
+								arr.push(hqProps.country);
+								this.country = hqProps.country;
+							}
+							this.companyProfile.Location = arr;
+						} else {
+							this.companyProfile.Location = [];
+						}
+					} else {
+						this.companyProfile.Location = [];
+					}
+
+					// 规模
+					if (this.companyProfile.properties.num_employees_min || this.companyProfile.properties.num_employees_max) {
+						this.companyProfile.Size = '';
+						if (this.companyProfile.properties.num_employees_min) this.companyProfile.Size += this.formatNumber(this.companyProfile.properties.num_employees_min);
+						if (this.companyProfile.properties.num_employees_max) this.companyProfile.Size += this.companyProfile.Size ? `-${this.formatNumber(this.companyProfile.properties.num_employees_max)}` : this.formatNumber(this.companyProfile.properties.num_employees_max);
+					} else {
+						this.companyProfile.Size = '';
+					}
+
+					// 成立时间
+					if (this.companyProfile.properties.founded_on) {
+						this.companyProfile.FoundIn = this.companyProfile.properties.founded_on;
+					} else {
+						this.companyProfile.FoundIn = '';
+					}
+
+					// 社交媒体
+					if (this.companyProfile.relationships?.websites?.items && this.companyProfile.relationships.websites.items.length > 0) {
+						const socialArr = [];
+						this.companyProfile.relationships.websites.items.forEach(item => {
+							if (item.properties.website_type !== 'homepage') {
+								if (item.properties.website_type === 'twitter') this.companyProfile.twitterURL = item.properties.url;
+								else if (item.properties.website_type === 'facebook') this.companyProfile.facebookURL = item.properties.url;
+								else if (item.properties.website_type === 'linkedin') this.companyProfile.linkedinURL = item.properties.url;
+								if (item.properties.url) socialArr.push(`<a href="${item.properties.url}" target="_blank"><img src="https://innonation.oss-cn-beijing.aliyuncs.com/company/${item.properties.website_type}.png" style="width:24px;"></a>`);
+							}
+						});
+						this.companyProfile.Social = socialArr.join('&nbsp;&nbsp;');
+					} else {
+						this.companyProfile.Social = '';
+					}
+
+					// 描述 - 短描述在前，空行分隔，然后是详细描述
+					const desEnArr = [];
+					if (this.companyProfile.properties.short_description) desEnArr.push(this.companyProfile.properties.short_description);
+					if (this.companyProfile.properties.description) desEnArr.push(this.companyProfile.properties.description);
+					this.companyProfile.Description = desEnArr.length > 0 ? desEnArr.join('<br><br>') : '';
+
+					// 技术信息 - 根据公司特点设置技术名称和描述
+					// 这里可以根据实际API数据或公司信息来设置
+					// 示例：CI/CD相关公司
+					if (this.companyProfile.properties.name && this.companyProfile.properties.name.toLowerCase().includes('codefresh')) {
+						this.companyProfile.TechName = 'CI/CD (Continuous Integration/Continuous Delivery/Continuous Deployment)';
+						this.companyProfile.TechDescription = 'CI/CD is a set of automated software development practices that frequently integrates code changes, runs automated tests, and deploys applications to production with minimal or no human intervention, often used to accelerate product iteration and reduce release risks.';
+					} else {
+						// 可以根据其他条件或API数据来设置技术信息
+						// 暂时设置为空，等待后续数据源
+						this.companyProfile.TechName = '';
+						this.companyProfile.TechDescription = '';
+					}
+
+					// 新闻数据 - 从GetDetailInfo的news节点获取
+					console.log('Checking for news data in company profile:', this.companyProfile.relationships?.news);
+					if (this.companyProfile.relationships?.news?.items && this.companyProfile.relationships.news.items.length > 0) {
+						this.newsData = this.companyProfile.relationships.news.items;
+						this.NewsTotal = this.companyProfile.relationships.news.paging?.total_items || this.newsData.length;
+						console.log('Found news data:', this.newsData.length, 'items');
+						this.newsData.forEach(news => {
+							news.title = news.title || '';
+							news.url = news.url || '#';
+							news.Date = news.post_date || '';
+						});
+						console.log('Processed news data:', this.newsData);
+					} else {
+						console.log('No news data found in company profile');
+						this.newsData = [];
+						this.NewsTotal = 0;
+					}
+
+					// 确保所有必要的数据都已初始化
+					if (!this.companyProfile.Industry) this.companyProfile.Industry = '';
+					if (!this.companyProfile.Size) this.companyProfile.Size = '';
+					if (!this.companyProfile.FoundIn) this.companyProfile.FoundIn = '';
+					if (!this.companyProfile.Social) this.companyProfile.Social = '';
+					if (!this.companyProfile.Description) this.companyProfile.Description = '';
+
+					// Tab计数 & 图表
+					this.updateTabCounts();
+					this.initCharts();
+
+					// 确保所有数据都已加载完成
+					console.log('Company profile loaded successfully:', {
+						name: this.companyName,
+						fundingTotal: this.fundingTotal,
+						acquisitionTotal: this.acquisitionTotal,
+						newsTotal: this.NewsTotal
+					});
+				}
+			} catch (error) {
+				console.error('Failed to load company profile:', error);
+				this.loading = false;
+
+				// 设置默认值
+				this.companyProfile = {};
+				this.companyName = '';
+				this.companyLogo = '';
+				this.currentTeamData = [];
+				this.fundingData = [];
+				this.fundingTotal = 0;
+				this.acquisitionData = [];
+				this.acquisitionTotal = 0;
+				this.newsData = [];
+				this.NewsTotal = 0;
+
+				this.totalFundAmount = 0;
+				this.FRXData = [];
+				this.FRYData = [];
+			}
+		},
+		updateTabCounts() {
+			// 不再需要更新标签页计数，因为已经移除了标签页功能
+		},
+
+		initCharts() {
+			if (this.fundingData && this.fundingData.length > 0) {
+				const byYearMap = {}, seriesMap = {}, investorMap = {};
+				this.fundingData.forEach(round => {
+					const year = new Date(round.properties.announced_on).getFullYear();
+					const amount = Number(round.properties.money_raised_usd || 0);
+					byYearMap[year] = (byYearMap[year] || 0) + amount;
+					const series = round.properties.series ? `Series ${round.properties.series}` : (round.properties.funding_type || '').replace(/_/g, ' ');
+					if (series) seriesMap[series] = (seriesMap[series] || 0) + amount;
+					const investments = round.relationships?.investments?.items || [];
+					investments.forEach(inv => {
+						const invNode = inv.relationships?.investors?.item || inv.relationships?.investors;
+						const name = invNode?.properties?.name;
+						if (name) investorMap[name] = (investorMap[name] || 0) + amount;
+					});
+				});
+				this.fundingByYear = Object.keys(byYearMap).sort().map(y => ({ label: y, value: byYearMap[y] }));
+				this.seriesDistribution = Object.keys(seriesMap).sort().map(k => ({ label: k, value: seriesMap[k] }));
+				this.topInvestors = Object.entries(investorMap).sort((a,b) => b[1]-a[1]).slice(0, 10).map(([label, value]) => ({ label, value }));
+			} else {
+				this.fundingByYear = [];
+				this.seriesDistribution = [];
+				this.topInvestors = [];
+			}
+
+			if (this.isCreatingChart) return;
+			if (!(this.FRXData?.length && this.FRYData?.length)) {
+				console.log('No funding data available for chart');
+				return;
+			}
+
+			this.isCreatingChart = true;
+			this.$nextTick(() => {
+				try {
+					const ctx = document.getElementById('fundingChart');
+					if (!ctx) {
+						console.log('Chart canvas not found');
+						this.isCreatingChart = false;
+						return;
+					}
+
+					if (this.fundingChartInstance) {
+						try {
+							this.fundingChartInstance.destroy();
+						} catch(e) {
+							console.log('Error destroying chart instance:', e);
+						}
+					}
+
+					let chartConfig;
+					if (this.chartMode === 'year') {
+						const labels = this.fundingByYear.map(i => i.label);
+						const values = this.fundingByYear.map(i => i.value);
+						const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+						gradient.addColorStop(0, 'rgba(25,111,166,0.35)');
+						gradient.addColorStop(1, 'rgba(25,111,166,0.05)');
+						chartConfig = {
+							type: 'line',
+							data: {
+								labels,
+								datasets: [{
+									label: '年度融资总额',
+									data: values,
+									borderColor: '#196fa6',
+									backgroundColor: gradient,
+									fill: true,
+									tension: 0.35,
+									borderWidth: 3,
+									pointRadius: 5
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								plugins: {
+									legend: { display: false },
+									tooltip: {
+										callbacks: {
+											label: (ctx) => ` $${this.nFormatter(ctx.parsed.y)}`
+										}
+									}
+								},
+								scales: {
+									y: {
+										beginAtZero: true,
+										ticks: { callback: (v) => '$' + this.nFormatter(v) }
+									},
+									x: {
+										ticks: { color: '#6b7280' }
+									}
+								}
+							}
+						};
+					} else if (this.chartMode === 'series') {
+						const labels = this.seriesDistribution.map(i => i.label);
+						const values = this.seriesDistribution.map(i => i.value);
+						chartConfig = {
+							type: 'doughnut',
+							data: {
+								labels,
+								datasets: [{
+									data: values,
+									backgroundColor: ['#196fa6','#8b5cf6','#dc2626','#f59e0b','#10b981','#ec4899','#6366f1']
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								plugins: {
+									legend: {
+										position: 'right',
+										labels: {
+											usePointStyle: true,
+											pointStyle: 'rectRounded',
+											padding: 15,
+											font: {
+												size: 12
+											}
+										}
+									},
+									tooltip: {
+										callbacks: {
+											label: (ctx) => `${ctx.label}: $${this.nFormatter(ctx.parsed)}`
+										}
+									}
+								},
+								cutout: '60%'
+							}
+						};
+					} else if (this.chartMode === 'investor') {
+						const labels = this.topInvestors.map(i => i.label);
+						const values = this.topInvestors.map(i => i.value);
+						chartConfig = {
+							type: 'bar',
+							data: {
+								labels,
+								datasets: [{
+									label: '投资额',
+									data: values,
+									backgroundColor: 'rgba(25,111,166,0.7)',
+									borderRadius: 12
+								}]
+							},
+							options: {
+								indexAxis: 'y',
+								responsive: true,
+								maintainAspectRatio: false,
+								plugins: {
+									legend: { display: false },
+									tooltip: {
+										callbacks: {
+											label: (ctx) => ` $${this.nFormatter(ctx.parsed.x)}`
+										}
+									}
+								},
+								scales: {
+									x: {
+										beginAtZero: true,
+										ticks: { callback: (v) => '$' + this.nFormatter(v) }
+									},
+									y: {
+										ticks: { color: '#6b7280' }
+									}
+								}
+							}
+						};
+					} else {
+						const labels = this.fundingByYear.map(i => i.label);
+						const values = this.fundingByYear.map(i => i.value);
+						chartConfig = {
+							type: 'bar',
+							data: {
+								labels,
+								datasets: [{
+									data: values,
+									backgroundColor: 'rgba(25,111,166,0.7)',
+									borderRadius: 12
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false
+							}
+						};
+					}
+
+					this.fundingChartInstance = new Chart(ctx, chartConfig);
+					console.log('Chart created successfully:', this.chartMode);
+				} catch (error) {
+					console.error('Error creating chart:', error);
+				} finally {
+					this.isCreatingChart = false;
+				}
+			});
+		},
+		// Utils
+		formatDate(dateString) { if (!dateString) return 'N/A'; const date = new Date(dateString); return date.toLocaleDateString('zh-CN'); },
+		formatMonthStr(value) { const monthArr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; const date = new Date(value); return monthArr[date.getMonth()] + ', ' + date.getFullYear(); },
+		formatCurrency(amount) { if (!amount) return 'N/A'; return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'USD' }).format(amount); },
+		formatLocation(location) { if (!location || !Array.isArray(location)) return 'N/A'; return location.join(', '); },
+		formatRoundSeries(series) { if (!series) return 'N/A'; return series.toUpperCase(); },
+		getInitials(name) { if (!name) return '?'; const names = name.trim().split(' '); if (names.length === 1) return name.charAt(0).toUpperCase(); return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase(); },
+		nFormatter(num, digits = 1) { if (num === null || num === undefined) return '—'; const si = [{value:1,symbol:''},{value:1E3,symbol:'K'},{value:1E6,symbol:'M'},{value:1E9,symbol:'B'},{value:1E12,symbol:'T'},{value:1E15,symbol:'P'},{value:1E18,symbol:'E'}]; const rx=/\.0+$|(\.[0-9]*[1-9])0+$/; let i; for(i=si.length-1;i>0;i--){ if(num>=si[i].value) break;} return (num/si[i].value).toFixed(digits).replace(rx,'$1')+si[i].symbol; },
+		formatNumber(num) { if (num === null || num === undefined) return ''; return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); },
+		shouldShowStatus() { const props = this.companyProfile?.properties; return props?.is_acquired || props?.is_closed || props?.company_status; },
+		getStatusText() {
+			const props = this.companyProfile?.properties;
+			if (props?.is_acquired) return '被收购';
+			if (props?.is_closed) return '已关闭';
+			if (props?.company_status) {
+				const map = {
+					stopped:'停止营业',
+					site_closed:'网站关闭',
+					site_not_verified:'网站未验证',
+					no_site:'无网站',
+					merge:'合并'
+				};
+				return map[props.company_status] || props.company_status;
+			}
+			return '';
+		},
+		getStatusClass() {
+			const props = this.companyProfile?.properties;
+			if (props?.is_acquired) return 'status-badge-purple';
+			if (props?.is_closed) return 'status-badge-red';
+			return 'status-badge-green';
+		},
+		normalizeLogoUrl(value) {
+			if (!value) return '';
+			try {
+				if (value.indexOf('/image/t_api_images/')>-1)
+					return value.replace('/image/t_api_images','https://images.crunchbase.com/image/upload');
+				if (value.indexOf('res.cloudinary.com/crunchbase-production')>-1)
+					return value.replace('res.cloudinary.com/crunchbase-production','images.crunchbase.com');
+				if (value.indexOf('/res_image')>-1)
+					return value.replace('/res_image','https://images.crunchbase.com/image');
+				return value;
+			} catch(e){
+				return value;
+			}
+		},
+		setChartMode(mode){
+			this.chartMode = mode;
+			this.chartLoading = true;
+			setTimeout(()=>{
+				this.initCharts();
+				this.chartLoading=false;
+			},200);
+		},
+		getAcquisitionLink(a){
+			return `acquisition_details_israel.html?id=${a.uuid}`;
+		},
+		goBack(){
+			window.history.back();
+		},
+		openEditModal() {
+			// Prevent body scroll when modal is open
+			document.body.style.overflow = 'hidden';
+
+			this.showEditModal = true;
+			this.editError = '';
+			// Populate form with current data
+			this.editForm = {
+				homepage_url: this.companyProfile?.properties?.homepage_url || '',
+				founded_on: this.companyProfile?.properties?.founded_on || '',
+				num_employees_min: this.companyProfile?.properties?.num_employees_min || '',
+				num_employees_max: this.companyProfile?.properties?.num_employees_max || '',
+				focus_cn: this.companyProfile?.properties?.focus_cn || '',
+				focus_en: this.companyProfile?.properties?.focus_en || '',
+				country: this.country || '',
+				region: this.region || '',
+				city: this.city || '',
+				street: this.street || '',
+				company_status: this.companyProfile?.properties?.company_status || '',
+				is_closed: this.companyProfile?.properties?.is_closed || false
+			};
+
+			// Ensure modal scrolls to top
+			this.$nextTick(() => {
+				const modalElement = document.querySelector('.modal.d-block');
+				if (modalElement) {
+					modalElement.scrollTop = 0;
+				}
+			});
+		},
+		closeEditModal() {
+			this.showEditModal = false;
+			// Restore body scroll
+			document.body.style.overflow = '';
+		},
+		async saveCompanyUpdate() {
+			this.editLoading = true;
+			this.editError = '';
+			try {
+				// Prepare headers with authentication
+				const config = {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				};
+
+				// Add authentication token if available
+				const apiToken = this.getApiToken();
+				if (apiToken) {
+					config.headers['Authorization'] = 'Bearer ' + apiToken;
+				}
+
+				const response = await axios.post(
+					this.getApiUrl('UpdateCompanyProfile'),
+					{
+						homepage_url: this.editForm.homepage_url,
+						founded_on: this.editForm.founded_on,
+						num_employees_min: this.editForm.num_employees_min ? parseInt(this.editForm.num_employees_min) : null,
+						num_employees_max: this.editForm.num_employees_max ? parseInt(this.editForm.num_employees_max) : null,
+						focus_cn: this.editForm.focus_cn,
+						focus_en: this.editForm.focus_en,
+						country: this.editForm.country,
+						region: this.editForm.region,
+						city: this.editForm.city,
+						street_1: this.editForm.street,
+						company_status: this.editForm.company_status,
+						is_closed: this.editForm.is_closed === 'true' || this.editForm.is_closed === true,
+						id: this.cId
+					},
+					config
+				);
+
+				if (response.data.ReturnCode === 0) {
+					this.showToast = true;
+					this.toastType = 'success';
+					this.toastMessage = this.t('updateSuccess') || 'Update successful!';
+					this.closeEditModal();
+					// Reload page after 1 second to show changes
+					setTimeout(() => {
+						window.location.reload();
+					}, 1000);
+				} else {
+					this.editError = response.data.Message || this.t('updateFailed') || 'Update failed';
+				}
+			} catch (error) {
+				console.error('Failed to update company:', error);
+				this.editError = error.response?.data?.Message || error.message || this.t('updateError') || 'An error occurred';
+			} finally {
+				this.editLoading = false;
+			}
+		},
+		openEditDescModal() {
+			// Prevent body scroll when modal is open
+			document.body.style.overflow = 'hidden';
+
+			this.showEditDescModal = true;
+			this.descError = '';
+			// Populate form with current data
+			this.descForm = {
+				contact_email: this.companyProfile?.properties?.contact_email || '',
+				phone_number: this.companyProfile?.properties?.phone_number || '',
+				short_description: this.companyProfile?.properties?.short_description || '',
+				description: this.companyProfile?.properties?.description || '',
+				short_description_cn: this.companyProfile?.properties?.short_description_cn || '',
+				description_cn: this.companyProfile?.properties?.description_cn || ''
+			};
+
+			// Ensure modal scrolls to top
+			this.$nextTick(() => {
+				const modalElement = document.querySelector('.modal.d-block');
+				if (modalElement) {
+					modalElement.scrollTop = 0;
+				}
+			});
+		},
+		closeEditDescModal() {
+			this.showEditDescModal = false;
+			// Restore body scroll
+			document.body.style.overflow = '';
+		},
+		async saveDescriptionUpdate() {
+			this.descLoading = true;
+			this.descError = '';
+			try {
+				// Prepare headers with authentication
+				const config = {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				};
+
+				// Add authentication token if available
+				const apiToken = this.getApiToken();
+				if (apiToken) {
+					config.headers['Authorization'] = 'Bearer ' + apiToken;
+				}
+
+				const response = await axios.post(
+					this.getApiUrl('UpdateCompanyDesc'),
+					{
+						contact_email: this.descForm.contact_email,
+						phone_number: this.descForm.phone_number,
+						short_description: this.descForm.short_description,
+						description: this.descForm.description,
+						short_description_cn: this.descForm.short_description_cn,
+						description_cn: this.descForm.description_cn,
+						id: this.cId
+					},
+					config
+				);
+
+				if (response.data.ReturnCode === 0) {
+					this.showToast = true;
+					this.toastType = 'success';
+					this.toastMessage = this.t('updateSuccess') || 'Update successful!';
+					this.closeEditDescModal();
+					// Reload page after 1 second to show changes
+					setTimeout(() => {
+						window.location.reload();
+					}, 1000);
+				} else {
+					this.descError = response.data.Message || this.t('updateFailed') || 'Update failed';
+				}
+			} catch (error) {
+				console.error('Failed to update description:', error);
+				this.descError = error.response?.data?.Message || error.message || this.t('updateError') || 'An error occurred';
+			} finally {
+				this.descLoading = false;
+			}
+		},
+		openCreateNewsModal() {
+			// Prevent body scroll when modal is open
+			document.body.style.overflow = 'hidden';
+
+			this.showCreateNewsModal = true;
+			this.newsError = '';
+			// Reset form
+			this.newsForm = {
+				title: '',
+				url: '',
+				posted_on: ''
+			};
+
+			// Ensure modal scrolls to top
+			this.$nextTick(() => {
+				const modalElement = document.querySelector('.modal.d-block');
+				if (modalElement) {
+					modalElement.scrollTop = 0;
+				}
+			});
+		},
+		closeCreateNewsModal() {
+			this.showCreateNewsModal = false;
+			// Restore body scroll
+			document.body.style.overflow = '';
+		},
+		async saveNews() {
+			this.newsLoading = true;
+			this.newsError = '';
+			try {
+				const userId = localStorage.getItem('userId') || '';
+
+				// Prepare headers with authentication
+				const config = {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				};
+
+				// Add authentication token if available
+				const apiToken = this.getApiToken();
+				if (apiToken) {
+					config.headers['Authorization'] = 'Bearer ' + apiToken;
+				}
+
+				const response = await axios.post(
+					this.getApiUrl('InsertNews') + `?userId=${userId}`,
+					{
+						title: this.newsForm.title,
+						url: this.newsForm.url,
+						posted_on: this.newsForm.posted_on,
+						cId: this.cId
+					},
+					config
+				);
+
+				if (response.data.ReturnCode === 0) {
+					this.showToast = true;
+					this.toastType = 'success';
+					this.toastMessage = this.t('createSuccess') || 'News created successfully!';
+					this.closeCreateNewsModal();
+					// Reload page after 1 second to show new news
+					setTimeout(() => {
+						window.location.reload();
+					}, 1000);
+				} else {
+					this.newsError = response.data.Message || this.t('createFailed') || 'Create failed';
+				}
+			} catch (error) {
+				console.error('Failed to create news:', error);
+				this.newsError = error.response?.data?.Message || error.message || this.t('createError') || 'An error occurred';
+			} finally {
+				this.newsLoading = false;
+			}
+		},
+		async openAIAnalysis(){
+			this.showAIModal = true;
+			this.aiAnalysisLoading = true;
+			try {
+				// Prepare headers with authentication
+				const config = {
+					headers: {}
+				};
+
+				// Add authentication token if available
+				const apiToken = this.getApiToken();
+				if (apiToken) {
+					config.headers['Authorization'] = 'Bearer ' + apiToken;
+				}
+
+				const response = await axios.get(this.getApiUrl(`GetAIAnalysis?cId=${this.cId}`), config);
+				if (response.data.ReturnCode === 0) {
+					this.aiAnalysis = response.data.Data;
+				}
+			} catch (e) {
+				console.error('Failed to load AI analysis:', e);
+			} finally {
+				this.aiAnalysisLoading = false;
+			}
+		}
+	}
+}).mount('#app');
+    </script>
+</body>
+</html>

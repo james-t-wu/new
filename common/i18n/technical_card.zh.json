@@ -1,0 +1,21 @@
+{
+    "title": "Smart Match 科技小百科",
+    "searchPlaceholder": "搜索技术关键词...",
+    "searchButton": "搜索技术",
+    "checkingCompanies": "正在检查与显示技术相关的以色列公司...",
+    "searchingText": "Checking Israeli companies related to displayed technology...",
+    "noResults": "未找到相关技术",
+    "loading": "加载中...",
+    "error": "加载失败，请重试",
+    "techCardTitle": "技术卡片",
+    "techExplanation": "技术解释",
+    "relatedCompanies": "相关公司",
+    "viewDetails": "查看详情",
+    "startAnalysis": "开始分析",
+    "aiAnalysis": "AI分析",
+    "aiAnalysisDesc": "获取AI驱动的技术洞察",
+    "chineseAnalysis": "中文分析",
+    "englishAnalysis": "英文分析",
+    "aiAnalyzing": "AI正在分析中...",
+    "aiAnalysisReport": "AI分析报告"
+}

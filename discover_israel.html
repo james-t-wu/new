@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>发现以色列企业 - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- 页面特定样式 -->
+    <link rel="stylesheet" href="css/discover_israel.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+    <style>
+        /* Design System Variables - Standard */
+        :root {
+            /* 品牌主色调 */
+            --color-brand-blue: #196fa6;
+            --color-deep-blue: #104991;
+            --color-highlight-blue: #0ea5e9;
+            --color-action-blue: #196fa6;
+            --color-light-blue: #f4f8fb;
+
+            /* 文字颜色 */
+            --text-color: #1e293b;
+            --light-text: #64748b;
+            --muted-text: #9ca3af;
+
+            /* 背景颜色 */
+            --background-light: #f8fbfd;
+            --background-white: #ffffff;
+            --background-gray: #f9fafb;
+
+            /* 状态颜色 */
+            --success-color: #27ae60;
+            --warning-color: #f59e0b;
+            --error-color: #e74c3c;
+            --info-color: #8e44ad;
+
+            /* 阴影效果 */
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+            /* 边框和圆角 */
+            --border-color: #e2e8f0;
+            --border-radius: 0.5rem;
+            --border-radius-lg: 0.75rem;
+            --border-radius-xl: 1rem;
+
+            /* 动画过渡 */
+            --transition-base: 0.2s ease-in-out;
+            --transition-slow: 0.3s ease-in-out;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background: var(--background-light);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+
+        /* Language Switch */
+        .language-switch {
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-white);
+            color: var(--text-color);
+        }
+
+        .language-switch:hover {
+            background-color: var(--color-light-blue);
+        }
+
+        /* Search Container - Simplified */
+        .search-container {
+            background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-deep-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-container h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .search-container p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        /* Modern Search Container */
+        .modern-search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Search Type Toggle */
+        .search-type-toggle {
+            display: flex;
+            justify-content: center;
+        }
+
+        .toggle-wrapper {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 4px;
+            display: flex;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--card-shadow);
+        }
+
+        .toggle-option {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.75rem 2rem;
+            border-radius: calc(var(--border-radius) - 2px);
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .toggle-option.active {
+            color: var(--color-brand-blue);
+            font-weight: 600;
+        }
+
+        .toggle-option:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .toggle-indicator {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
+            width: calc(50% - 4px);
+            background: white;
+            border-radius: calc(var(--border-radius) - 2px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .toggle-indicator.is-patent {
+            transform: translateX(100%);
+        }
+
+        /* Search Input Area */
+        .search-input-area {
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            align-items: stretch;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--hover-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-wrapper:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .input-icon {
+            padding: 0 1rem;
+            color: var(--color-brand-blue);
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            min-height: 54px;
+        }
+
+        .modern-search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 1rem 0;
+            font-size: 1rem;
+            color: var(--text-color);
+            background: transparent;
+            min-height: 54px;
+            line-height: 1.5;
+        }
+
+        .modern-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .modern-search-btn {
+            background: var(--color-brand-blue);
+            border: none;
+            color: white;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border-radius: 0;
+            margin: 0;
+            height: 100%;
+            min-height: 54px;
+        }
+
+        .modern-search-btn:hover {
+            background: var(--color-deep-blue);
+            transform: translateX(2px);
+        }
+
+        .modern-search-btn:active {
+            transform: translateX(0);
+        }
+
+        /* Modern Search Responsive */
+        @media (max-width: 768px) {
+            .modern-search-container {
+                gap: 1rem;
+            }
+
+            .toggle-option {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .search-input-wrapper {
+                max-width: 100%;
+            }
+
+            .modern-search-input {
+                padding: 0.75rem 0;
+                font-size: 0.95rem;
+                min-height: 48px;
+            }
+
+            .modern-search-btn {
+                padding: 0 1rem;
+                min-height: 48px;
+            }
+
+            .input-icon {
+                padding: 0 0.75rem;
+                font-size: 1rem;
+                min-height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toggle-option {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+                min-width: 100px;
+            }
+
+            .toggle-option i {
+                display: none;
+            }
+        }
+
+        /* Alert Styles */
+        .alert {
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        /* Loading and No Data States */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .no-data-icon img {
+            max-width: 120px;
+            opacity: 0.6;
+        }
+
+        .no-data-desc {
+            margin-top: 1rem;
+            color: var(--muted-text);
+            font-size: 1.1rem;
+        }
+
+        /* Tab Styles */
+        .nav-tabs-custom {
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            background: white;
+            box-shadow: var(--card-shadow);
+        }
+
+        .nav-tabs {
+            border-bottom: none;
+            background: var(--background-gray);
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 0;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: white;
+            color: var(--color-brand-blue);
+            border-bottom: 3px solid var(--color-brand-blue);
+        }
+
+        /* Standard Card Container */
+        .inno-card {
+            background: var(--background-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-base);
+        }
+
+        .inno-card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        .inno-card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--background-gray);
+        }
+
+        .inno-card-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .inno-card-body {
+            padding: 1.5rem;
+        }
+
+        /* Company Grid - Standard */
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .company-item {
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition-base);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .company-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--color-brand-blue);
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            margin: 0 auto 1rem;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--background-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-brand-blue);
+            border: 2px solid var(--border-color);
+            transition: var(--transition-base);
+            flex-shrink: 0;
+        }
+
+        /* 在搜索结果表格中的logo样式调整 */
+        .table .company-logo {
+            margin: 0;
+            margin-right: 1rem;
+        }
+
+        .company-item:hover .company-logo {
+            border-color: var(--color-brand-blue);
+        }
+
+        .company-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .company-category {
+            color: var(--muted-text);
+            font-size: 0.85rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Patent Section - Standard */
+        .patent-container {
+            background: var(--background-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Patent Charts Enhancement */
+        .patent-chart-container {
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-base);
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .patent-chart-container:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        .patent-chart-container .card-header {
+            background: linear-gradient(135deg, var(--color-light-blue) 0%, rgba(255, 255, 255, 0.5) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .patent-chart-container .card-body {
+            padding: 1.25rem;
+            position: relative;
+            height: 300px;
+            min-height: 280px;
+        }
+
+        .patent-chart-container .chart-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+        }
+
+        .patent-chart-container .chart-spinner {
+            color: var(--color-brand-blue);
+        }
+
+        #assignee-chart, #inventor-chart {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 280px;
+        }
+
+        /* Patent Item Enhancement */
+        .patent-item {
+            background: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            transition: var(--transition-base);
+            box-shadow: var(--card-shadow);
+        }
+
+        .patent-item:hover {
+            box-shadow: var(--hover-shadow);
+            border-color: var(--color-brand-blue);
+            transform: translateY(-2px);
+        }
+
+        .patent-item .card-body {
+            padding: 1.5rem;
+        }
+
+        .patent-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-brand-blue);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .patent-meta {
+            margin-bottom: 1rem;
+        }
+
+        .patent-meta .row {
+            margin-bottom: 0.75rem;
+        }
+
+        .patent-meta .col-xs-5,
+        .patent-meta .col-xs-6,
+        .patent-meta .col-xs-7,
+        .patent-meta .col-xs-12 {
+            padding: 0.25rem 0;
+        }
+
+        .patent-desc {
+            background: var(--color-light-blue);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        .patent-dates {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+
+        /* Standard Tables */
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: var(--background-gray);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-color);
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: var(--color-light-blue);
+        }
+
+        .table td {
+            padding: 1rem 1rem 1rem 0.5rem;
+            vertical-align: middle;
+            border-color: var(--border-color);
+            text-align: left;
+        }
+
+        .table td:first-child {
+            padding-left: 1rem;
+        }
+
+        /* 强制搜索结果左对齐 */
+        .table td .d-flex {
+            margin-left: 0;
+            padding-left: 0;
+            justify-content: flex-start !important;
+            width: 100%;
+        }
+
+        /* 确保公司信息容器左对齐 */
+        .table .text-start {
+            text-align: left !important;
+            width: 100%;
+        }
+
+        /* 搜索结果中的logo间距 */
+        .table .company-logo.me-3 {
+            margin-right: 1rem !important;
+            margin-left: 0 !important;
+        }
+
+        /* Standard Alerts */
+        .alert {
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-left-color: var(--warning-color);
+        }
+
+        .alert-success {
+            background-color: #d1edff;
+            color: #155724;
+            border-left-color: var(--success-color);
+        }
+
+        /* Responsive Design - Standard */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-top: 80px;
+                padding: 1rem 0;
+            }
+
+            .search-container {
+                padding: 2rem 0;
+            }
+
+            .search-container h1 {
+                font-size: 2rem;
+            }
+
+            .search-container p {
+                font-size: 1rem;
+            }
+
+            .company-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .company-item {
+                padding: 1rem;
+            }
+
+            .modern-menu-toggle {
+                top: 0.75rem;
+                left: 12px;
+                font-size: 18px;
+            }
+
+        }
+
+        @media (max-width: 576px) {
+            .search-container h1 {
+                font-size: 1.75rem;
+            }
+
+            .company-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .company-item {
+                padding: 0.75rem;
+            }
+
+            .company-logo {
+                width: 50px;
+                height: 50px;
+                border-radius: 6px;
+            }
+
+            /* Patent Mobile Responsive */
+            .patent-container .p-4 {
+                padding: 1rem !important;
+            }
+
+            .patent-item .card-body {
+                padding: 1rem;
+            }
+
+            .patent-title {
+                font-size: 1rem;
+            }
+
+            .patent-chart-container .card-body {
+                padding: 1rem;
+            }
+
+            #assignee-chart, #inventor-chart {
+                height: 220px !important;
+            }
+        }
+
+        /* INNONATION Global Menu - common styles */
+
+
+        /* 菜单模态框 */
+        .modern-menu-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1048;
+        }
+
+        .modern-menu-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modern-menu-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 320px;
+            max-width: 90%;
+            background: white;
+            border-radius: 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            border-right: 1px solid #e5e7eb;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            z-index: 1050;
+        }
+
+        .modern-menu-modal.active .modern-menu-content {
+            transform: translateX(0);
+        }
+
+        /* 页面内容适配 - 菜单展开时推动页面内容 */
+        body.menu-active {
+            margin-left: 320px;
+            transition: margin-left 0.3s ease;
+        }
+
+        body.menu-active.menu-collapsed {
+            margin-left: 80px;
+        }
+
+        .modern-menu-header {
+            background: linear-gradient(135deg, #196fa6 0%, #104991 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 81px;
+        }
+
+        .modern-menu-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modern-menu-logo b {
+            color: var(--color-highlight-blue);
+            text-shadow: 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .modern-menu-collapse,
+        .modern-menu-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .modern-menu-collapse:hover,
+        .modern-menu-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* 折叠状态样式 */
+        .modern-menu-content.collapsed {
+            width: 80px;
+        }
+
+        .modern-menu-content.collapsed .menu-logo-text,
+        .modern-menu-content.collapsed .modern-menu-link span,
+        .modern-menu-content.collapsed .modern-submenu-link span {
+            display: none;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-link,
+        .modern-menu-content.collapsed .modern-submenu-link {
+            justify-content: center;
+            padding: 12px 8px;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-link i,
+        .modern-menu-content.collapsed .modern-submenu-link i {
+            margin-right: 0 !important;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-arrow {
+            display: none;
+        }
+
+        .modern-menu-content.collapsed .modern-menu-header {
+            padding: 1rem 0.5rem;
+            justify-content: center;
+            position: relative;
+            height: 81px;
+        }
+
+        .modern-menu-content.collapsed .menu-controls {
+            position: static;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .modern-menu-nav {
+            padding: 10px 0 12px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+        }
+
+        .modern-menu-content, .modern-menu-nav {
+            overflow-x: hidden;
+        }
+
+        .modern-menu-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modern-menu-item { margin: 0; }
+
+        .modern-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-menu-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .modern-menu-link:hover::before { left: 100%; }
+
+        .modern-menu-link:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(25, 111, 166, 0.03) 100%);
+            color: var(--color-highlight-blue);
+            border-left-color: var(--color-highlight-blue);
+            transform: translateX(5px);
+        }
+
+        .modern-menu-link i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .modern-menu-link:hover i { transform: scale(1.1); }
+
+        .modern-menu-link span {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .modern-menu-arrow {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            color: #999;
+        }
+
+        .modern-menu-arrow.expanded { transform: rotate(90deg); color: var(--color-highlight-blue); }
+
+        .modern-submenu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(25, 111, 166, 0.04) 0%, rgba(16, 73, 145, 0.01) 100%);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .modern-submenu.expanded { max-height: 500px; }
+
+        .modern-submenu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 30px 12px 69px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            font-size: 14px;
+        }
+
+        .modern-submenu-link:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(25, 111, 166, 0.02) 100%);
+            color: var(--color-highlight-blue);
+            border-left-color: var(--color-highlight-blue);
+            transform: translateX(5px);
+        }
+
+        .modern-submenu-link i { width: 20px; margin-right: 12px; font-size: 16px; }
+
+        /* 菜单项图标颜色 - 统一设计 */
+        .modern-menu-item i {
+            color: #6b7280 !important;
+            transition: color 0.3s ease;
+        }
+
+        .modern-menu-link:hover i {
+            color: var(--color-highlight-blue) !important;
+            text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        /* 子菜单图标颜色 - 统一设计 */
+        .modern-submenu i {
+            color: #6b7280 !important;
+            transition: color 0.3s ease;
+        }
+
+        .modern-submenu-link:hover i {
+            color: var(--color-highlight-blue) !important;
+            text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .modern-menu-content { width: 78vw; max-width: 320px; }
+            .modern-menu-toggle {
+                top: 0.75rem;
+                bottom: auto;
+                left: 12px;
+                padding: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .modern-menu-header {
+                padding: 0.75rem 1rem;
+                height: 65px;
+            }
+            .modern-menu-logo { font-size: 1.25rem; }
+            .modern-menu-link { padding: 12px 18px; }
+            .modern-submenu-link { padding: 10px 18px 10px 56px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单挂载点（公共组件渲染） -->
+        <div id="inno-global-menu"></div>
+
+        <!-- 隐藏的元素用于兼容原始脚本 -->
+        <div id="translate_trigger" style="display: none;">中文</div>
+        <div id="discover_israel" style="display: contents;"></div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="lang-text">{{ currentLang === 'cn' ? 'EN' : '中文' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                
+                
+                <p>{{ t('loading') }}</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content page-container">
+            <!-- Alerts -->
+            <div class="container">
+                <div v-show="showDiscoverAlert" class="alert alert-warning alert-dismissible">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span>{{ t('upgradeToDownload') }} <a href="/pricing.html" target="_blank">{{ t('membershipPlan') }}</a>.</span>
+                </div>
+
+                <div v-show="showLockAlert" class="alert alert-warning alert-dismissible">
+                    <i class="fas fa-lock me-2"></i>
+                    <span>{{ t('upgradeToView') }} <a href="/pricing.html" target="_blank">{{ t('membershipPlan') }}</a>.</span>
+                </div>
+
+                <div v-show="showSaveSearchAlert" class="alert alert-success alert-dismissible">
+                    <i class="fas fa-check me-2"></i>
+                    <span>{{ t('saveSearchSuccess') }}</span>
+                </div>
+
+                <div v-show="showSignupAlert" class="alert alert-warning alert-dismissible">
+                    <i class="fas fa-user me-2"></i>
+                    <span>{{ t('pleaseLogin') }} <a href="/signout.aspx">{{ t('clickHere') }}</a> {{ t('toLogin') }}.</span>
+                </div>
+            </div>
+
+            <!-- Search Container -->
+            <div class="search-container">
+                <div class="container">
+                    <div class="text-center mb-4">
+                        <h1 class="text-white mb-3">{{ t('discoverTitle') }}</h1>
+                        <p class="text-white opacity-75">{{ t('discoverSubtitle') }}</p>
+                    </div>
+
+                    <div class="modern-search-container">
+                        <!-- Search Type Toggle -->
+                        <div class="search-type-toggle">
+                            <div class="toggle-wrapper">
+                                <button
+                                    class="toggle-option"
+                                    :class="{ active: searchType === 'Company' }"
+                                    @click="setSearchType('Company')"
+                                >
+                                    <i class="fas fa-building me-2"></i>
+                                    {{ t('company') }}
+                                </button>
+                                <button
+                                    class="toggle-option"
+                                    :class="{ active: searchType === 'Patent' }"
+                                    @click="setSearchType('Patent')"
+                                >
+                                    <i class="fas fa-file-text me-2"></i>
+                                    {{ t('patent') }}
+                                </button>
+                                <div class="toggle-indicator" :class="{ 'is-patent': searchType === 'Patent' }"></div>
+                            </div>
+                        </div>
+
+                        <!-- Search Input Area -->
+                        <div class="search-input-area">
+                            <div class="search-input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <input
+                                    v-show="searchType === 'Company'"
+                                    v-model="searchValue"
+                                    @keyup.enter="searchC"
+                                    @focus="showSearch"
+                                    @blur="hideSearch"
+                                    type="text"
+                                    class="modern-search-input"
+                                    :placeholder="currentLang === 'cn' ? '搜索公司名称、产品或技术...' : 'Search company name, product or technology...'"
+                                    autocomplete="off"
+                                >
+                                <input
+                                    v-show="searchType === 'Patent'"
+                                    v-model="searchValuePatent"
+                                    @keyup.enter="searchP"
+                                    @focus="showSearch"
+                                    @blur="hideSearch"
+                                    type="text"
+                                    class="modern-search-input"
+                                    :placeholder="currentLang === 'cn' ? '搜索专利技术...' : 'Search patent technology...'"
+                                    autocomplete="off"
+                                >
+                                <button @click="performSearch" class="modern-search-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Patent Filters -->
+                        <div v-show="searchType === 'Patent'" class="mt-3">
+                            <div class="row g-3 justify-content-center">
+                                <div class="col-auto">
+                                    <select v-model="relativeValue" class="form-select" style="min-width: 200px;">
+                                        <option value="new">Newest</option>
+                                        <option value="relativity">Relevance</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select v-model="patentCountryValue" class="form-select" style="min-width: 200px;">
+                                        <option v-for="item in localizedCountryData" :key="item.iso" :value="item.iso">{{ item.name }}</option>
+                                    </select>
+                                </div>
+                                <div v-show="patentResultCount > 0" class="col-auto d-flex align-items-center">
+                                    <span class="text-white">{{ resultPatent }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Search Results -->
+            <div v-show="searchCompanyFlag && searchType === 'Company'" class="container">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ t('searchResults') }}</h5>
+                        <button @click="closeCompanySearch" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div v-show="searchData.length > 0" class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 25%;">{{ t('companyName') }}</th>
+                                        <th>{{ t('industry') }}</th>
+                                        <th style="width: 40%;">{{ t('description') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in searchData" :key="item.id">
+                                        <td>
+                                            <a :href="item.link" target="_blank" class="text-decoration-none">
+                                                <div class="d-flex align-items-center justify-content-start">
+                                                    <div class="company-logo me-3" :style="getLogoStyle(item.logo, item.type)">
+                                                        {{ !item.logo ? getInitials(item.name) : '' }}
+                                                    </div>
+                                                    <div class="text-start">
+                                                        <div class="fw-bold text-primary">{{ item.name }}</div>
+                                                        <div class="text-muted small">{{ item.location }}</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td class="text-capitalize">{{ item.root_category }}</td>
+                                        <td>
+                                            <p class="mb-0" v-html="item.Description"></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Loading Overlay -->
+                    <div v-show="showFlag" class="overlay">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <!-- See More Indicator -->
+                    <div v-show="searchData.length > 14" class="text-center p-3">
+                        <span class="text-muted">{{ t('scrollToSeeMore') }}</span>
+                        <i class="fas fa-arrow-down ms-1"></i>
+                    </div>
+
+                    <!-- No Data -->
+                    <div v-show="searchData.length === 0 && nodata" class="no-data">
+                        <div class="no-data-icon">
+                            <img src="https://innonation.oss-cn-beijing.aliyuncs.com/logo/no-data.png" alt="No data">
+                        </div>
+                        <div class="no-data-desc">{{ t('noDataFound') }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Hot/Recent View Tabs -->
+            <div v-show="!searchCompanyFlag && searchType === 'Company'" class="container">
+                <div class="inno-card">
+                    <div class="inno-card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#israel-company" data-bs-toggle="tab">{{ t('hotCompanies') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#recent-view" data-bs-toggle="tab">{{ t('recentlyViewed') }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="inno-card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="israel-company">
+                                <!-- Loading State -->
+                                <div v-if="loadingIsraelCompanies" class="text-center py-5">
+                                    <div class="spinner-border text-primary mb-3" role="status">
+                                        <span class="visually-hidden">{{ t('loading') }}</span>
+                                    </div>
+                                    <p class="text-muted">{{ t('loadingCompanies') }}</p>
+                                </div>
+
+                                <!-- Company Grid -->
+                                <div v-else class="company-grid">
+                                    <div v-for="item in israelCompanyData" :key="item.id" class="company-item">
+                                        <a :href="getCompanyLink(item.id, item.type)" target="_blank" class="text-decoration-none">
+                                            <div class="company-logo" :style="getLogoStyle(item.logo, item.type)">
+                                                {{ !item.logo ? getInitials(item.name) : '' }}
+                                            </div>
+                                            <div class="company-name">{{ item.name }}</div>
+                                            <div class="company-category" :title="item.category">{{ item.category }}</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="recent-view">
+                                <div class="company-grid">
+                                    <div v-for="item in recentViewData" :key="item.id" class="company-item">
+                                        <a :href="getCompanyLink(item.id, item.type)" target="_blank" class="text-decoration-none">
+                                            <div class="company-logo" :style="getLogoStyle(item.logo, item.type)">
+                                                {{ !item.logo ? getInitials(item.name) : '' }}
+                                            </div>
+                                            <div class="company-name">{{ item.name }}</div>
+                                            <div class="company-category">{{ getCategoryName(item.category, item.type) }}</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搜索结果状态显示区域 -->
+            <div class="organization" style="display: none;">
+                <div class="see-more">
+                    <span></span>
+                </div>
+            </div>
+            <div class="patent" style="display: none;">
+                <div class="see-more">
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Patent Search Instructions -->
+            <div v-show="!searchPatentFlag && searchType === 'Patent'" class="container">
+                <div class="alert alert-info">
+                    <h5>{{ t('patentSearchTitle') }}</h5>
+                    <ul class="mb-0">
+                        <li>{{ t('patentSearchDesc') }}</li>
+                        <li>
+                            {{ t('discoverFind') }}
+                            <a href="javascript:;" @click="changeType('Company')" class="text-primary">{{ t('company') }}</a>
+                            {{ t('discoverFind2') }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Patent Search Results -->
+            <div v-show="searchPatentFlag && searchType === 'Patent'" class="container">
+                <div class="patent-container">
+                    <div v-show="patentResultData.length > 0" class="p-4">
+                        <!-- Patent Charts -->
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <div class="patent-chart-container">
+                                    <div class="card-header">
+                                        <h6 class="mb-1 fw-bold">{{ t('topAssignees') }}</h6>
+                                        <small class="text-muted">{{ t('percentageInTop1000') }}</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Chart Placeholder with Loading -->
+                                        <div v-show="!chartsInitialized" class="chart-placeholder">
+                                            <div class="text-center">
+                                                <div class="spinner-border chart-spinner mb-3" role="status">
+                                                    <span class="visually-hidden">Loading charts...</span>
+                                                </div>
+                                                <p class="text-muted mb-0">{{ t('loadingCharts') }}</p>
+                                            </div>
+                                        </div>
+                                        <div id="assignee-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="patent-chart-container">
+                                    <div class="card-header">
+                                        <h6 class="mb-1 fw-bold">{{ t('topInventors') }}</h6>
+                                        <small class="text-muted">{{ t('percentageInTop1000') }}</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Chart Placeholder with Loading -->
+                                        <div v-show="!chartsInitialized" class="chart-placeholder">
+                                            <div class="text-center">
+                                                <div class="spinner-border chart-spinner mb-3" role="status">
+                                                    <span class="visually-hidden">Loading charts...</span>
+                                                </div>
+                                                <p class="text-muted mb-0">{{ t('loadingCharts') }}</p>
+                                            </div>
+                                        </div>
+                                        <div id="inventor-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Patent Items -->
+                        <div class="row">
+                            <div v-for="item in patentResultData" :key="item.publication_number" class="col-md-6 mb-3">
+                                <div class="patent-item">
+                                    <div class="card-body">
+                                        <!-- Patent Title and Number -->
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <h6 class="patent-title mb-0" v-html="item.title"></h6>
+                                            <span class="badge bg-light text-dark ms-2">{{ item.publication_number }}</span>
+                                        </div>
+
+                                        <!-- Patent Meta Information -->
+                                        <div class="patent-meta">
+                                            <div v-if="item.inventor" class="row mb-2">
+                                                <div class="col-12">
+                                                    <strong class="text-primary">{{ t('inventor') }}:</strong>
+                                                    <span class="text-dark" v-html="item.inventor"></span>
+                                                </div>
+                                            </div>
+
+                                            <div v-if="item.assignee" class="row mb-2">
+                                                <div class="col-12">
+                                                    <strong class="text-primary">{{ t('originalAssignee') }}:</strong>
+                                                    <span class="text-dark" v-html="item.assignee"></span>
+                                                </div>
+                                            </div>
+
+                                            <div v-if="item.current" class="row mb-3">
+                                                <div class="col-12">
+                                                    <strong class="text-primary">{{ t('currentAssignee') }}:</strong>
+                                                    <span class="text-dark" v-html="item.current"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Patent Description -->
+                                        <div class="patent-desc" v-html="stripHtml(item.snippet)"></div>
+
+                                        <!-- Patent Dates -->
+                                        <div class="patent-dates">
+                                            <div class="row text-muted small">
+                                                <div v-if="item.filing_date" class="col-6">
+                                                    <strong>{{ t('filingDate') }}:</strong> {{ item.filing_date }}
+                                                </div>
+                                                <div v-if="item.publication_date" class="col-6 text-end">
+                                                    <strong>{{ t('publicationDate') }}:</strong> {{ item.publication_date }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading Overlay -->
+                    <div v-show="showFlag" class="overlay" style="position: relative; height: 200px; background: rgba(255, 255, 255, 0.8); margin-top: 2rem; border-radius: var(--border-radius);">
+                        <div class="text-center">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">Loading patents...</span>
+                            </div>
+                            <p class="text-muted mb-0">{{ t('loadingPatents') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- See More Indicator -->
+                    <div v-show="patentResultData.length > 9" class="text-center p-3">
+                        <span class="text-muted">{{ t('scrollToSeeMore') }}</span>
+                        <i class="fas fa-arrow-down ms-1"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patent No Data -->
+            <div v-show="patentResultData.length === 0 && noPatentdata && searchType === 'Patent'" class="container">
+                <div class="no-data">
+                    <div class="no-data-icon">
+                        <img src="https://innonation.oss-cn-beijing.aliyuncs.com/logo/no-data.png" alt="No data">
+                    </div>
+                    <div class="no-data-desc">{{ t('noDataFound') }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- 全局菜单组件依赖 -->
+    <script src="common/js/common-utils.js"></script>
+    <script src="common/js/api-client.js"></script>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+
+    <!-- 第三方库依赖 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- 通用工具脚本 -->
+    <script>
+        // Base64 编码解码工具
+        const base64 = {
+            encode: function(str) {
+                return btoa(unescape(encodeURIComponent(str)));
+            },
+            decode: function(str) {
+                return decodeURIComponent(escape(atob(str)));
+            }
+        };
+
+        // 通用工具函数
+        const common = {
+            APIDomain: 'https://ai.innonation.io/inno_ai_services',
+            scrollHtml: '<i class="fa fa-spinner fa-spin"></i>',
+            getUrlParam: function(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            },
+            hideMask: function() {
+                // Hide loading mask
+                console.log('Hide loading mask');
+            }
+        };
+
+        // Cookie 工具函数
+        function getCookie(name) {
+            const arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+            return arr ? unescape(arr[2]) : null;
+        }
+
+        function setCookie(name, value) {
+            const Days = 3000;
+            const exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";domain=" + escape(window.hostname.substring(window.hostname.split('.')[0].length + 1));
+        }
+
+        // 中文检测
+        function isChinese(s) {
+            return /[\u4e00-\u9fa5]/.test(s);
+        }
+
+        // 过滤器函数（Vue 3 兼容）
+        const filters = {
+            delHtml: function(value) {
+                return value.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/<[^>]+>/g, "");
+            },
+            companylink: function(value, type) {
+                if (type === 'cb' || type === 'company_cb') {
+                    return "company_profile_israel.html?cId=" + value;
+                }
+                if (type == 'kr') {
+                    return "investor_company_israel.html?cId=" + value;
+                }
+                if (type == 'kr_startup') {
+                    return "startup_israel.html?id=" + value;
+                }
+                if (type == null || type == undefined) {
+                    return "app_detail_israel.html?appId=" + value;
+                }
+                return 'javascript:;';
+            },
+            category: function(value, type) {
+                if (type == 'kr') {
+                    return "投资机构";
+                }
+                return value;
+            }
+        };
+
+        // 配置 axios 认证头
+        const apiToken = getCookie('api_token');
+        if (apiToken) {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
+        }
+    </script>
+
+    <!-- Page Script -->
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    // URL 参数
+                    type: common.getUrlParam('type') ? common.getUrlParam('type') : '',
+                    keyword: common.getUrlParam('keyword') ? base64.decode(common.getUrlParam('keyword')) : '',
+                    assignee: common.getUrlParam('assignee') ? base64.decode(common.getUrlParam('assignee')) : '',
+                    industry: common.getUrlParam('industry') ? base64.decode(common.getUrlParam('industry')) : '',
+                    size: common.getUrlParam('size') ? base64.decode(common.getUrlParam('size')) : '',
+                    location: common.getUrlParam('location') ? base64.decode(common.getUrlParam('location')) : '',
+
+                    // 数据状态
+                    industryData: [],
+                    sizeData: ['1-10', '11-50', '51-100', '101-250', '251-500', '501-1000', '1001-5000', '5001-10000', '10001-1000000'],
+                    locationData: [],
+                    searchType: 'Company',
+                    disableSearch: true,
+
+                    // 分页
+                    page: 1,
+                    pageApp: 1,
+                    pagePatent: 1,
+
+                    // 状态标志
+                    showFlag: false,
+                    scrollFlag: true,
+                    searchCompanyFlag: false,
+                    searchAppFlag: false,
+                    searchPatentFlag: false,
+                    nodata: false,
+                    noAppdata: false,
+                    noPatentdata: false,
+
+                    // 搜索值
+                    searchValue: '',
+                    searchValueApp: '',
+                    searchValuePatent: '',
+                    search_criteria: '',
+
+                    // 搜索结果
+                    searchData: [],
+                    appResultData: [],
+                    patentResultData: [],
+
+                    // 专利相关
+                    patentCountryValue: '',
+                    countryData: [
+                        { "iso": "BE", "name": "Belgium" },
+                        { "iso": "CA", "name": "Canada" },
+                        { "iso": "CN", "name": "China" },
+                        { "iso": "DK", "name": "Denmark" },
+                        { "iso": "EP", "name": "European Patent Office" },
+                        { "iso": "FI", "name": "Finland" },
+                        { "iso": "FR", "name": "France" },
+                        { "iso": "DE", "name": "Germany" },
+                        { "iso": "JP", "name": "Japan" },
+                        { "iso": "KR", "name": "Korea" },
+                        { "iso": "LU", "name": "Luxembourg" },
+                        { "iso": "NL", "name": "Netherlands" },
+                        { "iso": "RU", "name": "Russia" },
+                        { "iso": "ES", "name": "Spain" },
+                        { "iso": "US", "name": "The United States" },
+                        { "iso": "GB", "name": "The United Kingdom" },
+                        { "iso": "WO", "name": "WIPO" }
+                    ],
+                    patentResultCount: 0,
+                    resultPatent: '',
+                    inventor: '',
+                    relativeValue: 'new',
+
+                    // 其他状态
+                    savedSearchData: [],
+                    showSavedSearchFlag: false,
+                    recentViewData: [],
+                    recentViewType: 'Company',
+                    showRecentFlag: false,
+                    appTrendData: [],
+                    lockFlag: false,
+                    activeTrend: true,
+                    showTrendFlag: false,
+                    locationURL: window.location.href,
+                    selectLocationData: [],
+                    isParamLocation: false,
+                    showFilterFlag: false,
+                    filter: false,
+                    categoryTranslateData: [],
+
+                    // 界面状态
+                    currentLang: 'cn',
+                    loading: false,
+                    israelCompanyData: [],
+                    loadingIsraelCompanies: false,
+                    showDiscoverAlert: false,
+                    showLockAlert: false,
+                    showSaveSearchAlert: false,
+                    showSignupAlert: false,
+                    chartsInitialized: false,
+                    assigneeChartInstance: null,
+                    inventorChartInstance: null,
+
+                    // Translations
+                    translations: {
+                        cn: {
+                            discoverTitle: '发现企业',
+                            discoverSubtitle: '搜索全球以色列公司、专利和技术',
+                            company: '公司',
+                            patent: '专利',
+                            search: '搜索',
+                            newest: '最新',
+                            relevance: '相关性',
+                            searchResults: '搜索结果',
+                            companyName: '公司名称',
+                            industry: '行业',
+                            description: '描述',
+                            hotCompanies: '热门以色列公司',
+                            recentlyViewed: '最近查看',
+                            scrollToSeeMore: '向下滚动查看更多',
+                            noDataFound: '未找到数据',
+                            patentSearchTitle: '专利搜索',
+                            patentSearchDesc: '从全球专利中搜索技术',
+                            discoverFind: '查找',
+                            discoverFind2: '通过名称、产品或技术等',
+                            topAssignees: '顶级受让人',
+                            topInventors: '顶级发明人',
+                            loading: '加载中...',
+                            loadingCompanies: '加载公司数据...',
+                            loadingPatents: '加载专利数据...',
+                            loadingCharts: '加载图表...',
+                            upgradeToDownload: '请升级到高级版以下载数据到Excel文件',
+                            membershipPlan: '会员计划',
+                            upgradeToView: '请升级账户以查看数据',
+                            saveSearchSuccess: '搜索条件保存成功',
+                            pleaseLogin: '请登录系统查看数据',
+                            clickHere: '点击这里',
+                            toLogin: '登录',
+                            close: '关闭',
+                            viewMore: '查看更多',
+                            date: '日期',
+                            amount: '金额',
+                            acquirer: '收购方',
+                            acquiredCompany: '被收购公司',
+                            inventor: '发明人',
+                            assignee: '受让人',
+                            currentAssignee: '当前受让人',
+                            filingDate: '申请日期',
+                            publicationDate: '公布日期',
+                            originalAssignee: '原始受让人',
+                            results: '结果',
+                            percentage: '百分比',
+                            by: '按',
+                            percentageInTop1000: '占前1000项申请日期结果的百分比',
+                            anyPatentOffice: '所有专利局'
+                        },
+                        en: {
+                            discoverTitle: 'Discover Companies',
+                            discoverSubtitle: 'Search global Israeli companies, patents and technologies',
+                            company: 'Company',
+                            patent: 'Patent',
+                            search: 'Search',
+                            newest: 'Newest',
+                            relevance: 'Relevance',
+                            searchResults: 'Search Results',
+                            companyName: 'Company Name',
+                            industry: 'Industry',
+                            description: 'Description',
+                            hotCompanies: 'Hot Israeli Companies',
+                            recentlyViewed: 'Recently Viewed',
+                            scrollToSeeMore: 'Scroll down to see more',
+                            noDataFound: 'No data found',
+                            patentSearchTitle: 'Patent Search',
+                            patentSearchDesc: 'Search technologies from patents worldwide',
+                            discoverFind: 'Find',
+                            discoverFind2: 'by name, product or technology etc.',
+                            topAssignees: 'Top Assignees',
+                            topInventors: 'Top Inventors',
+                            loading: 'Loading...',
+                            loadingCompanies: 'Loading companies...',
+                            loadingPatents: 'Loading patents...',
+                            loadingCharts: 'Loading charts...',
+                            upgradeToDownload: 'Please upgrade to Premium to download data to Excel file',
+                            membershipPlan: 'Membership Plan',
+                            upgradeToView: 'Please upgrade your account to view data',
+                            saveSearchSuccess: 'Search criteria saved successfully',
+                            pleaseLogin: 'Please log in to view data',
+                            clickHere: 'Click here',
+                            toLogin: 'to login',
+                            close: 'Close',
+                            viewMore: 'View More',
+                            date: 'Date',
+                            amount: 'Amount',
+                            acquirer: 'Acquirer',
+                            acquiredCompany: 'Acquired Company',
+                            inventor: 'Inventor',
+                            assignee: 'Assignee',
+                            currentAssignee: 'Current Assignee',
+                            filingDate: 'Filing Date',
+                            publicationDate: 'Publication Date',
+                            originalAssignee: 'Original Assignee',
+                            results: 'results',
+                            percentage: 'percentage',
+                            by: 'by',
+                            percentageInTop1000: '% in top 1000 results by filing date',
+                            anyPatentOffice: 'Any Patent Office'
+                        }
+                    }
+                }
+            },
+
+            computed: {
+                // 计算属性
+                localizedCountryData() {
+                    // 返回本地化的国家数据，使用原始数据确保一致性
+                    const baseCountries = this.countryData;
+
+                    // 在数组开头添加"Any Patent Office"
+                    return [
+                        { "iso": "", "name": "Any Patent Office" },
+                        ...baseCountries
+                    ];
+                }
+            },
+
+            watch: {
+                searchValue: function(val) {
+                    this.searchValue = val ? val.trim() : '';
+                },
+                searchValueApp: function(val) {
+                    this.searchValueApp = val;
+                },
+                searchValuePatent: function(val) {
+                    this.searchValuePatent = val;
+                }
+            },
+
+            methods: {
+                // 翻译方法
+                t(key) {
+                    if (!key) return '';
+                    const lang = this.translations[this.currentLang];
+                    if (!lang) {
+                        console.warn(`Translation language '${this.currentLang}' not found`);
+                        return key;
+                    }
+                    const translation = lang[key];
+                    if (translation === undefined) {
+                        console.warn(`Translation key '${key}' not found for language '${this.currentLang}'`);
+                        return key;
+                    }
+                    return translation;
+                },
+
+                // 语言切换
+                toggleLang() {
+                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                },
+
+                // URL 参数操作
+                replaceParamVal: function(paramName, replaceWith) {
+                    const oUrl = this.locationURL;
+                    const re = new RegExp('(' + paramName + '=)([^&]*)', 'gi');
+                    const nUrl = oUrl.replace(re, paramName + '=' + replaceWith);
+                    this.locationURL = nUrl;
+                    return nUrl;
+                },
+
+                removeParamVal: function(paramName) {
+                    const oUrl = this.locationURL;
+                    const re = new RegExp('(&' + paramName + '=)([^&]*)', 'gi');
+                    const nUrl = oUrl.replace(re, '');
+                    this.locationURL = nUrl;
+                    return nUrl;
+                },
+
+                readState: function(data) {
+                    if (data) {
+                        this.locationURL = data.id;
+                        console.log(this.locationURL);
+                    }
+                },
+
+                // 删除位置过滤器
+                delLocation: function(val) {
+                    const _self = this;
+                    _self.selectLocationData.splice(_self.selectLocationData.indexOf(val), 1);
+                    _self.location = _self.selectLocationData.join(';');
+                    _self.isParamLocation = false;
+                    _self.InitSearchCriterial(false);
+                },
+
+                // 中文字符检测
+                isChineseChar: function(char) {
+                    const chineseRegex = /[\u4e00-\u9fff]/;
+                    return chineseRegex.test(char);
+                },
+
+                // 分类翻译
+                convertCategoryDataToCN: function(val) {
+                    const _self = this;
+                    const inputCategories = val.split(', ').map(item => item.trim());
+                    const outputCategories = [];
+
+                    inputCategories.forEach(function(category) {
+                        const translation = _self.categoryTranslateData.find(item => item.en.toLowerCase() === category.toLowerCase());
+                        if (translation) {
+                            outputCategories.push(translation.cn);
+                        } else {
+                            outputCategories.push(category);
+                        }
+                    });
+                    return outputCategories.join(', ');
+                },
+
+                // 初始化最近查看
+                InitRecentView: function() {
+                    const _self = this;
+                    _self.recentViewData = [];
+                    _self.showRecentFlag = true;
+                    // 从API获取最近查看的数据
+                    axios.get(common.APIDomain + "/api/User/Get" + _self.recentViewType + "RecentViews?size=15")
+                        .then(function(response) {
+                            if (response.data.ReturnCode === 0) {
+                                if (response.data.Data) {
+                                    _self.recentViewData = response.data.Data;
+                                }
+                            }
+                            _self.showRecentFlag = false;
+                            common.hideMask();
+                        })
+                        .catch(function(error) {
+                            console.error('Error loading recent views:', error);
+                            _self.showRecentFlag = false;
+                            common.hideMask();
+                        });
+                },
+
+                // 切换搜索类型
+                changeType: function(val) {
+                    this.searchType = val;
+                    this.searchCompanyFlag = false;
+                    this.searchPatentFlag = false;
+                },
+
+                // 高级公司搜索
+                seachCompanyByFilter: function() {
+                    this.disableSearch = false;
+                    this.searchCompanyFlag = true;
+                    if (this.location.length > 0) {
+                        this.selectLocationData = this.location.split(';');
+                    }
+                    this.InitSearchCriterial(true);
+                },
+
+                // 公司搜索
+                searchC: function() {
+                    if (this.searchValue.length > 0 && this.disableSearch) {
+                        this.disableSearch = false;
+                        this.industry = '';
+                        this.size = '';
+                        this.location = '';
+                        this.selectLocationData = [];
+                        this.filter = false;
+                        this.searchCompanyFlag = true;
+                        this.InitSearchCriterial(true);
+                    }
+                },
+
+                // 专利搜索
+                searchP: function() {
+                    if (this.searchValuePatent.length > 0 && this.disableSearch) {
+                        this.disableSearch = false;
+                        this.pagePatent = 1;
+                        this.patentResultData = [];
+                        this.searchPatentFlag = true;
+                        this.inventor = "";
+                        if (this.searchValuePatent.indexOf('assignee:') == -1) {
+                            this.assignee = "";
+                        } else {
+                            this.assignee = this.searchValuePatent.replace('assignee:', '');
+                        }
+                        this.InitSearchPatent();
+                        this.updateURL('Patent');
+                    }
+                },
+
+                // URL 更新
+                updateURL: function(type) {
+                    try {
+                        const url = new URL(window.location.href);
+                        const params = new URLSearchParams(url.search);
+
+                        // 确保type参数正确
+                        params.set('type', type);
+
+                        if (type === 'Patent') {
+                            // 清除之前的搜索参数
+                            params.delete('keyword');
+                            params.delete('assignee');
+
+                            // 添加新的专利搜索参数
+                            if (this.searchValuePatent.indexOf('assignee:') == -1) {
+                                if (this.searchValuePatent.trim()) {
+                                    params.set('keyword', base64.encode(this.searchValuePatent));
+                                }
+                            } else {
+                                if (this.assignee.trim()) {
+                                    params.set('assignee', base64.encode(this.assignee));
+                                }
+                            }
+                        } else {
+                            // 公司搜索
+                            params.delete('keyword');
+                            params.delete('assignee');
+
+                            if (this.searchValue.trim()) {
+                                params.set('keyword', base64.encode(this.searchValue));
+                            }
+                        }
+
+                        // 更新URL
+                        url.search = params.toString();
+                        const newURL = url.toString();
+
+                        // 更新locationURL和浏览器历史
+                        this.locationURL = newURL;
+                        history.pushState({ id: newURL }, '', newURL);
+                    } catch (error) {
+                        console.error('Error updating URL:', error);
+                    }
+                },
+
+                // 名称搜索
+                searchByName: function(type, text, industry, size, location) {
+                    const _self = this;
+                    switch (type) {
+                        case 'cmp':
+                            _self.searchType = 'Company';
+                            _self.searchValue = text;
+                            _self.searchC();
+                            break;
+                        case 'cmp_advance':
+                            _self.searchType = 'Company';
+                            _self.searchValue = text;
+                            _self.industry = industry;
+                            _self.size = size;
+                            _self.location = location;
+                            if (location == '') {
+                                _self.selectLocationData = [];
+                            }
+                            _self.seachCompanyByFilter();
+                            break;
+                        case 'Patent':
+                            _self.searchType = 'Patent';
+                            if (text.indexOf('assignee:') > -1) {
+                                _self.disableSearch = false;
+                                _self.searchPatentFlag = true;
+                                _self.pagePatent = 1;
+                                _self.patentResultData = [];
+                                _self.inventor = "";
+                                _self.searchValuePatent = text;
+                                _self.assignee = text.replace('assignee:', '');
+                                _self.InitSearchPatent();
+                                _self.updateURL('Patent');
+                            } else {
+                                _self.searchValuePatent = text;
+                                _self.searchP();
+                            }
+                            break;
+                    }
+                },
+
+                // 初始化搜索条件
+                InitSearchCriterial: function(flag) {
+                    this.search_criteria = '';
+                    if (this.searchValue) {
+                        this.search_criteria += '&cn=' + this.searchValue.trim();
+                    }
+                    this.page = 1;
+                    this.searchData = [];
+                    this.InitSearch(flag);
+                    this.updateURL('Company');
+                },
+
+                // 初始化搜索
+                InitSearch: function(flag) {
+                    const _self = this;
+                    _self.showFlag = true;
+                    _self.scrollFlag = false;
+                    _self.nodata = false;
+                    _self.noAppdata = false;
+                    _self.noPatentdata = false;
+                    _self.showFilterFlag = false;
+                    if (_self.location == '') {
+                        _self.locationData = [];
+                    }
+
+                    const url = common.APIDomain + "/api/Company/AdvancedSearchOpen?page=" + _self.page + "&pageSize=15" + _self.search_criteria + (_self.filter ? "&filter=app" : "");
+
+                    axios.get(url)
+                        .then(function(response) {
+                            if (response.data.ReturnCode === 0) {
+                                if (response.data.Data) {
+                                    response.data.Data.company.forEach(function(item) {
+                                        item.link = "company_profile_israel.aspx?cId=" + item.id;
+                                        if (item.source == 'kr') {
+                                            item.link = "startup.aspx?id=" + item.id;
+                                        }
+
+                                        if (!_self.isChineseChar(_self.searchValue)) {
+                                            if (item.desc_highlight && item.desc_highlight.length > 0) {
+                                                item.Description = item.desc_highlight;
+                                            } else {
+                                                item.Description = item.desc;
+                                            }
+                                        } else {
+                                            if (item.desc_highlight_cn && item.desc_highlight_cn.length > 0) {
+                                                item.Description = item.desc_highlight_cn;
+                                            } else {
+                                                item.Description = item.desc_cn;
+                                            }
+                                            item.root_category = _self.convertCategoryDataToCN(item.root_category);
+                                        }
+                                        _self.searchData.push(item);
+                                    });
+                                    _self.showFilterFlag = true;
+
+                                    if (response.data.Data.size == 0) {
+                                        _self.nodata = true;
+                                    }
+
+                                    _self.scrollFlag = true;
+                                    if (_self.page == response.data.Data.total_pages) {
+                                        _self.scrollFlag = false;
+                                    }
+                                }
+                            }
+                            if (response.data.ReturnCode === -2) {
+                                _self.scrollFlag = false;
+                                _self.showSignupAlert = true;
+                            }
+                            _self.showFlag = false;
+                            _self.disableSearch = true;
+                            common.hideMask();
+                        })
+                        .catch(function(error) {
+                            _self.showFlag = false;
+                            _self.disableSearch = true;
+                            common.hideMask();
+                            console.error('Search error:', error);
+                        });
+                },
+
+                // 初始化专利搜索
+                InitSearchPatent: function() {
+                    const _self = this;
+                    _self.showFlag = true;
+                    _self.scrollFlag = false;
+                    _self.nodata = false;
+                    _self.noAppdata = false;
+                    _self.noPatentdata = false;
+                    _self.patentResultCount = 0;
+
+                    let val = _self.searchValuePatent;
+                    if (_self.searchValuePatent.indexOf('assignee:') > -1) {
+                        val = _self.searchValuePatent.split('assignee:')[1];
+                    }
+
+                    const url = "https://api.innonation.io/keyword/patent/search/?q=" + val + "&country=" + _self.patentCountryValue + "&page=" + _self.pagePatent + "&pageSize=10&inventor=" + _self.inventor + "&assignee=" + _self.assignee + "&sort=" + _self.relativeValue;
+
+                    axios.get(url)
+                        .then(function(response) {
+                            if (response.data.ReturnCode === 0) {
+                                if (response.data.Data) {
+                                    if (response.data.Data.results.user_error) {
+                                        _self.noPatentdata = true;
+                                    } else {
+                                        _self.patentResultCount = response.data.Data.results.total_num_results;
+                                        _self.resultPatent = "'" + _self.searchValuePatent + "'  Search Result: " + _self.patentResultCount;
+
+                                        if (_self.pagePatent == 1 && response.data.Data.results.summary) {
+                                            _self.initPatentCharts(response.data.Data.results.summary);
+                                        }
+
+                                        if (response.data.Data.results.cluster) {
+                                            response.data.Data.results.cluster[0].result.forEach(function(item) {
+                                                if (item.patent) {
+                                                    // 处理专利数据结构
+                                                    if (item.patent.family_metadata &&
+                                                        item.patent.family_metadata.aggregated &&
+                                                        item.patent.family_metadata.aggregated.representative_publication &&
+                                                        item.patent.family_metadata.aggregated.representative_publication.ifi_content &&
+                                                        item.patent.family_metadata.aggregated.representative_publication.ifi_content.assignee &&
+                                                        item.patent.family_metadata.aggregated.representative_publication.ifi_content.assignee.current) {
+                                                        item.patent.current = item.patent.family_metadata.aggregated.representative_publication.ifi_content.assignee.current.join(', ');
+                                                    }
+                                                    _self.patentResultData.push(item.patent);
+                                                }
+                                            });
+                                        }
+
+                                        if (_self.patentResultData.length == 0) {
+                                            _self.noPatentdata = true;
+                                        }
+
+                                        _self.scrollFlag = true;
+                                        if (_self.pagePatent == response.data.Data.total_pages) {
+                                            _self.scrollFlag = false;
+                                        }
+
+                                        // 高亮搜索关键词
+                                        _self.$nextTick(function() {
+                                            if (window.$ && $.fn.mark) {
+                                                $('.patent-title').mark(_self.searchValuePatent);
+                                                $('.patent-desc').mark(_self.searchValuePatent);
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    _self.noPatentdata = true;
+                                }
+                            } else if (response.data.ReturnCode === -2) {
+                                _self.scrollFlag = false;
+                                _self.showLockAlert = true;
+                            } else {
+                                _self.noPatentdata = true;
+                            }
+                            _self.showFlag = false;
+                            _self.disableSearch = true;
+                        })
+                        .catch(function(error) {
+                            _self.showFlag = false;
+                            _self.disableSearch = true;
+                            _self.noPatentdata = true;
+                            console.error('Patent search error:', error);
+                        });
+                },
+
+                // 初始化专利图表
+                initPatentCharts: function(summary) {
+                    const _self = this;
+
+                    // 延迟初始化以确保DOM完全渲染
+                    setTimeout(() => {
+                        try {
+                            // 销毁现有图表实例
+                            if (_self.assigneeChartInstance) {
+                                _self.assigneeChartInstance.dispose();
+                            }
+                            if (_self.inventorChartInstance) {
+                                _self.inventorChartInstance.dispose();
+                            }
+
+                            // 初始化图表实例
+                            const inventorChartDom = document.getElementById('inventor-chart');
+                            const assigneeChartDom = document.getElementById('assignee-chart');
+
+                            if (!inventorChartDom || !assigneeChartDom) {
+                                console.warn('Chart containers not found');
+                                return;
+                            }
+
+                            const inventorChart = echarts.init(inventorChartDom);
+                            const assigneeChart = echarts.init(assigneeChartDom);
+
+                            // 保存图表实例
+                            _self.assigneeChartInstance = assigneeChart;
+                            _self.inventorChartInstance = inventorChart;
+
+                            const inventorX = [];
+                            const inventorY = [];
+                            const assigneeX = [];
+                            const assigneeY = [];
+
+                            if (summary.inventor) {
+                                summary.inventor.forEach(function(item, index) {
+                                    if (item.key != 'Total' && inventorX.length < 6) {
+                                        inventorX.push(item.key);
+                                        inventorY.push(item.value / 10);
+                                    }
+                                });
+                            }
+
+                            if (summary.assignee) {
+                                summary.assignee.forEach(function(item, index) {
+                                    if (item.key != 'Total' && assigneeX.length < 6) {
+                                        assigneeX.push(item.key);
+                                        assigneeY.push(item.value / 10);
+                                    }
+                                });
+                            }
+
+                            // 现代化的图表配置
+                            const chartOption = {
+                                backgroundColor: 'transparent',
+                                tooltip: {
+                                    trigger: 'axis',
+                                    axisPointer: {
+                                        type: 'shadow',
+                                        shadowStyle: {
+                                            color: 'rgba(0, 0, 0, 0.1)'
+                                        }
+                                    },
+                                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                    borderColor: '#e2e8f0',
+                                    borderWidth: 1,
+                                    textStyle: {
+                                        color: '#1e293b'
+                                    },
+                                    formatter: function(params) {
+                                        return params[0].name + '<br />' + params[0].value + '%';
+                                    }
+                                },
+                                grid: {
+                                    top: '15%',
+                                    left: '3%',
+                                    right: '3%',
+                                    bottom: '8%',
+                                    containLabel: true
+                                },
+                                xAxis: [{
+                                    type: 'category',
+                                    data: [],
+                                    axisTick: { show: false },
+                                    axisLine: { show: false },
+                                    axisLabel: { show: false }
+                                }],
+                                yAxis: [{
+                                    type: 'value',
+                                    axisLine: { show: false },
+                                    axisTick: { show: false },
+                                    splitLine: {
+                                        lineStyle: {
+                                            color: 'rgba(0, 0, 0, 0.1)',
+                                            type: 'dashed'
+                                        }
+                                    },
+                                    axisLabel: {
+                                        color: '#64748b',
+                                        fontSize: 12,
+                                        formatter: function(val) {
+                                            return val + '%';
+                                        }
+                                    }
+                                }],
+                                series: [{
+                                    name: 'Percentage',
+                                    type: 'bar',
+                                    barWidth: '45%',
+                                    barMaxWidth: 25,
+                                    itemStyle: {
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                            { offset: 0, color: '#196fa6' },
+                                            { offset: 1, color: '#104991' }
+                                        ]),
+                                        borderRadius: [4, 4, 0, 0]
+                                    },
+                                    label: {
+                                        show: true,
+                                        position: 'top',
+                                        color: '#1e293b',
+                                        fontSize: 11,
+                                        fontWeight: '500',
+                                        formatter: '{c}%'
+                                    },
+                                    emphasis: {
+                                        itemStyle: {
+                                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                                { offset: 0, color: '#0ea5e9' },
+                                                { offset: 1, color: '#196fa6' }
+                                            ])
+                                        }
+                                    }
+                                }]
+                            };
+
+                            // 设置发明人图表
+                            const inventorOption = JSON.parse(JSON.stringify(chartOption));
+                            inventorOption.xAxis[0].data = inventorX;
+                            inventorOption.series[0].data = inventorY;
+                            inventorChart.setOption(inventorOption);
+
+                            // 设置受让人图表
+                            const assigneeOption = JSON.parse(JSON.stringify(chartOption));
+                            assigneeOption.xAxis[0].data = assigneeX;
+                            assigneeOption.series[0].data = assigneeY;
+                            assigneeChart.setOption(assigneeOption);
+
+                            // 添加图表点击事件
+                            inventorChart.on('click', function(params) {
+                                if (params.componentType === 'series' && params.seriesType === 'bar') {
+                                    _self.assignee = "";
+                                    _self.inventor = params.name;
+                                    _self.disableSearch = false;
+                                    _self.pagePatent = 1;
+                                    _self.patentResultData = [];
+                                    _self.searchPatentFlag = true;
+                                    _self.InitSearchPatent();
+                                }
+                            });
+
+                            assigneeChart.on('click', function(params) {
+                                if (params.componentType === 'series' && params.seriesType === 'bar') {
+                                    _self.inventor = "";
+                                    _self.assignee = params.name;
+                                    _self.disableSearch = false;
+                                    _self.pagePatent = 1;
+                                    _self.patentResultData = [];
+                                    _self.searchPatentFlag = true;
+                                    _self.InitSearchPatent();
+                                }
+                            });
+
+                            // 响应式处理
+                            const resizeCharts = () => {
+                                inventorChart.resize();
+                                assigneeChart.resize();
+                            };
+
+                            window.addEventListener('resize', resizeCharts);
+
+                            // 清理函数
+                            _self.chartCleanup = () => {
+                                window.removeEventListener('resize', resizeCharts);
+                            };
+
+                            // 标记图表已初始化
+                            _self.chartsInitialized = true;
+
+                        } catch (error) {
+                            console.error('Error initializing charts:', error);
+                            _self.chartsInitialized = false;
+                        }
+                    }, 100); // 延迟100ms确保DOM渲染完成
+                },
+
+                // 关闭公司搜索
+                closeCompanySearch: function() {
+                    this.searchValue = '';
+                    this.industry = '';
+                    this.location = '';
+                    this.searchCompanyFlag = false;
+                },
+
+                // 滚动处理
+                scrollFun: function() {
+                    const winH = window.innerHeight;
+                    const pageH = document.documentElement.scrollHeight;
+                    const scrollT = window.pageYOffset || document.documentElement.scrollTop;
+                    const resultH = (pageH - winH - scrollT) / winH;
+
+                    if (resultH < 0.02) {
+                        if (this.scrollFlag) {
+                            if (this.searchType === 'Company' && !this.nodata) {
+                                this.page++;
+                                this.InitSearch();
+                            }
+                            if (this.searchType === 'Patent' && !this.noPatentdata && (this.searchValuePatent.trim() != '' || this.assignee.trim() != '')) {
+                                this.pagePatent++;
+                                this.InitSearchPatent();
+                            }
+                        }
+                    }
+                },
+
+                // 注册登录
+                goSignup: function() {
+                    if (document.getElementById('signinModal')) {
+                        document.getElementById('signinModal').style.display = 'block';
+                    }
+                },
+
+                // 执行搜索
+                performSearch() {
+                    if (this.searchType === 'Company') {
+                        this.searchC();
+                    } else {
+                        this.searchP();
+                    }
+                },
+
+                // 设置搜索类型
+                setSearchType(type) {
+                    const previousType = this.searchType;
+                    this.searchType = type;
+
+                    // 关闭之前的搜索结果
+                    if (this.searchCompanyFlag) {
+                        this.closeCompanySearch();
+                    }
+                    if (this.searchPatentFlag) {
+                        this.searchPatentFlag = false;
+                        this.patentResultData = [];
+                        this.noPatentdata = false;
+                    }
+
+                    // 更新URL参数以反映搜索类型变化
+                    this.updateSearchTypeURL(type, previousType);
+                },
+
+                // 更新搜索类型的URL
+                updateSearchTypeURL(newType, oldType) {
+                    try {
+                        const url = new URL(window.location.href);
+                        const params = new URLSearchParams(url.search);
+
+                        // 更新type参数
+                        params.set('type', newType);
+
+                        // 如果搜索类型改变，清除相关的搜索参数
+                        if (oldType !== newType) {
+                            // 从专利切换到公司，清除专利相关参数
+                            if (oldType === 'Patent') {
+                                params.delete('keyword');
+                                params.delete('assignee');
+                            }
+                            // 从公司切换到专利，清除公司相关参数
+                            else if (oldType === 'Company') {
+                                params.delete('keyword');
+                            }
+                        }
+
+                        // 更新URL
+                        url.search = params.toString();
+                        const newURL = url.toString();
+
+                        // 更新locationURL和浏览器历史
+                        this.locationURL = newURL;
+                        history.pushState({ id: newURL }, '', newURL);
+
+                        console.log('URL updated for search type change:', {
+                            from: oldType,
+                            to: newType,
+                            newURL: newURL
+                        });
+                    } catch (error) {
+                        console.error('Error updating search type URL:', error);
+                    }
+                },
+
+                showSearch() {
+                    // Handle search input focus
+                },
+
+                hideSearch() {
+                    // Handle search input blur
+                },
+
+                getLogoStyle(logo, type) {
+                    if (logo && logo != null) {
+                        // 处理不同的 logo URL 格式
+                        if (logo.indexOf('/image/t_api_images/') > -1) {
+                            logo = logo.replace('/image/t_api_images', 'https://images.crunchbase.com/image/upload');
+                        } else if (logo.indexOf('res.cloudinary.com/crunchbase-production') > -1) {
+                            logo = logo.replace('res.cloudinary.com/crunchbase-production', 'images.crunchbase.com');
+                        } else if (logo.indexOf('/res_image') > -1) {
+                            logo = logo.replace('/res_image', 'https://images.crunchbase.com/image');
+                        }
+                        return `background-image: url('${logo}') !important; background-size: cover; background-position: center;`;
+                    } else {
+                        // 根据类型返回默认图标
+                        if (type === 'Person') {
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/investor-avatar.png') !important; background-size: cover; background-position: center;";
+                        } else if (type === 'App') {
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/app_logo.png') !important; background-size: cover; background-position: center;";
+                        } else {
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/company-icon.png') !important; background-size: cover; background-position: center;";
+                        }
+                    }
+                },
+
+                getInitials(name) {
+                    if (!name) return '';
+                    return name.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 2);
+                },
+
+                getCompanyLink(id, type) {
+                    return `company_profile_israel.html?cId=${id}`;
+                },
+
+                getCategoryName(category, type) {
+                    return category || '';
+                },
+
+                stripHtml(html) {
+                    if (!html) return '';
+                    return html.replace(/<[^>]*>/g, '');
+                },
+
+                async loadIsraelCompanies() {
+                    // Load Israel company data from API (recent funding rounds)
+                    this.loadingIsraelCompanies = true;
+                    try {
+                        // 计算日期范围：当前日期往前3个月
+                        const endDate = new Date();
+                        const startDate = new Date();
+                        startDate.setMonth(startDate.getMonth() - 3);
+
+                        // 格式化日期为 YYYY-MM-DD
+                        const formatDate = (date) => {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, '0');
+                            return `${year}-${month}-${day}`;
+                        };
+
+                        const sd = formatDate(startDate);
+                        const ed = formatDate(endDate);
+
+                        // 调用 Funding API
+                        const url = `${common.APIDomain}/api/Funding/Search?page=1&pageSize=15&sd=${sd}&ed=${ed}&country=Israel`;
+
+                        const response = await axios.get(url);
+
+                        if (response.data.ReturnCode === 0 && response.data.Data && response.data.Data.data) {
+                            // 将 API 返回的数据映射为与 JSON 文件一致的格式
+                            this.israelCompanyData = response.data.Data.data.map(item => {
+                                return {
+                                    id: item.company_id || item._id,
+                                    name: item.company_name || 'Unknown',
+                                    category: item.industry && item.industry.length > 0 ? item.industry.join(', ') : 'Technology',
+                                    type: 'Company',
+                                    logo: item.logo || '',
+                                    // 保留原始数据以便后续使用
+                                    funding_round: item.funding_round,
+                                    money_raised: item.money_raised,
+                                    announced_on: item.announced_on
+                                };
+                            });
+                        } else {
+                            // 如果 API 调用失败，使用空数组
+                            this.israelCompanyData = [];
+                        }
+
+                        this.loadingIsraelCompanies = false;
+                        common.hideMask();
+                    } catch (error) {
+                        console.error('Error loading Israel companies:', error);
+                        // API 失败时，尝试降级使用 JSON 文件
+                        try {
+                            const fallbackResponse = await axios.get("/data/company_israel.json?timestamp=202302202");
+                            this.israelCompanyData = fallbackResponse.data['Data'];
+                        } catch (fallbackError) {
+                            console.error('Fallback also failed:', fallbackError);
+                            this.israelCompanyData = [];
+                        }
+                        this.loadingIsraelCompanies = false;
+                        common.hideMask();
+                    }
+                },
+
+                async loadRecentViews() {
+                    // 调用原有的初始化方法
+                    this.InitRecentView();
+                },
+
+                // 图表响应式处理
+                resizeCharts() {
+                    if (this.assigneeChartInstance) {
+                        this.assigneeChartInstance.resize();
+                    }
+                    if (this.inventorChartInstance) {
+                        this.inventorChartInstance.resize();
+                    }
+                }
+            },
+
+            async mounted() {
+                try {
+                    const _self = this;
+
+                    // 页面滚动到顶部
+                    if (window.$) {
+                        $('body').animate({ scrollTop: 0 }, 500);
+                    } else {
+                        window.scrollTo(0, 0);
+                    }
+
+                    // 初始化 AOS
+                    if (window.AOS) {
+                        AOS.init({
+                            duration: 800,
+                            easing: 'ease-in-out',
+                            once: true
+                        });
+                    }
+
+                    // 加载保存的语言
+                    const savedLang = localStorage.getItem('inno_lang');
+                    if (savedLang && ['cn', 'en'].includes(savedLang)) {
+                        this.currentLang = savedLang;
+                    }
+
+                    // 初始化类别翻译数据
+                    try {
+                        const response = await axios.get('/data/categories_translation_pair.json');
+                        _self.categoryTranslateData = response.data;
+                    } catch (error) {
+                        console.error('Error loading category translation data:', error);
+                    }
+
+                    // 根据 URL 参数初始化
+                    if (_self.type.length > 0) {
+                        if (_self.type == 'Company') {
+                            _self.searchType = 'Company';
+                            if (_self.keyword.length > 0) {
+                                _self.searchValue = _self.keyword;
+                            }
+                            if (_self.location.length > 0) {
+                                _self.isParamLocation = true;
+                                _self.selectLocationData = _self.location.split(';');
+                            }
+                            _self.seachCompanyByFilter();
+                        }
+                        if (_self.type == 'Patent') {
+                            _self.searchType = 'Patent';
+                            if (_self.keyword.length > 0) {
+                                _self.searchValuePatent = _self.keyword;
+                                _self.searchP();
+                            }
+                            if (_self.assignee.length > 0) {
+                                _self.disableSearch = false;
+                                _self.searchPatentFlag = true;
+                                _self.searchValuePatent = "assignee:" + _self.assignee;
+                                _self.InitSearchPatent();
+                            }
+                        }
+                    } else {
+                        if (_self.keyword.length > 0) {
+                            _self.searchValue = _self.keyword;
+                            _self.searchC();
+                        }
+                    }
+
+                    // 加载初始数据
+                    await Promise.all([
+                        this.loadIsraelCompanies(),
+                        this.loadRecentViews()
+                    ]);
+
+                    // 添加滚动监听
+                    window.addEventListener('scroll', this.scrollFun);
+
+                    // 添加历史状态监听
+                    window.addEventListener('popstate', function(event) {
+                        _self.readState(event.state);
+                    });
+
+                    // 添加窗口大小变化监听用于图表响应式
+                    let resizeTimeout;
+                    window.addEventListener('resize', function() {
+                        clearTimeout(resizeTimeout);
+                        resizeTimeout = setTimeout(function() {
+                            _self.resizeCharts();
+                        }, 250);
+                    });
+
+                } catch (error) {
+                    console.error('Error during component mounting:', error);
+                    this.loading = false;
+                }
+            },
+
+            beforeUnmount() {
+                // 清理事件监听器
+                window.removeEventListener('scroll', this.scrollFun);
+
+                // 清理图表实例
+                if (this.assigneeChartInstance) {
+                    this.assigneeChartInstance.dispose();
+                }
+                if (this.inventorChartInstance) {
+                    this.inventorChartInstance.dispose();
+                }
+
+                // 清理图表相关事件监听器
+                if (this.chartCleanup) {
+                    this.chartCleanup();
+                }
+            },
+
+            errorCaptured(err, vm, info) {
+                console.error('Vue error captured:', err, info);
+                return false;
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

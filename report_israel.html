@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>投资报告 - Innonation</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+	
+    <link rel="stylesheet" href="css/report_israel.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  </head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单挂载点（公共组件渲染） -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                
+                
+                <p class="text-muted fw-medium">{{ t('loadingReportInfo') }}</p>
+            </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容区域 -->
+        <div class="container page-container with-fixed-header">
+            <!-- 报告标题区域 -->
+            <div class="report-hero" data-aos="fade-up">
+                <div class="container">
+                    <h1>{{ t('new-report-title1') }}</h1>
+                    <p>{{ t('new-report-desc1') }}</p>
+                </div>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="report-layout">
+                <!-- 左侧主要内容 -->
+                <div class="report-main">
+                    <!-- 月度报告列表 -->
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-file-lines"></i>
+                                {{ t('monthlyReports') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>{{ t('date') }}</th>
+                                            <th>{{ t('reportName') }}</th>
+                                            <th>{{ t('actions') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="report in displayedReports" :key="report.id">
+                                            <td>{{ report.date }}</td>
+                                            <td>
+                                                <a href="#" @click.prevent="openReport(report)" class="text-primary text-decoration-none">
+                                                    {{ report.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" @click="openReport(report)">
+                                                    <i class="fas fa-external-link-alt"></i> {{ t('viewReport') }}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Load More Button -->
+                            <div v-if="hasMoreReports" class="text-center mt-3">
+                                <button class="btn btn-outline-primary" @click="loadMoreReports">
+                                    <i class="fas fa-plus"></i> {{ currentLang === 'zh' ? '加载更多' : 'Load More' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 年度报告 -->
+                    <div class="card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-line"></i>
+                                {{ t('new-report-title3') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">{{ t('new-report-desc5') }}</p>
+                            <div class="d-grid gap-2 d-md-block">
+                                <button class="btn btn-primary" @click="generateAnnualReport">
+                                    <i class="fas fa-magic"></i> {{ t('generateReport') }}
+                                </button>
+                                <button class="btn btn-secondary" @click="viewSampleReport">
+                                    <i class="fas fa-eye"></i> {{ t('viewSample') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 公司分析报告 -->
+                    <div class="card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-building"></i>
+                                {{ t('new-report-title2') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">{{ t('new-report-desc4') }}</p>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="report-feature">
+                                        <i class="fas fa-search"></i>
+                                        <h4>{{ t('companySearch') }}</h4>
+                                        <p>{{ t('companySearchDesc') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="report-feature">
+                                        <i class="fas fa-chart-pie"></i>
+                                        <h4>{{ t('marketAnalysis') }}</h4>
+                                        <p>{{ t('marketAnalysisDesc') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="report-feature">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <h4>{{ t('financialForecast') }}</h4>
+                                        <p>{{ t('financialForecastDesc') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="report-feature">
+                                        <i class="fas fa-users"></i>
+                                        <h4>{{ t('teamAnalysis') }}</h4>
+                                        <p>{{ t('teamAnalysisDesc') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧边栏 -->
+                <div class="report-sidebar">
+                    <!-- 报告定制服务 -->
+                    <div class="card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-cog"></i>
+                                {{ t('customReportService') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small">{{ t('customReportDesc') }}</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ t('reportFeature1') }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ t('reportFeature2') }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ t('reportFeature3') }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ t('reportFeature4') }}
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-100" @click="contactService">
+                                <i class="fas fa-phone"></i> {{ t('contactService') }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 报告样例 -->
+                    <div class="card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-file-alt"></i>
+                                {{ t('reportSamples') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" @click="viewSample('in-depth')">
+                                    {{ t('new-report-name1') }}
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm" @click="viewSample('standard')">
+                                    {{ t('new-report-name2') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 联系方式 -->
+                    <div class="card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-qrcode"></i>
+                                {{ t('contactUs') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="qr-section">
+                                <div class="qr-code">
+                                    <img src="../dashboard/dist/img/report/qrcode.png" alt="WeChat QR" style="width: 100%; height: 100%; object-fit: contain;">
+                                </div>
+                                <h5>{{ t('customerService') }}</h5>
+                                <p>{{ t('scanQRDesc') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 报告模态框 -->
+        <div v-if="showReportModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ selectedReport?.name || '' }}</h5>
+                        <button type="button" class="btn-close" @click="showReportModal = false"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="reportLoading" class="text-center py-5">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="text-muted fw-medium">{{ t('loadingReport') }}</p>
+                        </div>
+                        <div v-else-if="reportContent">
+                            <div class="report-content" v-html="reportContent"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="showReportModal = false">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="downloadCurrentReport">
+                            <i class="fas fa-download"></i> {{ t('download') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script src="common/js/common-utils.js"></script>
+    <script src="common/js/api-client.js"></script>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <script>
+
+// Initialize AOS animations
+AOS.init({
+	duration: 800,
+	easing: 'ease-in-out',
+	once: true
+});
+
+// Vue App
+const DEFAULT_LANG = (localStorage.getItem('inno_lang') || 'zh');
+const FALLBACK_I18N = {
+	zh: {
+		loadingReportInfo: '正在加载报告信息...',
+		monthlyReports: '月度报告',
+		reportName: '报告名称',
+		actions: '操作',
+		download: '下载',
+		generateReport: '生成报告',
+		viewSample: '查看样例',
+		companySearch: '公司搜索',
+		companySearchDesc: '智能搜索目标公司信息',
+		marketAnalysis: '市场分析',
+		marketAnalysisDesc: '深入分析市场趋势和机会',
+		financialForecast: '财务预测',
+		financialForecastDesc: '专业的财务数据分析和预测',
+		teamAnalysis: '团队分析',
+		teamAnalysisDesc: '核心团队成员背景和能力分析',
+		customReportService: '报告定制服务',
+		customReportDesc: '根据您的需求定制专属报告',
+		reportFeature1: '深度行业分析',
+		reportFeature2: '竞品对比分析',
+		reportFeature3: '投资机会评估',
+		reportFeature4: '市场进入策略',
+		reportSamples: '报告样例',
+		contactService: '联系客服',
+		customerService: '客服微信',
+		scanQRDesc: '扫码添加客服微信',
+		loadingReport: '正在加载报告...',
+		close: '关闭',
+		date: '日期',
+		contactUs: '联系我们'
+	},
+	en: {
+		loadingReportInfo: 'Loading report info...',
+		monthlyReports: 'Monthly Reports',
+		reportName: 'Report Name',
+		actions: 'Actions',
+		download: 'Download',
+		generateReport: 'Generate Report',
+		viewSample: 'View Sample',
+		companySearch: 'Company Search',
+		companySearchDesc: 'Intelligent search for target company information',
+		marketAnalysis: 'Market Analysis',
+		marketAnalysisDesc: 'In-depth analysis of market trends and opportunities',
+		financialForecast: 'Financial Forecast',
+		financialForecastDesc: 'Professional financial data analysis and forecasting',
+		teamAnalysis: 'Team Analysis',
+		teamAnalysisDesc: 'Analysis of core team members\' background and capabilities',
+		customReportService: 'Custom Report Service',
+		customReportDesc: 'Customized reports based on your needs',
+		reportFeature1: 'Deep Industry Analysis',
+		reportFeature2: 'Competitive Analysis',
+		reportFeature3: 'Investment Opportunity Assessment',
+		reportFeature4: 'Market Entry Strategy',
+		reportSamples: 'Report Samples',
+		contactService: 'Contact Service',
+		customerService: 'Customer Service WeChat',
+		scanQRDesc: 'Scan to add customer service WeChat',
+		loadingReport: 'Loading report...',
+		close: 'Close',
+		date: 'Date',
+		contactUs: 'Contact Us'
+	}
+};
+const { createApp } = Vue;
+
+createApp({
+	data() {
+		return {
+			// i18n
+			currentLang: DEFAULT_LANG,
+			translations: FALLBACK_I18N[DEFAULT_LANG] || {},
+			// Report data
+			monthlyReports: [],
+			annualReports: [],
+			// UI state
+			loading: true,
+			showReportModal: false,
+			reportLoading: false,
+			reportContent: null,
+			selectedReport: null,
+			// Load More functionality
+			displayCount: 10 // 默认显示10条记录
+		}
+	},
+	async mounted() {
+		// 立即滚动到顶部，防止浏览器自动恢复滚动位置
+		if ('scrollRestoration' in history) {
+			history.scrollRestoration = 'manual';
+		}
+		window.scrollTo(0, 0);
+		document.documentElement.scrollTop = 0;
+		document.body.scrollTop = 0;
+
+		await this.loadI18n();
+		await this.initData();
+
+		// 最终确保页面在顶部
+		this.$nextTick(() => {
+			setTimeout(() => {
+				window.scrollTo(0, 0);
+				document.documentElement.scrollTop = 0;
+				document.body.scrollTop = 0;
+			}, 100);
+		});
+	},
+	computed: {
+		displayedReports() {
+			return this.monthlyReports.slice(0, this.displayCount);
+		},
+		hasMoreReports() {
+			return this.monthlyReports.length > this.displayCount;
+		}
+	},
+	methods: {
+		// i18n helpers
+		async loadI18n() {
+			try {
+				// Load page-specific translations
+				const res = await axios.get(`common/i18n/report_israel.${this.currentLang}.json`);
+				const pageTranslations = res.data;
+
+				this.translations = {
+					...(FALLBACK_I18N[this.currentLang] || {}),
+					...pageTranslations
+				};
+			} catch (e) {
+				console.warn('Failed to load i18n files, using fallback:', e);
+				this.translations = FALLBACK_I18N[this.currentLang] || {};
+			}
+		},
+		t(key) {
+			return this.translations[key] || key;
+		},
+		async toggleLang() {
+			this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+			localStorage.setItem('inno_lang', this.currentLang);
+			window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
+			await this.loadI18n();
+			// 重新生成月度报告以更新报告名称的本地化
+			this.generateMonthlyReports();
+		},
+
+		// Initialize data
+		async initData() {
+			try {
+				await this.loadMonthlyReports();
+			} catch (error) {
+				console.error('Failed to load data:', error);
+			} finally {
+				this.loading = false;
+				// 确保页面显示在顶部
+				this.$nextTick(() => {
+					window.scrollTo(0, 0);
+				});
+			}
+		},
+
+		// Load monthly reports
+		async loadMonthlyReports() {
+			this.generateMonthlyReports();
+		},
+
+		// Generate monthly reports based on current language
+		generateMonthlyReports() {
+			this.monthlyReports = [];
+
+			// Use all available report data from original file (2025, 2024, 2023)
+			const availableReports = [
+				// 2025年报告
+				{ year: 2025, month: 8, key: '2025-08' },
+				{ year: 2025, month: 7, key: '2025-07' },
+				{ year: 2025, month: 6, key: '2025-06' },
+				{ year: 2025, month: 5, key: '2025-05' },
+				{ year: 2025, month: 4, key: '2025-04' },
+				{ year: 2025, month: 3, key: '2025-03' },
+				{ year: 2025, month: 2, key: '2025-02' },
+				{ year: 2025, month: 1, key: '2025-01' },
+				// 2024年报告
+				{ year: 2024, month: 12, key: '2024-12' },
+				{ year: 2024, month: 11, key: '2024-11' },
+				{ year: 2024, month: 10, key: '2024-10' },
+				{ year: 2024, month: 9, key: '2024-09' },
+				{ year: 2024, month: 8, key: '2024-08' },
+				{ year: 2024, month: 7, key: '2024-07' },
+				{ year: 2024, month: 6, key: '2024-06' },
+				{ year: 2024, month: 5, key: '2024-05' },
+				{ year: 2024, month: 4, key: '2024-04' },
+				{ year: 2024, month: 3, key: '2024-03' },
+				{ year: 2024, month: 2, key: '2024-02' },
+				{ year: 2024, month: 1, key: '2024-01' },
+				// 2023年报告
+				{ year: 2023, month: 12, key: '2023-12' },
+				{ year: 2023, month: 11, key: '2023-11' },
+				{ year: 2023, month: 10, key: '2023-10' },
+				{ year: 2023, month: 9, key: '2023-09' },
+				{ year: 2023, month: 8, key: '2023-08' },
+				{ year: 2023, month: 7, key: '2023-07' },
+				{ year: 2023, month: 6, key: '2023-06' },
+				{ year: 2023, month: 5, key: '2023-05' },
+				{ year: 2023, month: 4, key: '2023-04' },
+				{ year: 2023, month: 3, key: '2023-03' },
+				{ year: 2023, month: 2, key: '2023-02' },
+				{ year: 2023, month: 1, key: '2023-01' }
+			];
+
+			// Generate reports from available data
+			availableReports.forEach(report => {
+				const reportKey = `new-report-name-${report.key}`;
+				const reportName = this.t(reportKey);
+
+				if (reportName !== reportKey) { // Only add if translation exists
+					// Localized date format
+					const localizedDate = this.currentLang === 'zh'
+						? `${report.year}年${report.month}月`
+						: `${report.year} ${this.getMonthName(report.month)}`;
+
+					this.monthlyReports.push({
+						id: report.key,
+						date: localizedDate,
+						name: reportName,
+						year: report.year,
+						month: report.month
+					});
+				}
+			});
+		},
+
+		// Load more reports
+		loadMoreReports() {
+			this.displayCount += 10; // 每次加载10条更多
+		},
+
+		// Get localized month name
+		getMonthName(month) {
+			const monthNames = {
+				zh: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+			};
+			return monthNames[this.currentLang][month - 1] || month;
+		},
+
+		// Open report page
+		openReport(report) {
+			// Open the corresponding report HTML page in report directory
+			// For English reports, add -en suffix (matching original file pattern)
+			const reportSuffix = this.currentLang === 'en' ? '-en' : '';
+			const reportUrl = `/new/report/${report.id}${reportSuffix}.html`;
+			console.log('Opening report:', report.name, 'at URL:', reportUrl);
+			window.open(reportUrl, '_blank');
+		},
+
+		// Generate annual report
+		generateAnnualReport() {
+			console.log('Generating annual report');
+		},
+
+		// View sample report
+		viewSampleReport() {
+			console.log('Viewing sample report');
+		},
+
+		// View sample by type
+		viewSample(type) {
+			console.log('Viewing sample:', type);
+		},
+
+		// Contact service
+		contactService() {
+			console.log('Contacting service');
+		},
+
+		// View current report from modal
+		viewCurrentReport() {
+			if (this.selectedReport) {
+				this.openReport(this.selectedReport);
+			}
+		}
+	}
+}).mount('#app');
+    </script>
+</body>
+</html>

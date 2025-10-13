@@ -1,0 +1,242 @@
+/* INNONATION AI - CSS 变量和设计系统 */
+
+:root {
+    /* ===== 品牌主色调 ===== */
+    --color-brand-blue: #196fa6;
+    --color-deep-blue: #104991;
+    --color-highlight-blue: #0ea5e9;
+    --color-action-blue: #196fa6;
+    --color-light-blue: #f4f8fb;
+
+    /* ===== 渐变色 ===== */
+    --gradient-primary: linear-gradient(135deg, #196fa6, #104991);
+    --gradient-light: linear-gradient(135deg, #f4f8fb 0%, #ffffff 100%);
+    --gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fbfd 100%);
+
+    /* ===== 文字颜色 ===== */
+    --text-color: #1e293b;
+    --text-light: #64748b;
+    --text-muted: #9ca3af;
+    --text-secondary: #374151;
+    --text-placeholder: #d1d5db;
+    --text-white: #ffffff;
+
+    /* ===== 背景颜色 ===== */
+    --background-light: #f8fbfd;
+    --background-white: #ffffff;
+    --background-gray: #f9fafb;
+    --background-dark: #1f2937;
+    --background-overlay: rgba(0, 0, 0, 0.5);
+
+    /* ===== 状态颜色 ===== */
+    --success-color: #27ae60;
+    --success-light: #d4edda;
+    --success-dark: #155724;
+
+    --warning-color: #f59e0b;
+    --warning-light: #fff3cd;
+    --warning-dark: #856404;
+
+    --error-color: #e74c3c;
+    --error-light: #f8d7da;
+    --error-dark: #721c24;
+
+    --info-color: #8e44ad;
+    --info-light: #d1ecf1;
+    --info-dark: #0c5460;
+
+    /* ===== 边框颜色 ===== */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+    --border-focus: var(--color-brand-blue);
+
+    /* ===== 阴影效果 ===== */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-base: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+    /* 特殊阴影效果 */
+    --card-shadow: var(--shadow-base);
+    --hover-shadow: var(--shadow-lg);
+    --focus-shadow: 0 0 0 3px rgba(25, 111, 166, 0.1);
+
+    /* ===== 边框圆角 ===== */
+    --border-radius-sm: 0.25rem;
+    --border-radius: 0.5rem;
+    --border-radius-md: 0.5rem;
+    --border-radius-lg: 0.75rem;
+    --border-radius-xl: 1rem;
+    --border-radius-2xl: 1.5rem;
+    --border-radius-full: 9999px;
+
+    /* ===== 间距系统 ===== */
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    --spacing-xl: 2rem;      /* 32px */
+    --spacing-2xl: 3rem;     /* 48px */
+    --spacing-3xl: 4rem;     /* 64px */
+
+    /* ===== 字体大小 ===== */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    --font-size-5xl: 3rem;      /* 48px */
+
+    /* ===== 字体粗细 ===== */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+
+    /* ===== 行高 ===== */
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+
+    /* ===== 动画和过渡 ===== */
+    --transition-fast: 0.15s ease-in-out;
+    --transition-base: 0.2s ease-in-out;
+    --transition-slow: 0.3s ease-in-out;
+    --transition-slower: 0.5s ease-in-out;
+
+    /* 常用动画缓动函数 */
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in-out-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ===== Z-Index 层级管理 ===== */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
+
+    /* ===== 布局尺寸 ===== */
+    --container-xs: 480px;
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1280px;
+    --container-2xl: 1536px;
+
+    /* ===== 响应式断点 ===== */
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+
+    /* ===== 组件特定变量 ===== */
+
+    /* 导航栏 */
+    --navbar-height: 80px;
+    --navbar-padding: 1rem 2rem;
+    --navbar-bg: rgba(255, 255, 255, 0.95);
+    --navbar-backdrop-filter: blur(10px);
+
+    /* 侧边栏 */
+    --sidebar-width: 280px;
+    --sidebar-width-collapsed: 60px;
+    --sidebar-bg: var(--background-white);
+
+    /* 卡片 */
+    --card-padding: var(--spacing-lg);
+    --card-bg: var(--background-white);
+    --card-border: 1px solid var(--border-color);
+
+    /* 按钮 */
+    --button-padding-sm: 0.5rem 1rem;
+    --button-padding-md: 0.75rem 1.5rem;
+    --button-padding-lg: 1rem 2rem;
+    --button-font-weight: var(--font-weight-medium);
+
+    /* 输入框 */
+    --input-padding: 0.75rem 1rem;
+    --input-bg: var(--background-white);
+    --input-border: 1px solid var(--border-color);
+    --input-focus-border: var(--border-focus);
+
+    /* 表单 */
+    --form-label-font-weight: var(--font-weight-medium);
+    --form-label-color: var(--text-secondary);
+    --form-help-color: var(--text-muted);
+    --form-error-color: var(--error-color);
+
+    /* ===== 暗色主题变量 (可选) ===== */
+    --dark-bg-primary: #0f172a;
+    --dark-bg-secondary: #1e293b;
+    --dark-bg-tertiary: #334155;
+    --dark-text-primary: #f8fafc;
+    --dark-text-secondary: #cbd5e1;
+    --dark-text-muted: #64748b;
+    --dark-border: #374151;
+}
+
+/* ===== 字体族定义 ===== */
+:root {
+    --font-sans: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* ===== 基础重置和全局样式 ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    line-height: var(--line-height-normal);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--text-color);
+    background: var(--gradient-light);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== 辅助类 ===== */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Vue.js cloak */
+[v-cloak] {
+    display: none !important;
+}

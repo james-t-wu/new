@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>以色列科技新闻 - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- 页面特定样式 -->
+    <link rel="stylesheet" href="css/tech_news_israel.css">
+
+    <style>
+        /* Critical inline styles for immediate rendering */
+        :root {
+            --color-brand-blue: #196fa6;
+            --color-deep-blue: #104991;
+            --color-highlight-blue: #0ea5e9;
+            --text-color: #1e293b;
+            --muted-text: #64748b;
+            --background-light: #f8fbfd;
+        }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+
+
+        /* Page title styling */
+        .page-title {
+            color: var(--color-brand-blue) !important;
+            font-size: 2.5rem !important;
+            margin-bottom: 2rem !important;
+        }
+
+        /* Language switch button */
+        .language-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(25, 111, 166, 0.1);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-brand-blue);
+            font-weight: 600;
+        }
+
+        .language-switch:hover {
+            background: var(--color-brand-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Critical box and layout styles to prevent layout breaking */
+        .box {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(25, 111, 166, 0.1);
+            border: 1px solid rgba(25, 111, 166, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .box-header {
+            background: linear-gradient(135deg, rgba(25, 111, 166, 0.08) 0%, rgba(16, 73, 145, 0.03) 100%);
+            border-bottom: 1px solid rgba(25, 111, 166, 0.1);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .box-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-brand-blue);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .box-body {
+            padding: 0;
+        }
+
+        /* Critical card grid to prevent layout issues */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem !important;
+            }
+        }
+
+        /* Vue.js v-cloak directive to prevent flash of uncompiled content */
+        [v-cloak] {
+            display: none !important;
+        }
+
+        /* Loading state improvements */
+        .spinner-border {
+            width: 3rem !important;
+            height: 3rem !important;
+        }
+
+        /* Global menu container */
+        #inno-global-menu {
+            position: relative;
+            z-index: 1060;
+        }
+
+
+        .modern-menu-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 320px;
+            max-width: 90%;
+            background: white;
+            border-radius: 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            border-right: 1px solid #e5e7eb;
+            transform: translateX(-100%);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            z-index: 1060;
+        }
+
+        .modern-menu-modal.active .modern-menu-content {
+            transform: translateX(0);
+        }
+
+        /* 页面内容适配 - 菜单展开时推动页面内容 */
+        body.menu-active {
+            margin-left: 320px;
+            transition: margin-left 0.3s ease;
+        }
+
+        body.menu-active.menu-collapsed {
+            margin-left: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .modern-menu-content {
+                width: 78vw;
+                max-width: 320px;
+            }
+
+            /* 移动端菜单激活时不推动内容 */
+            body.menu-active {
+                margin-left: 0;
+            }
+
+            body.menu-active.menu-collapsed {
+                margin-left: 0;
+            }
+        }
+
+        .modern-menu-header {
+            background: linear-gradient(135deg, #196fa6 0%, #104991 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 81px;
+            flex-shrink: 0;
+        }
+
+        .modern-menu-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .menu-logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .menu-logo-text b {
+            color: var(--color-highlight-blue);
+            text-shadow: 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .menu-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modern-menu-collapse,
+        .modern-menu-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .modern-menu-collapse:hover,
+        .modern-menu-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .modern-menu-collapse {
+            transition: transform 0.3s ease;
+        }
+
+        .modern-menu-collapse.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* Menu Navigation */
+        .modern-menu-nav {
+            padding: 10px 0 12px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+        }
+
+        /* 隐藏横向滚动条，避免误触 */
+        .modern-menu-content, .modern-menu-nav {
+            overflow-x: hidden;
+        }
+
+        .modern-menu-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modern-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-menu-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .modern-menu-link:hover::before { left: 100%; }
+
+        .modern-menu-link:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(25, 111, 166, 0.03) 100%);
+            color: var(--color-highlight-blue);
+            border-left-color: var(--color-highlight-blue);
+            transform: translateX(5px);
+        }
+
+        .modern-menu-item.active .modern-menu-link {
+            background: rgba(25, 111, 166, 0.1);
+            color: var(--color-brand-blue);
+            border-left-color: var(--color-brand-blue);
+            font-weight: 600;
+        }
+
+        .modern-menu-link i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .modern-menu-link:hover i { transform: scale(1.1); }
+
+        .modern-menu-link span {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .modern-menu-arrow {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            color: #999;
+        }
+
+        .modern-menu-arrow.expanded { transform: rotate(90deg); color: var(--color-highlight-blue); }
+
+        .modern-submenu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(25, 111, 166, 0.04) 0%, rgba(16, 73, 145, 0.01) 100%);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .modern-submenu.expanded { max-height: 300px; }
+
+        .modern-submenu-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 18px 10px 56px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border-left: 4px solid transparent;
+        }
+
+        .modern-submenu-link:hover {
+            background: rgba(25, 111, 166, 0.05);
+            color: var(--color-highlight-blue);
+            border-left-color: var(--color-highlight-blue);
+        }
+
+        .modern-submenu-link i {
+            width: 18px;
+            margin-right: 12px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* 菜单项图标颜色 - 统一设计 */
+        .modern-menu-item i {
+            color: #6b7280 !important;
+            transition: color 0.3s ease;
+        }
+
+        .modern-menu-link:hover i {
+            color: var(--color-highlight-blue) !important;
+            text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        /* 子菜单图标颜色 - 统一设计 */
+        .modern-submenu i {
+            color: #6b7280 !important;
+            transition: color 0.3s ease;
+        }
+
+        .modern-submenu-link:hover i {
+            color: var(--color-highlight-blue) !important;
+            text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        /* Ensure main content is not hidden behind menu */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(25, 111, 166, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        /* Debug styles to ensure content is visible */
+        .page-container {
+            background: rgba(255, 255, 255, 0.9);
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+        }
+
+        /* Ensure the Vue app container is visible */
+        #app {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Loading state should be clearly visible */
+        .position-fixed.bg-white.bg-opacity-75 {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- AOS 动画库脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单挂载点（公共组件渲染） -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
+        <div v-if="appLoading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="text-muted fw-medium">{{ t('loading') }}</p>
+            </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <!-- 语言切换按钮 -->
+                    <div class="language-switch" @click="toggleLanguage">
+                        <i class="fas fa-globe"></i>
+                        <span>{{ currentLanguage === 'zh' ? 'EN' : '中' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <div class="container page-container with-fixed-header">
+                <!-- 页面标题 -->
+                <div class="row mb-4" data-aos="fade-up">
+                    <div class="col-12">
+                        <h1 class="page-title fw-bold text-center mb-4">
+                            <span name="message-ISRAEL-TECH">以色列科技新闻</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- 主要内容区域 -->
+                <div class="row" data-aos="fade-up" data-aos-delay="100">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">
+                                    <i class="fas fa-newspaper me-2"></i>
+                                    {{ t('tech-news-title') }}
+                                </h3>
+                            </div>
+
+                            <div class="box-body">
+                                <!-- 新闻卡片网格 -->
+                                <div class="card-grid">
+                                    <div class="card" v-for="item in newsList" @click="openModal(item)" data-aos="fade-up">
+                                        <div class="card-body">
+                                            <div class="news-title" v-if="!isEnglish">{{item.ChineseTitle}}</div>
+                                            <div class="news-title" v-if="isEnglish">{{item.EnglishTitle}}</div>
+                                            <div class="news-content" v-if="!isEnglish">{{item.ChineseSummary}}</div>
+                                            <div class="news-content" v-if="isEnglish">{{item.EnglishSummary}}</div>
+                                        </div>
+                                        <div class="footer">
+                                            <div class="time">{{item.Date}}</div>
+                                            <div class="type">{{item.Type}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 分页组件 -->
+                                <div class="pagination" v-show="totalPages > 0">
+                                    <button class="page-button page-nav"
+                                            @click="prevPage"
+                                            :disabled="currentPage === 1">
+                                        <span name="message-prev-page">{{ t('previous') }}</span>
+                                    </button>
+
+                                    <button class="page-button"
+                                            v-for="item in displayedPages"
+                                            @click="item.page && goToPage(item.page)"
+                                            :class="{
+                                                'active': currentPage === item.page,
+                                                'disabled': !item.page
+                                            }">
+                                        {{item.text}}
+                                    </button>
+
+                                    <button class="page-button page-nav"
+                                            @click="nextPage"
+                                            :disabled="currentPage === totalPages">
+                                        <span name="message-next-page">{{ t('next') }}</span>
+                                    </button>
+                                </div>
+
+                                <!-- 详情模态框 -->
+                                <div class="detail-modal" v-if="showModal" @click.self="closeModal">
+                                    <div class="modal-backdrop" @click="closeModal"></div>
+                                    <div class="modal-content" :class="{ 'modal-closing': isClosing }">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" v-if="!isEnglish">{{ selectedItem.ChineseTitle }}</h4>
+                                            <h4 class="modal-title" v-if="isEnglish">{{ selectedItem.EnglishTitle }}</h4>
+                                            <div class="close" @click="closeModal">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-text" v-if="!isEnglish" v-html="selectedItem.ChineseContent"></div>
+                                            <div class="modal-text" v-if="isEnglish" v-html="selectedItem.EnglishContent"></div>
+
+                                            <div class="modal-references" v-if="selectedItem.Reference">
+                                                <strong>{{ t('references') }}:</strong>
+                                                <div v-for="ref in selectedItem.Reference.split('\n')" :key="ref">
+                                                    <a :href="ref" target="_blank" class="reference-link">{{ ref }}</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <div class="modal-date">
+                                                    <strong>{{ t('news-date') }}:</strong> {{ selectedItem.Date }}
+                                                </div>
+                                                <div class="modal-type">
+                                                    <strong>{{ t('news-type') }}:</strong> {{ selectedItem.Type }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+    
+    <!-- 兼容原有 common.js 的桥接代码 -->
+    <script>
+        // 兼容原有的 common 对象
+        if (typeof common === 'undefined') {
+            window.common = {
+                APIDomain: 'https://ai.innonation.io/inno_ai_services',
+                hideMask: function() {
+                    console.log('hideMask called');
+                }
+            };
+        }
+
+        // 监听语言切换事件
+        window.addEventListener('inno_lang_change', function(e) {
+            const lang = e.detail;
+            if (window.InnoMenu) {
+                window.InnoMenu.setLang(lang);
+            }
+        });
+    </script>
+
+    <!-- 初始化 AOS 动画 -->
+    <script>
+        // 确保 AOS 库已加载后再初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-in-out',
+                    once: true,
+                    offset: 120
+                });
+            }
+        });
+    </script>
+
+    <!-- Vue 应用 -->
+    <script>
+        console.log('Starting Vue application initialization...');
+
+        // Check if Vue is loaded properly
+        if (typeof Vue === 'undefined') {
+            console.error('Vue is not loaded properly!');
+        } else {
+            console.log('Vue is loaded successfully, version:', Vue.version);
+        }
+
+        const { createApp } = Vue;
+
+        // Enhanced error handling for Vue app
+        const app = createApp({
+            data() {
+                return {
+                    // 基础配置
+                    currentPage: 1,
+                    pageSize: 12,
+                    total: 0,
+
+                    // 新闻数据
+                    newsList: [],
+                    selectedItem: {},
+
+                    // 应用状态
+                    appLoading: true,
+
+                    // i18n 翻译
+                    translations: {},
+
+                    // 语言状态
+                    currentLanguage: 'zh',
+                    isEnglish: false,
+
+                    // 模态框状态
+                    showModal: false,
+                    isClosing: false
+                }
+            },
+
+            computed: {
+                totalPages() {
+                    return Math.ceil(this.total / this.pageSize);
+                },
+
+                displayedPages() {
+                    let pages = [];
+                    const total = this.totalPages;
+                    const current = this.currentPage;
+
+                    if (total <= 7) {
+                        for (let i = 1; i <= total; i++) {
+                            pages.push({ page: i, text: i });
+                        }
+                    } else {
+                        if (current <= 4) {
+                            for (let i = 1; i <= 5; i++) {
+                                pages.push({ page: i, text: i });
+                            }
+                            pages.push({ page: null, text: '...' });
+                            pages.push({ page: total, text: total });
+                        } else if (current >= total - 3) {
+                            pages.push({ page: 1, text: 1 });
+                            pages.push({ page: null, text: '...' });
+                            for (let i = total - 4; i <= total; i++) {
+                                pages.push({ page: i, text: i });
+                            }
+                        } else {
+                            pages.push({ page: 1, text: 1 });
+                            pages.push({ page: null, text: '...' });
+                            for (let i = current - 1; i <= current + 1; i++) {
+                                pages.push({ page: i, text: i });
+                            }
+                            pages.push({ page: null, text: '...' });
+                            pages.push({ page: total, text: total });
+                        }
+                    }
+                    return pages;
+                }
+            },
+
+            async mounted() {
+                console.log('Vue app mounted, starting initialization...');
+
+                // 立即滚动到顶部，防止浏览器自动恢复滚动位置
+                if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                }
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+
+                try {
+                    console.log('Getting current language...');
+                    this.getCurrentLang();
+
+                    console.log('Loading i18n translations...');
+                    await this.loadI18n();
+
+                    console.log('Initializing data...');
+                    await this.initData();
+
+                    console.log('Vue app initialization completed successfully');
+                } catch (error) {
+                    console.error('Error during Vue app initialization:', error);
+                    this.appLoading = false; // Ensure loading state is cleared even on error
+                }
+            },
+
+            methods: {
+                // i18n 方法
+                t(key) {
+                    return this.translations[key] || key;
+                },
+
+                async loadI18n() {
+                    try {
+                        const lang = this.currentLanguage;
+                        const response = await fetch(`common/i18n/tech_news_israel.${lang}.json`);
+                        if (!response.ok) {
+                            throw new Error(`Failed to load i18n: ${response.status}`);
+                        }
+                        this.translations = await response.json();
+                    } catch (error) {
+                        console.error('Failed to load i18n:', error);
+                        // 设置默认翻译
+                        this.translations = {
+                            loading: this.currentLanguage === 'zh' ? '加载中...' : 'Loading...',
+                            'tech-news-title': this.currentLanguage === 'zh' ? '科技新闻' : 'Tech News',
+                            'news-tab-technology': this.currentLanguage === 'zh' ? '科技新闻' : 'Technology',
+                            'news-tab-business': this.currentLanguage === 'zh' ? '公司新闻' : 'Business',
+                            'news-tab-healthcare': this.currentLanguage === 'zh' ? '医疗新闻' : 'Healthcare',
+                            previous: this.currentLanguage === 'zh' ? '上一页' : 'Previous',
+                            next: this.currentLanguage === 'zh' ? '下一页' : 'Next',
+                            'news-date': this.currentLanguage === 'zh' ? '发布时间' : 'Published',
+                            'news-type': this.currentLanguage === 'zh' ? '新闻类型' : 'News Type',
+                            close: this.currentLanguage === 'zh' ? '关闭' : 'Close',
+                            references: this.currentLanguage === 'zh' ? '参考资料' : 'References'
+                        };
+                    }
+                },
+
+                getCurrentLang() {
+                    const storedLang = localStorage.getItem('inno_lang');
+                    if (storedLang) {
+                        this.currentLanguage = storedLang;
+                        this.isEnglish = storedLang === 'en';
+                    } else {
+                        const trigger = document.getElementById("translate_trigger");
+                        if (trigger && trigger.innerText) {
+                            const isZh = trigger.innerText.includes("中");
+                            this.currentLanguage = isZh ? "zh" : "en";
+                            this.isEnglish = !isZh;
+                        } else {
+                            this.currentLanguage = "zh";
+                            this.isEnglish = false;
+                        }
+                    }
+                },
+
+                async toggleLanguage() {
+                    const newLang = this.currentLanguage === 'zh' ? 'en' : 'zh';
+                    this.currentLanguage = newLang;
+                    this.isEnglish = newLang === 'en';
+                    localStorage.setItem('inno_lang', newLang);
+
+                    // 触发语言切换事件
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: newLang }));
+
+                    // 重新加载翻译
+                    await this.loadI18n();
+                },
+
+                async initData() {
+                    try {
+                        console.log('Starting to load news data...');
+                        await this.loadNews();
+                        console.log('News data loaded successfully, items:', this.newsList.length);
+                    } catch (error) {
+                        console.error('Failed to load data:', error);
+                        // Set some demo data so the page is not completely empty
+                        this.newsList = [
+                            {
+                                ChineseTitle: '示例新闻标题',
+                                EnglishTitle: 'Sample News Title',
+                                ChineseSummary: '这是一个示例新闻摘要，用于展示页面布局。',
+                                EnglishSummary: 'This is a sample news summary to demonstrate the page layout.',
+                                Date: '2024-01-01',
+                                Type: 'Technology'
+                            }
+                        ];
+                        this.total = 1;
+                        console.log('Set demo data due to API error');
+                    } finally {
+                        this.appLoading = false;
+                        console.log('App loading completed, appLoading set to false');
+                        // 确保页面显示在顶部
+                        this.$nextTick(() => {
+                            window.scrollTo(0, 0);
+                        });
+                    }
+                },
+
+                
+                setFallbackData() {
+                    // 设置fallback数据用于演示
+                    this.newsList = [
+                        {
+                            ChineseTitle: '演示数据 - 以色列科技新闻',
+                            EnglishTitle: 'Demo Data - Israeli Tech News',
+                            ChineseSummary: '这是演示数据，用于测试页面布局和功能。实际数据将通过API加载。',
+                            EnglishSummary: 'This is demo data for testing page layout and functionality. Real data will be loaded via API.',
+                            ChineseContent: '详细内容演示...',
+                            EnglishContent: 'Detailed content demo...',
+                            Date: new Date().toISOString().split('T')[0],
+                            Type: 'Technology',
+                            Reference: 'https://example.com'
+                        },
+                        {
+                            ChineseTitle: '第二条演示新闻',
+                            EnglishTitle: 'Second Demo News Item',
+                            ChineseSummary: '第二条演示新闻的摘要内容。',
+                            EnglishSummary: 'Summary content for the second demo news item.',
+                            ChineseContent: '第二条详细内容...',
+                            EnglishContent: 'Second detailed content...',
+                            Date: new Date().toISOString().split('T')[0],
+                            Type: 'Business',
+                            Reference: 'https://example2.com'
+                        }
+                    ];
+                    this.total = this.newsList.length;
+                    console.log('Set fallback data');
+                },
+
+                async loadNews() {
+                    try {
+                        console.log('Loading tech news, page:', this.currentPage);
+
+                        // 固定使用科技新闻API端点
+                        const apiUrl = '/api/Notion/SearchIsraelNews';
+
+                        const apiParams = {
+                            page: this.currentPage,
+                            pageSize: this.pageSize
+                        };
+
+                        console.log('API URL:', common.APIDomain + apiUrl);
+                        console.log('API Params:', apiParams);
+
+                        const response = await axios.get(common.APIDomain + apiUrl, {
+                            params: apiParams,
+                            timeout: 30000 // 30 second timeout
+                        });
+
+                        console.log('API Response status:', response.status);
+                        console.log('API Response data structure:', Object.keys(response.data || {}));
+
+                        // 使用与dashboard版本相同的数据结构解析
+                        if (response.data && response.data.ReturnCode === 0) {
+                            // Dashboard版本期望的数据结构: response.Data.Items 和 response.Data.Total
+                            if (response.data.Data) {
+                                this.newsList = response.data.Data.Items || [];
+                                this.total = response.data.Data.Total || 0;
+
+                                console.log('Processed news data (dashboard format):');
+                                console.log('- News items count:', this.newsList.length);
+                                console.log('- Total count:', this.total);
+                                console.log('- First item sample:', this.newsList[0]);
+                            } else {
+                                console.warn('Data structure not as expected, missing Data property');
+                                this.newsList = [];
+                                this.total = 0;
+                            }
+                        } else {
+                            console.error('API returned error:', response.data?.ReturnMsg || 'Unknown error');
+                            // 设置fallback数据
+                            this.setFallbackData();
+                        }
+                    } catch (error) {
+                        console.error('Failed to load news:', error);
+                        if (error.response) {
+                            console.error('Error response status:', error.response.status);
+                            console.error('Error response data:', error.response.data);
+                            console.error('Error response headers:', error.response.headers);
+                        } else if (error.request) {
+                            console.error('No response received. Request details:', error.request);
+                        } else {
+                            console.error('Error setting up request:', error.message);
+                        }
+
+                        // Set fallback demo data for debugging
+                        this.newsList = [
+                            {
+                                ChineseTitle: '演示数据 - 以色列科技新闻',
+                                EnglishTitle: 'Demo Data - Israeli Tech News',
+                                ChineseSummary: '这是演示数据，用于测试页面布局和功能。实际数据将通过API加载。',
+                                EnglishSummary: 'This is demo data for testing page layout and functionality. Real data will be loaded via API.',
+                                ChineseContent: '详细内容演示...',
+                                EnglishContent: 'Detailed content demo...',
+                                Date: new Date().toISOString().split('T')[0],
+                                Type: 'Technology',
+                                Reference: 'https://example.com'
+                            },
+                            {
+                                ChineseTitle: '第二条演示新闻',
+                                EnglishTitle: 'Second Demo News Item',
+                                ChineseSummary: '第二条演示新闻的摘要内容。',
+                                EnglishSummary: 'Summary content for the second demo news item.',
+                                ChineseContent: '第二条详细内容...',
+                                EnglishContent: 'Second detailed content...',
+                                Date: new Date().toISOString().split('T')[0],
+                                Type: 'Business',
+                                Reference: 'https://example2.com'
+                            }
+                        ];
+                        this.total = this.newsList.length;
+                        console.log('Set fallback demo data');
+                    }
+                },
+
+                goToPage(page) {
+                    if (page && page !== this.currentPage && page >= 1 && page <= this.totalPages) {
+                        this.currentPage = page;
+                        this.loadNews();
+                        window.scrollTo(0, 0);
+                    }
+                },
+
+                prevPage() {
+                    if (this.currentPage > 1) {
+                        this.goToPage(this.currentPage - 1);
+                    }
+                },
+
+                nextPage() {
+                    if (this.currentPage < this.totalPages) {
+                        this.goToPage(this.currentPage + 1);
+                    }
+                },
+
+                openModal(item) {
+                    this.selectedItem = item;
+                    this.showModal = true;
+                    this.isClosing = false;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                closeModal() {
+                    this.isClosing = true;
+                    setTimeout(() => {
+                        this.showModal = false;
+                        this.isClosing = false;
+                        document.body.style.overflow = '';
+                    }, 300);
+                }
+            }
+        });
+
+        // Global error handler
+        app.config.errorHandler = (err, instance, info) => {
+            console.error('Vue Error:', err);
+            console.error('Error Info:', info);
+        };
+
+        // Note: Vue DevTools will automatically connect if available in browser extension
+
+        // Mount the app with error handling
+        try {
+            console.log('Mounting Vue app...');
+            const mountedApp = app.mount('#app');
+            console.log('Vue app mounted successfully:', mountedApp);
+
+            // Add debug info
+            setTimeout(() => {
+                console.log('Vue app state check:');
+                console.log('- newsList length:', mountedApp.newsList?.length || 0);
+                console.log('- appLoading:', mountedApp.appLoading);
+                console.log('- isEnglish:', mountedApp.isEnglish);
+            }, 1000);
+        } catch (error) {
+            console.error('Failed to mount Vue app:', error);
+            // Show error message on page
+            document.getElementById('app').innerHTML = `
+                <div style="padding: 2rem; text-align: center; color: red;">
+                    <h2>Application Error</h2>
+                    <p>Failed to initialize the application. Please check the console for details.</p>
+                    <pre style="text-align: left; background: #f5f5f5; padding: 1rem; margin: 1rem 0; border-radius: 4px;">${error.message}</pre>
+                </div>
+            `;
+        }
+
+        // Fallback: Initialize with demo data if Vue fails after 3 seconds
+        setTimeout(() => {
+            const appElement = document.getElementById('app');
+            if (appElement && appElement.innerHTML.includes('v-cloak')) {
+                console.warn('Vue app may not have mounted properly, adding fallback content');
+                // Add visible fallback content
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.innerHTML = `
+                    <div class="container mt-5">
+                        <div class="alert alert-warning">
+                            <h4>Fallback Mode</h4>
+                            <p>The application is running in fallback mode. Please check browser console for errors.</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>示例新闻标题</h5>
+                                        <p>这是一个示例新闻摘要，用于展示页面布局。</p>
+                                        <small class="text-muted">2024-01-01 | Technology</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>第二条演示新闻</h5>
+                                        <p>第二条演示新闻的摘要内容。</p>
+                                        <small class="text-muted">2024-01-01 | Business</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                appElement.appendChild(fallbackDiv);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Investment Statistics - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+    <link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="css/investment_statistic_israel.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Highcharts -->
+    <script src="https://lib.baomitu.com/highcharts/6.0.4/highcharts.js"></script>
+    <script src="https://lib.baomitu.com/highcharts/6.0.4/modules/exporting.js"></script>
+    <script src="https://lib.baomitu.com/highcharts/6.0.4/modules/offline-exporting.js"></script>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- Global Menu Mount Point -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                
+                
+                <p class="text-muted fw-medium">{{ t('loading') }}</p>
+            </div>
+        </div>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container page-container with-fixed-header">
+            <!-- Statistics Chart Card -->
+            <div class="card" data-aos="fade-up">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-line me-2"></i>
+                                {{ t('investToIsraelAnnualStatistics') }} ({{ year }})
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-end">
+                                <select v-model="year" @change="onYearChange" class="form-select year-select">
+                                    <option v-for="yearItem in yearList" :key="yearItem" :value="yearItem">
+                                        {{ yearItem }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body chart-card-body">
+                    <div id="container" class="highcharts-container"></div>
+                    <div v-if="chartLoading" class="chart-loading-overlay">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investments Table Card -->
+            <div v-if="fundingData.length > 0" class="card mt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-ul me-2"></i>
+                        {{ t('investments') }} ({{ month }} {{ year }})
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover investment-table">
+                            <thead>
+                                <tr>
+                                    <th>{{ t('company') }}</th>
+                                    <th>{{ t('fundingRound') }}</th>
+                                    <th>{{ t('industry') }}</th>
+                                    <th>{{ t('investors') }}</th>
+                                    <th>{{ t('moneyRaised') }}</th>
+                                    <th>{{ t('date') }}</th>
+                                    <th style="width: 60px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in fundingData" :key="item._id">
+                                    <td class="company-cell">
+                                        <a :href="item.URL" target="_blank" class="company-link">
+                                            <div class="company-logo" :style="getLogoStyle(item.logo, 'Organization')"></div>
+                                            <span class="company-name">{{ item.company_name }}</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-uppercase">{{ item.funding_round }}</td>
+                                    <td class="industry-cell" :title="item.industryStr">{{ item.industryStr }}</td>
+                                    <td class="investor-cell" :title="item.investorStr">{{ item.investorStr }}</td>
+                                    <td class="amount-cell">{{ item.money_raised }}</td>
+                                    <td>{{ item.announced_on }}</td>
+                                    <td class="text-center">
+                                        <a :href="item.detailURL" target="_blank" class="detail-link">
+                                            <i class="fa fa-external-link"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Loading Overlay for Table -->
+                    <div v-if="tableLoading" class="table-loading-overlay">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <!-- Scroll More Indicator -->
+                    <div v-if="fundingData.length > 14 && scrollFlag" class="text-center mt-3 scroll-more">
+                        <span>{{ t('scrollDownToSeeMore') }}</span> &nbsp;<i class="fa fa-arrow-down"></i>
+                    </div>
+
+                    <!-- End Indicator -->
+                    <div v-if="!scrollFlag && fundingData.length > 0" class="text-center mt-3 text-muted">
+                        <span>-- {{ t('theEnd') }} --</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="common/js/common-utils.js"></script>
+    <script src="common/js/api-client.js"></script>
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Vue App
+        const DEFAULT_LANG = (localStorage.getItem('inno_lang') || 'zh');
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    currentLang: DEFAULT_LANG,
+                    translations: {},
+                    loading: false,
+                    chartLoading: false,
+                    tableLoading: false,
+                    statisticsData: [],
+                    yearList: ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001', '2000'],
+                    year: '2025',
+                    monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    month: '',
+                    fundingData: [],
+                    page: 1,
+                    scrollFlag: true,
+                    chartInstance: null
+                };
+            },
+            async mounted() {
+                window.scrollTo(0, 0);
+                await this.loadI18n();
+                await this.initStatistics();
+                this.initScrollHandler();
+            },
+            methods: {
+                async loadI18n() {
+                    try {
+                        const langKey = this.currentLang === 'zh' ? 'zh' : 'en';
+                        const res = await axios.get(`common/i18n/investment_statistic_israel.${langKey}.json`);
+                        this.translations = res.data || {};
+                    } catch (e) {
+                        console.error('Failed to load i18n:', e);
+                        this.translations = {
+                            loading: 'Loading...',
+                            investToIsraelAnnualStatistics: 'Invest to Israel Annual Statistics',
+                            investments: 'Investments',
+                            company: 'Company',
+                            fundingRound: 'Funding Round',
+                            industry: 'Industry',
+                            investors: 'Investors',
+                            moneyRaised: 'Money Raised',
+                            date: 'Date',
+                            scrollDownToSeeMore: 'SCROLL DOWN TO SEE MORE',
+                            theEnd: 'The End'
+                        };
+                    }
+                },
+                t(key) {
+                    return this.translations[key] || key;
+                },
+                async toggleLang() {
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
+                    await this.loadI18n();
+                },
+                async initStatistics() {
+                    this.chartLoading = true;
+                    this.statisticsData = [];
+                    try {
+                        const url = `https://ai.innonation.io/inno_ai_services/api/Funding/GetIsraelInvestmentReportData?year=${this.year}`;
+                        const response = await axios.get(url);
+
+                        if (response.data.ReturnCode === 0 && response.data.Data && response.data.Data.length > 0) {
+                            this.statisticsData = response.data.Data;
+                            this.renderChart();
+                        }
+                    } catch (error) {
+                        console.error('Failed to load statistics:', error);
+                    } finally {
+                        this.chartLoading = false;
+                    }
+                },
+                renderChart() {
+                    const monthData = [];
+                    const columnData = [];
+                    const splineData = [];
+
+                    this.statisticsData.forEach(item => {
+                        monthData.push(this.monthsShort[parseInt(item.year_month) - 1]);
+                        columnData.push(parseInt(item.total_amount));
+                        splineData.push(parseInt(item.count));
+                    });
+
+                    if (this.chartInstance) {
+                        this.chartInstance.destroy();
+                    }
+
+                    // Create a reference to nFormatter for Highcharts
+                    const nFormatter = this.nFormatter;
+
+                    this.chartInstance = Highcharts.chart('container', {
+                        chart: {
+                            zoomType: 'xy',
+                            height: 500,
+                            spacingTop: 50,
+                            spacingRight: 20
+                        },
+                        title: {
+                            text: '',
+                            style: { display: 'none' }
+                        },
+                        credits: {
+                            text: 'Source: ai.innonation.io',
+                            position: { align: 'right', y: -5 },
+                            style: { fontSize: '8pt' },
+                            href: 'https://ai.innonation.io/'
+                        },
+                        exporting: {
+                            buttons: {
+                                contextButton: {
+                                    align: 'right',
+                                    verticalAlign: 'top',
+                                    x: -20,
+                                    y: -40,
+                                    symbolStroke: '#196fa6',
+                                    theme: {
+                                        fill: 'rgba(255, 255, 255, 0.95)',
+                                        stroke: '#196fa6',
+                                        'stroke-width': 1,
+                                        r: 4,
+                                        states: {
+                                            hover: {
+                                                fill: '#196fa6',
+                                                stroke: '#ffffff',
+                                                style: {
+                                                    color: '#ffffff'
+                                                }
+                                            },
+                                            select: {
+                                                fill: '#104991',
+                                                stroke: '#ffffff',
+                                                style: {
+                                                    color: '#ffffff'
+                                                }
+                                            }
+                                        }
+                                    },
+                                    symbolStrokeWidth: 2
+                                }
+                            }
+                        },
+                        xAxis: [{
+                            categories: monthData,
+                            crosshair: true,
+                            gridLineWidth: 1,
+                            gridLineDashStyle: 'longdash',
+                            tickWidth: 0,
+                            labels: { style: { fontWeight: 'bold' } }
+                        }],
+                        yAxis: [{
+                            title: { text: '' },
+                            labels: {
+                                format: '{value}',
+                                style: { color: Highcharts.getOptions().colors[1] }
+                            },
+                            opposite: true,
+                            gridLineWidth: 1,
+                            gridLineDashStyle: 'longdash'
+                        }, {
+                            title: { text: '' },
+                            labels: {
+                                formatter: function() { return nFormatter(this.value, 2); },
+                                style: { color: Highcharts.getOptions().colors[1] }
+                            },
+                            gridLineWidth: 1,
+                            gridLineDashStyle: 'longdash'
+                        }],
+                        tooltip: {
+                            shared: true,
+                            formatter: function() {
+                                return '<b>' + this.x + '</b><br>Total funding amount: <b>' +
+                                       nFormatter(this.y, 2) + '</b><br>Deal number: <b>' +
+                                       this.points[1].y + '</b>';
+                            }
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            floating: false,
+                            y: 0,
+                            itemStyle: {
+                                fontSize: '11px',
+                                fontWeight: '500',
+                                color: '#666666'
+                            },
+                            itemMarginBottom: 5,
+                            symbolRadius: 6,
+                            labelFormatter: function() {
+                                return this.name;
+                            }
+                        },
+                        series: [{
+                            name: this.t('totalFundingAmountInUSD'),
+                            type: 'column',
+                            yAxis: 1,
+                            data: columnData,
+                            color: '#196fa6',
+                            events: {
+                                click: (e) => {
+                                    this.month = e.point.category;
+                                    this.fundingData = [];
+                                    this.page = 1;
+                                    this.scrollFlag = true;
+                                    this.showFundingList();
+                                }
+                            }
+                        }, {
+                            name: this.t('dealNumber'),
+                            type: 'line',
+                            data: splineData,
+                            color: '#27ae60',
+                            marker: {
+                                lineWidth: 1,
+                                lineColor: '#27ae60',
+                                fillColor: 'white',
+                                radius: 5
+                            },
+                            events: {
+                                click: (e) => {
+                                    this.month = e.point.category;
+                                    this.fundingData = [];
+                                    this.page = 1;
+                                    this.scrollFlag = true;
+                                    this.showFundingList();
+                                }
+                            }
+                        }],
+                        plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true,
+                                    allowOverlap: true,
+                                    color: '#196fa6',
+                                    formatter: function() { return nFormatter(this.y, 2); },
+                                    y: -20
+                                }
+                            },
+                            line: {
+                                dataLabels: {
+                                    enabled: true,
+                                    allowOverlap: true,
+                                    color: '#27ae60',
+                                    formatter: function() { return this.y; }
+                                }
+                            }
+                        }
+                    });
+
+                    // Make x-axis labels clickable
+                    const chart = this.chartInstance;
+                    chart.xAxis[0].labelGroup.element.childNodes.forEach((label, index) => {
+                        label.style.cursor = 'pointer';
+                        label.addEventListener('click', () => {
+                            this.month = monthData[index];
+                            this.fundingData = [];
+                            this.page = 1;
+                            this.scrollFlag = true;
+                            this.showFundingList();
+                        });
+                    });
+                },
+                async showFundingList() {
+                    this.tableLoading = true;
+                    this.scrollFlag = false;
+
+                    const yearmonth = `${this.year}-${this.getMonthNumber()}`;
+                    const url = `https://ai.innonation.io/inno_ai_services/api/Funding/GetIsraelInvestmentData?page=${this.page}&pageSize=15&yearmonth=${yearmonth}`;
+
+                    try {
+                        const response = await axios.get(url);
+
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            response.data.Data.data.forEach(item => {
+                                const investorArr = [];
+                                item.URL = 'javascript:;';
+
+                                if (item.source === 'cb') {
+                                    item.URL = `company_profile_israel.html?cId=${item.company_id}`;
+                                    item.detailURL = `funding_round_details_israel.html?id=${item._id}`;
+                                    item.investors.forEach(investor => {
+                                        investorArr.push(investor.name);
+                                    });
+                                }
+
+                                item.industryStr = item.industry.join(', ');
+                                item.investorStr = investorArr.join(', ');
+                                item.money_raised = (item.money_raised == null || item.money_raised === '')
+                                    ? '—'
+                                    : '$' + this.nFormatter(item.money_raised, 2);
+
+                                this.fundingData.push(item);
+                            });
+
+                            this.scrollFlag = true;
+                            if (this.page === response.data.Data.total_pages) {
+                                this.scrollFlag = false;
+                            }
+
+                            if (this.page === 1) {
+                                this.$nextTick(() => {
+                                    window.scrollTo({
+                                        top: window.scrollY + 500,
+                                        behavior: 'smooth'
+                                    });
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Failed to load funding list:', error);
+                    } finally {
+                        this.tableLoading = false;
+                    }
+                },
+                getMonthNumber() {
+                    const index = this.monthsShort.indexOf(this.month);
+                    return (index + 1).toString().padStart(2, '0');
+                },
+                nFormatter(num, digits = 1) {
+                    if (num === null || num === undefined) return '—';
+                    const si = [
+                        { value: 1, symbol: '' },
+                        { value: 1E3, symbol: 'K' },
+                        { value: 1E6, symbol: 'M' },
+                        { value: 1E9, symbol: 'B' },
+                        { value: 1E12, symbol: 'T' }
+                    ];
+                    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+                    let i;
+                    for (i = si.length - 1; i > 0; i--) {
+                        if (num >= si[i].value) break;
+                    }
+                    return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+                },
+                getLogoStyle(logo, type) {
+                    if (logo && logo != null) {
+                        // Handle t_api_images path
+                        if (logo.indexOf('/image/t_api_images/') > -1) {
+                            const newUrl = logo.replace('/image/t_api_images', 'https://images.crunchbase.com/image/upload');
+                            return `background-image: url('${newUrl}') !important; background-size: cover; background-position: center;`;
+                        }
+                        // Handle res.cloudinary.com path
+                        if (logo.indexOf('res.cloudinary.com/crunchbase-production') > -1) {
+                            const newUrl = logo.replace('res.cloudinary.com/crunchbase-production', 'images.crunchbase.com');
+                            return `background-image: url('${newUrl}') !important; background-size: cover; background-position: center;`;
+                        }
+                        // Handle res_image path
+                        if (logo.indexOf('/res_image') > -1) {
+                            const newUrl = logo.replace('/res_image', 'https://images.crunchbase.com/image');
+                            return `background-image: url('${newUrl}') !important; background-size: cover; background-position: center;`;
+                        }
+                        // Default logo URL
+                        return `background-image: url('${logo}') !important; background-size: cover; background-position: center;`;
+                    } else {
+                        // Fallback images based on type
+                        if (type === 'Person') {
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/investor-avatar.png') !important; background-size: cover; background-position: center;";
+                        } else if (type === 'App') {
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/app_logo.png') !important; background-size: cover; background-position: center;";
+                        } else {
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/company-icon.png') !important; background-size: cover; background-position: center;";
+                        }
+                    }
+                },
+                onYearChange() {
+                    this.fundingData = [];
+                    this.page = 1;
+                    this.scrollFlag = true;
+                    this.initStatistics();
+                },
+                initScrollHandler() {
+                    window.addEventListener('scroll', () => {
+                        const winH = window.innerHeight;
+                        const pageH = document.documentElement.scrollHeight;
+                        const scrollT = window.scrollY;
+                        const resultH = (pageH - winH - scrollT) / winH;
+
+                        if (resultH < 0.02 && this.scrollFlag && this.fundingData.length > 0) {
+                            this.page++;
+                            this.showFundingList();
+                        }
+                    });
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

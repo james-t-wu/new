@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>收购详情 - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+    <link rel="stylesheet" href="common/css/inno-global-menu.css">
+
+    <!-- 页面特定样式 -->
+    <link rel="stylesheet" href="css/acquisition_details_israel.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(25, 111, 166, 0.1);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #196fa6 !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand b {
+            color: #104991;
+        }
+
+        /* 语言切换按钮 */
+        .language-switch {
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-white);
+            color: var(--text-color);
+            height: 40px;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .language-switch:hover {
+            background-color: var(--color-light-blue);
+        }
+
+        /* 页面容器 */
+        .page-container {
+            padding-top: 100px;
+            padding-bottom: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 卡片标题 */
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title i {
+            color: var(--color-brand-blue);
+        }
+
+        /* Vue隐藏未编译模板 */
+        [v-cloak] {
+            display: none;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--light-text);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局菜单挂载点 -->
+    <div id="inno-global-menu"></div>
+
+    <!-- Vue 应用挂载点 -->
+    <div id="app" v-cloak>
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                
+                
+                <p class="text-muted fw-medium">{{ t('loading') || 'Loading acquisition details...' }}</p>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="container page-container">
+
+            <!-- 收购基本信息卡片 -->
+            <div class="acquisition-details-card" data-aos="fade-up">
+                <div class="acquisition-header">
+                    <div class="acquisition-companies">
+                        <!-- Acquiree (被收购公司) -->
+                        <div class="company-section">
+                            <div class="company-logo"
+                                 :class="{ 'gradient-bg': !normalizeLogoUrl(acquisitionData.relationships?.acquiree?.item?.properties?.profile_image_url) }"
+                                 :style="normalizeLogoUrl(acquisitionData.relationships?.acquiree?.item?.properties?.profile_image_url) ? `background-image: url('${normalizeLogoUrl(acquisitionData.relationships.acquiree.item.properties.profile_image_url)}')` : ''">
+                                <span v-if="!normalizeLogoUrl(acquisitionData.relationships?.acquiree?.item?.properties?.profile_image_url)">
+                                    {{ getInitials(acquisitionData.relationships?.acquiree?.item?.properties?.name) }}
+                                </span>
+                            </div>
+                            <div class="company-info">
+                                <div class="company-label">{{ t('acquiredOrganization') }}</div>
+                                <a :href="getCompanyLink('acquiree')" target="_blank" class="company-name">
+                                    {{ acquisitionData.relationships?.acquiree?.item?.properties?.name || '—' }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="acquisition-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+
+                        <!-- Acquirer (收购公司) -->
+                        <div class="company-section">
+                            <div class="company-logo"
+                                 :class="{ 'gradient-bg': !normalizeLogoUrl(acquisitionData.relationships?.acquirer?.item?.properties?.profile_image_url) }"
+                                 :style="normalizeLogoUrl(acquisitionData.relationships?.acquirer?.item?.properties?.profile_image_url) ? `background-image: url('${normalizeLogoUrl(acquisitionData.relationships.acquirer.item.properties.profile_image_url)}')` : ''">
+                                <span v-if="!normalizeLogoUrl(acquisitionData.relationships?.acquirer?.item?.properties?.profile_image_url)">
+                                    {{ getInitials(acquisitionData.relationships?.acquirer?.item?.properties?.name) }}
+                                </span>
+                            </div>
+                            <div class="company-info">
+                                <div class="company-label">{{ t('acquiringOrganization') }}</div>
+                                <a :href="getCompanyLink('acquirer')" target="_blank" class="company-name">
+                                    {{ acquisitionData.relationships?.acquirer?.item?.properties?.name || '—' }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 收购详细信息 -->
+                <div class="info-row">
+                    <div class="info-label">{{ t('announcedDate') }}:</div>
+                    <div class="info-value">{{ formatDate(acquisitionData.properties?.announced_on) }}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('acquisitionType') }}:</div>
+                    <div class="info-value" style="text-transform: capitalize;">
+                        {{ acquisitionData.properties?.acquisition_type || '—' }}
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('price') }}:</div>
+                    <div class="info-value highlight">{{ acquisitionData.Price || '—' }}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">{{ t('acquisitionStatus') }}:</div>
+                    <div class="info-value">
+                        <span class="status-badge" :class="getStatusClass(acquisitionData.properties?.acquisition_status)">
+                            {{ acquisitionData.properties?.acquisition_status || '—' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新闻列表卡片 -->
+            <div v-if="acquisitionData.relationships?.news?.paging?.total_items > 0"
+                 class="acquisition-details-card"
+                 data-aos="fade-up"
+                 data-aos-delay="100">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-newspaper"></i>
+                    {{ t('news') }} ({{ acquisitionData.relationships.news.paging.total_items }})
+                </h3>
+                <div class="news-list">
+                    <div class="news-list-item" v-for="newsItem in acquisitionData.relationships.news.items" :key="newsItem.uuid">
+                        <div class="news-date">{{ formatDate(newsItem.properties.posted_on) }}</div>
+                        <div class="news-content">
+                            <a :href="newsItem.properties.url" target="_blank" class="news-title">
+                                {{ newsItem.properties.title }}
+                            </a>
+                        </div>
+                        <div class="news-actions" v-if="showOperationNewsFlag">
+                            <i class="fas fa-edit news-action-btn"
+                               @click="openUpdateNewsModal(newsItem.uuid, newsItem.properties.url, newsItem.properties.title, newsItem.properties.posted_on)"
+                               title="Edit"></i>
+                            <i class="fas fa-trash-alt news-action-btn delete"
+                               @click="openDeleteNewsModal(newsItem.uuid)"
+                               title="Delete"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 更新新闻模态框 -->
+        <div class="modal fade" id="updateNewsModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ t('updateNews') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{ t('title') }}</label>
+                            <input type="text" class="form-control" v-model="updateForm.title" :placeholder="t('enterTitle')">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ t('url') }}</label>
+                            <input type="text" class="form-control" v-model="updateForm.url" :placeholder="t('enterURL')">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ t('date') }}</label>
+                            <input type="date" class="form-control" v-model="updateForm.date">
+                        </div>
+                        <div v-if="updateForm.error" class="warning-message">
+                            {{ updateForm.error }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('close') }}</button>
+                        <button type="button" class="btn btn-primary" @click="handleUpdateNews" :disabled="updateForm.loading">
+                            <span v-if="updateForm.loading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('update') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 删除新闻模态框 -->
+        <div class="modal fade" id="deleteNewsModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ t('confirmDelete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ t('confirmDeleteMessage') }}</p>
+                        <div v-if="deleteForm.error" class="warning-message">
+                            {{ deleteForm.error }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ t('cancel') }}</button>
+                        <button type="button" class="btn btn-danger" @click="handleDeleteNews" :disabled="deleteForm.loading">
+                            <span v-if="deleteForm.loading" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ t('delete') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS 动画 -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <!-- Vue 应用逻辑 -->
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    loading: true,
+                    currentLang: 'zh',
+                    translations: {},
+                    acquisitionData: {
+                        Price: '—',
+                        properties: {},
+                        relationships: {
+                            acquiree: { item: { properties: {}, type: '' } },
+                            acquirer: { item: { properties: {}, type: '' } },
+                            news: { items: [], paging: { total_items: 0 } }
+                        }
+                    },
+                    showOperationNewsFlag: false,
+                    cId: '',
+                    aId: '',
+                    updateForm: {
+                        id: '',
+                        title: '',
+                        url: '',
+                        date: '',
+                        error: '',
+                        loading: false
+                    },
+                    deleteForm: {
+                        id: '',
+                        error: '',
+                        loading: false
+                    }
+                }
+            },
+
+            methods: {
+                // 国际化翻译
+                t(key) {
+                    return this.translations[key] || key;
+                },
+
+                // 切换语言
+                async toggleLang() {
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                    localStorage.setItem('inno_lang', this.currentLang);
+                    await this.loadTranslations();
+                },
+
+                // 加载翻译
+                async loadTranslations() {
+                    try {
+                        const response = await fetch(`common/i18n/acquisition_details_israel.${this.currentLang}.json`);
+                        this.translations = await response.json();
+                    } catch (error) {
+                        console.error('Failed to load translations:', error);
+                        // 使用默认翻译
+                        this.translations = this.getDefaultTranslations();
+                    }
+                },
+
+                // 获取默认翻译
+                getDefaultTranslations() {
+                    if (this.currentLang === 'zh') {
+                        return {
+                            loading: '加载中...',
+                            acquiredOrganization: '被收购公司',
+                            acquiringOrganization: '收购公司',
+                            announcedDate: '公告日期',
+                            acquisitionType: '收购类型',
+                            price: '金额',
+                            acquisitionStatus: '收购状态',
+                            news: '相关新闻',
+                            updateNews: '更新新闻',
+                            confirmDelete: '确认删除',
+                            confirmDeleteMessage: '确定要删除这条新闻吗？',
+                            title: '标题',
+                            url: '链接',
+                            date: '日期',
+                            close: '关闭',
+                            update: '更新',
+                            cancel: '取消',
+                            delete: '删除',
+                            enterTitle: '请输入标题',
+                            enterURL: '请输入链接',
+                            na: '—'
+                        };
+                    } else {
+                        return {
+                            loading: 'Loading...',
+                            acquiredOrganization: 'Acquired Organization',
+                            acquiringOrganization: 'Acquiring Organization',
+                            announcedDate: 'Announced Date',
+                            acquisitionType: 'Acquisition Type',
+                            price: 'Price',
+                            acquisitionStatus: 'Acquisition Status',
+                            news: 'Related News',
+                            updateNews: 'Update News',
+                            confirmDelete: 'Confirm Delete',
+                            confirmDeleteMessage: 'Are you sure you want to delete this news?',
+                            title: 'Title',
+                            url: 'URL',
+                            date: 'Date',
+                            close: 'Close',
+                            update: 'Update',
+                            cancel: 'Cancel',
+                            delete: 'Delete',
+                            enterTitle: 'Enter title',
+                            enterURL: 'Enter URL',
+                            na: '—'
+                        };
+                    }
+                },
+
+                // 获取 URL 参数
+                getUrlParam(name) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(name);
+                },
+
+                // 获取首字母
+                getInitials(name) {
+                    if (!name) return '?';
+                    const words = name.trim().split(' ');
+                    if (words.length >= 2) {
+                        return (words[0][0] + words[1][0]).toUpperCase();
+                    }
+                    return name.substring(0, 2).toUpperCase();
+                },
+
+                // 标准化 Logo URL
+                normalizeLogoUrl(value) {
+                    if (!value) return '';
+                    try {
+                        if (value.indexOf('/image/t_api_images/') > -1)
+                            return value.replace('/image/t_api_images', 'https://images.crunchbase.com/image/upload');
+                        if (value.indexOf('res.cloudinary.com/crunchbase-production') > -1)
+                            return value.replace('res.cloudinary.com/crunchbase-production', 'images.crunchbase.com');
+                        if (value.indexOf('/res_image') > -1)
+                            return value.replace('/res_image', 'https://images.crunchbase.com/image');
+                        return value;
+                    } catch(e) {
+                        return value;
+                    }
+                },
+
+                // 格式化日期
+                formatDate(dateString) {
+                    if (!dateString) return this.t('na');
+                    const date = new Date(dateString);
+                    if (isNaN(date.getTime())) return this.t('na');
+                    return date.toISOString().split('T')[0];
+                },
+
+                // 获取公司链接
+                getCompanyLink(type) {
+                    const item = type === 'acquiree'
+                        ? this.acquisitionData.relationships?.acquiree?.item
+                        : this.acquisitionData.relationships?.acquirer?.item;
+
+                    if (!item) return 'javascript:;';
+
+                    const uuid = item.uuid;
+                    const itemType = item.type;
+
+                    if (itemType === 'Person') {
+                        return `person_israel.html?pId=${uuid}`;
+                    }
+                    return `company_profile_israel.html?cId=${uuid}`;
+                },
+
+                // 获取状态样式类
+                getStatusClass(status) {
+                    if (!status) return '';
+                    const statusLower = status.toLowerCase();
+                    if (statusLower.includes('complete')) return 'status-completed';
+                    if (statusLower.includes('pending')) return 'status-pending';
+                    if (statusLower.includes('cancel')) return 'status-cancelled';
+                    return '';
+                },
+
+                // 格式化金额
+                nFormatter(num, digits) {
+                    if (!num || num === 0) return '—';
+
+                    const lookup = [
+                        { value: 1, symbol: '' },
+                        { value: 1e3, symbol: 'K' },
+                        { value: 1e6, symbol: 'M' },
+                        { value: 1e9, symbol: 'B' },
+                        { value: 1e12, symbol: 'T' }
+                    ];
+
+                    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+                    const item = lookup.slice().reverse().find(item => num >= item.value);
+
+                    return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
+                },
+
+                // 初始化收购数据
+                async initAcquisition() {
+                    this.loading = true;
+                    try {
+                        const apiDomain = 'https://ai.innonation.io/inno_ai_services';
+                        const url = `${apiDomain}/api/Company/GetAcquisitionInfo?aId=${this.aId}`;
+
+                        console.log('Fetching acquisition data from:', url);
+
+                        const response = await axios.get(url);
+
+                        console.log('API Response:', response.data);
+
+                        if (response.data.ReturnCode === 0 && response.data.Data) {
+                            this.acquisitionData = response.data.Data;
+                            this.cId = this.acquisitionData.relationships.acquiree.item.uuid;
+
+                            // 格式化价格
+                            const priceUsd = this.acquisitionData.properties.price_usd;
+                            this.acquisitionData.Price = (priceUsd == null || priceUsd === '')
+                                ? '—'
+                                : '$' + this.nFormatter(priceUsd, 2);
+
+                            console.log('Acquisition data loaded successfully');
+                        } else {
+                            console.error('API returned error or no data');
+                        }
+                    } catch (error) {
+                        console.error('Failed to load acquisition data:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                // 打开更新新闻模态框
+                openUpdateNewsModal(id, url, title, date) {
+                    this.updateForm = {
+                        id: id,
+                        title: title,
+                        url: url,
+                        date: date,
+                        error: '',
+                        loading: false
+                    };
+                    new bootstrap.Modal(document.getElementById('updateNewsModal')).show();
+                },
+
+                // 处理更新新闻
+                async handleUpdateNews() {
+                    this.updateForm.loading = true;
+                    this.updateForm.error = '';
+
+                    try {
+                        const apiDomain = 'https://ai.innonation.io/inno_ai_services';
+                        const response = await axios.post(
+                            `${apiDomain}/api/Company/UpdateFundingRoundNews`,
+                            {
+                                id: this.updateForm.id,
+                                title: this.updateForm.title,
+                                url: this.updateForm.url,
+                                posted_on: this.updateForm.date,
+                                cId: this.cId,
+                                collectionId: this.aId,
+                                collection: 'cb_acquisition_details'
+                            },
+                            {
+                                headers: { 'UserId': localStorage.getItem('userId') || '' }
+                            }
+                        );
+
+                        if (response.data.ReturnCode === 0) {
+                            bootstrap.Modal.getInstance(document.getElementById('updateNewsModal')).hide();
+                            window.location.reload();
+                        } else {
+                            this.updateForm.error = response.data.Message;
+                        }
+                    } catch (error) {
+                        this.updateForm.error = error.message;
+                    } finally {
+                        this.updateForm.loading = false;
+                    }
+                },
+
+                // 打开删除新闻模态框
+                openDeleteNewsModal(id) {
+                    this.deleteForm = {
+                        id: id,
+                        error: '',
+                        loading: false
+                    };
+                    new bootstrap.Modal(document.getElementById('deleteNewsModal')).show();
+                },
+
+                // 处理删除新闻
+                async handleDeleteNews() {
+                    this.deleteForm.loading = true;
+                    this.deleteForm.error = '';
+
+                    try {
+                        const apiDomain = 'https://ai.innonation.io/inno_ai_services';
+                        const response = await axios.post(
+                            `${apiDomain}/api/Company/DeleteFundingRoundNews`,
+                            {
+                                id: this.deleteForm.id,
+                                cId: this.cId,
+                                collectionId: this.aId,
+                                collection: 'cb_acquisition_details'
+                            },
+                            {
+                                headers: { 'UserId': localStorage.getItem('userId') || '' }
+                            }
+                        );
+
+                        if (response.data.ReturnCode === 0) {
+                            bootstrap.Modal.getInstance(document.getElementById('deleteNewsModal')).hide();
+                            window.location.reload();
+                        } else {
+                            this.deleteForm.error = response.data.Message;
+                        }
+                    } catch (error) {
+                        this.deleteForm.error = error.message;
+                    } finally {
+                        this.deleteForm.loading = false;
+                    }
+                }
+            },
+
+            async mounted() {
+                // 初始化 AOS 动画
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    offset: 100
+                });
+
+                // 获取语言设置
+                this.currentLang = localStorage.getItem('inno_lang') || 'zh';
+
+                // 加载翻译
+                await this.loadTranslations();
+
+                // 获取收购 ID
+                this.aId = this.getUrlParam('id');
+
+                // 检查用户权限
+                const userGroup = localStorage.getItem('userGroup') || '';
+                if (userGroup.toLowerCase() === 'admin') {
+                    this.showOperationNewsFlag = true;
+                }
+
+                // 初始化数据
+                if (this.aId) {
+                    await this.initAcquisition();
+                }
+
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

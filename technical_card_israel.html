@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>智能匹配技术百科 - Innonation AI</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+    <!-- 自定义现代CSS -->
+    <link href="common/css/technical-card-modern.css" rel="stylesheet">
+
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Noto Sans SC', 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS变量定义 */
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --accent-orange: #f59e0b;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --error-red: #ef4444;
+            --dark-gray: #1f2937;
+            --light-gray: #f9fafb;
+            --border-gray: #e5e7eb;
+
+            /* 主色调 - 使用统一的CSS变量命名 */
+            --color-brand-blue: #196fa6;
+            --color-deep-blue: #104991;
+            --color-highlight-blue: #0ea5e9;
+            --color-action-blue: #196fa6;
+            --color-light-blue: #f4f8fb;
+
+            /* 文字颜色 */
+            --text-color: #1e293b;
+            --light-text: #64748b;
+
+            /* 背景颜色 */
+            --background-light: #f8fbfd;
+            --background-white: #ffffff;
+
+            /* 强调和状态颜色 */
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --warning-color: #f59e0b;
+            --error-color: #e74c3c;
+            --info-color: #8e44ad;
+
+            /* 阴影效果 */
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+            /* 边框和间距 */
+            --border-color: #e2e8f0;
+            --border-radius: 0.5rem;
+            --border-radius-lg: 0.75rem;
+            --border-radius-xl: 1rem;
+
+            /* 过渡动画 */
+            --transition-base: 0.2s ease-in-out;
+            --transition-slow: 0.3s ease-in-out;
+        }
+
+        /* Vue 加载遮罩 */
+        [v-cloak] {
+            display: none;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--page-container-padding);
+            padding-top: 100px; /* 为固定导航栏留出空间 */
+        }
+
+        /* 搜索区域 */
+        .custom-search {
+            margin-bottom: 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+
+        .search_tech {
+            height: 60px;
+            font-size: 18px;
+            padding: 12px 50px 12px 20px;
+            border-radius: 10px;
+            border: 1px solid #009dff;
+            box-shadow: none;
+            width: 100%;
+        }
+
+        .search_tech:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #009dff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .search-icon:hover {
+            color: #0056b3;
+        }
+
+        /* 语言控制 */
+        .language-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hint-text {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .lang-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .lang-option {
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+        }
+
+        .lang-option:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-option.active {
+            color: #009dff;
+            font-weight: 500;
+        }
+
+        .separator {
+            color: #ccc;
+            font-weight: 400;
+        }
+
+        /* 技术名词按钮区域 */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .button-container button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .button-container button:hover {
+            background: #009dff;
+            color: white;
+            border-color: #009dff;
+        }
+
+        /* 三栏布局 */
+        .grid-container {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            width: 340px;
+            min-width: 340px;
+            height: 490px;
+        }
+
+        .grid-middle {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            width: 340px;
+            min-width: 340px;
+            height: 490px;
+        }
+
+        .right-content {
+            position: relative;
+            min-height: 360px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 340px;
+            min-width: 340px;
+            height: 490px;
+        }
+
+        /* 卡片样式 */
+        .card-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 2;
+            border-radius: 10px;
+        }
+
+        .card-loading i {
+            color: #4169E1;
+            margin-bottom: 8px;
+            font-size: 40px;
+        }
+
+        .card-loading span {
+            color: #666;
+            font-size: 14px;
+        }
+
+        #resultSvg {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 图片样式 */
+        .grid-middle img {
+            max-width: 300px;
+            max-height: 450px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        /* 让左右两个卡片loading在同一基线对齐 */
+        .grid-item .card-container,
+        .grid-middle .card-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 450px;
+        }
+
+        /* 初始包装器 */
+        .init-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            height: 100%;
+            padding: 20px 10px;
+        }
+
+        .left-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            order: 2;
+            justify-items: stretch;
+        }
+
+        .right-section {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            order: 1;
+            margin-bottom: 10px;
+        }
+
+        .robot-image {
+            max-width: 300px;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+        }
+
+        /* 功能按钮 */
+        .feature-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            justify-content: start;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            min-height: 36px;
+            text-align: left;
+        }
+
+        /* 右侧初始化区域的按钮整体居中，文本不溢出 */
+        .right-content .init-wrapper .left-section .feature-btn {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .feature-btn:hover:not(:disabled) {
+            background-color: #f8f9fa;
+            border-color: #009dff;
+            color: #009dff;
+        }
+
+        .feature-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .feature-btn i {
+            font-size: 14px;
+            color: #4169E1;
+            width: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .feature-btn span {
+            font-family: "思源黑体", sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 1.3;
+            white-space: normal;
+            word-break: break-word;
+            overflow: visible;
+            text-overflow: clip;
+        }
+
+        /* 动画容器 */
+        .animation-container {
+            position: relative;
+            height: 460px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            flex-direction: column;
+        }
+
+        .animation-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .thinking-container {
+            position: static;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            border-radius: 0;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .thinking-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .thinking-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .thinking-dots span {
+            width: 8px;
+            height: 8px;
+            background: #009dff;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .thinking-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .thinking-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .thinking-text {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            animation: fadeInOut 2s infinite;
+        }
+
+        /* 内容区域 */
+        .content-container {
+            position: relative;
+            flex-grow: 1;
+            min-height: 200px;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .copy-button:hover {
+            background: #f8f9fa;
+        }
+
+        .copy-button i {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 100%;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+        }
+
+        .message-content {
+            background: #f0f8ff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border-left: 3px solid #4169E1;
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .message-content.typing {
+            border-left: 3px solid #009dff;
+        }
+
+        .message-content a {
+            color: #4169E1;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .message-content p {
+            margin: 8px 0;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* 页面加载遮罩 */
+        .page-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .page-loading-content {
+            text-align: center;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.3em;
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 原版卡片样式 */
+        .svg-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 300px;
+            height: 450px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background-color: #f0f8ff;
+            position: relative;
+        }
+
+        /* 去掉resultSvg中卡片的边框样式，统一与其它容器 */
+        #resultSvg,
+        #resultSvg .svg-wrapper,
+        #resultSvg .card {
+            border: none !important;
+        }
+
+        .card-content {
+            padding: 20px;
+            height: calc(100% - 30px);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title {
+            font-family: "思源黑体", sans-serif;
+            font-size: 18px;
+            color: #00008B;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .divider {
+            border-top: 1px solid #00008B;
+            margin-bottom: 15px;
+        }
+
+        .dynamic-content {
+            flex-grow: 1;
+            overflow: hidden;
+            width: 240px;
+            margin: 0 auto;
+        }
+
+        .chinese-title {
+            font-family: "思源黑体", sans-serif;
+            font-size: 16px;
+            color: #00008B;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cn .english-title {
+            font-family: Roboto, sans-serif;
+            font-size: 14px;
+            color: #00008B;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .cn .explanation {
+            font-family: "思源黑体", sans-serif;
+            font-size: 14px;
+            color: #00008B;
+            text-align: justify;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .en .english-title {
+            font-family: Roboto, sans-serif;
+            font-size: 16px;
+            color: #00008B;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .en .explanation {
+            font-family: Roboto, sans-serif;
+            font-size: 14px;
+            color: #00008B;
+            text-align: justify;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 139, 0.1);
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 139, 0.2);
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* INNONATION Global Menu - common styles */
+
+
+
+/* 菜单模态框 */
+/* 侧边栏菜单（遮罩层样式已移除） */
+
+.modern-menu-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 320px;
+    max-width: 90%;
+    background: white;
+    border-radius: 0;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    border-right: 1px solid #e5e7eb;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    z-index: 1050;
+}
+
+.modern-menu-modal.active .modern-menu-content {
+    transform: translateX(0);
+}
+
+/* 页面内容适配 - 菜单展开时推动页面内容 */
+body.menu-active {
+    margin-left: 320px;
+    transition: margin-left 0.3s ease;
+}
+
+body.menu-active.menu-collapsed {
+    margin-left: 80px;
+}
+
+
+.modern-menu-header {
+    background: linear-gradient(135deg, #196fa6 0%, #104991 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 81px;
+}
+
+.menu-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modern-menu-collapse,
+.modern-menu-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.modern-menu-collapse:hover,
+.modern-menu-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.modern-menu-collapse {
+    transition: transform 0.3s ease;
+}
+
+.modern-menu-collapse.rotated {
+    transform: rotate(180deg);
+}
+
+/* 折叠状态样式 */
+.modern-menu-content.collapsed {
+    width: 80px;
+}
+
+.modern-menu-content.collapsed .menu-logo-text,
+.modern-menu-content.collapsed .modern-menu-link span,
+.modern-menu-content.collapsed .modern-submenu-link span {
+    display: none;
+}
+
+.modern-menu-content.collapsed .modern-menu-link,
+.modern-menu-content.collapsed .modern-submenu-link {
+    justify-content: center;
+    padding: 12px 8px;
+}
+
+.modern-menu-content.collapsed .modern-menu-link i,
+.modern-menu-content.collapsed .modern-submenu-link i {
+    margin-right: 0 !important;
+}
+
+.modern-menu-content.collapsed .modern-menu-arrow {
+    display: none;
+}
+
+.modern-menu-content.collapsed .modern-menu-header {
+    padding: 1rem 0.5rem;
+    justify-content: center;
+    position: relative;
+    height: 81px;
+}
+
+.modern-menu-content.collapsed .menu-controls {
+    position: static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* 旧的 .modern-menu-close 样式已移至新的控制区域 */
+
+.modern-menu-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.modern-menu-logo b {
+    color: var(--color-highlight-blue);
+    text-shadow: 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+.modern-menu-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.modern-menu-nav {
+    padding: 10px 0 12px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+}
+
+/* 隐藏横向滚动条，避免误触 */
+.modern-menu-content, .modern-menu-nav {
+    overflow-x: hidden;
+}
+
+.modern-menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.modern-menu-item { margin: 0; }
+
+.modern-menu-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-menu-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.modern-menu-link:hover::before { left: 100%; }
+
+.modern-menu-link:hover {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(25, 111, 166, 0.03) 100%);
+    color: var(--color-highlight-blue);
+    border-left-color: var(--color-highlight-blue);
+    transform: translateX(5px);
+}
+
+.modern-menu-link i {
+    width: 24px;
+    margin-right: 15px;
+    font-size: 18px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.modern-menu-link:hover i { transform: scale(1.1); }
+
+.modern-menu-link span {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.modern-menu-arrow {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    color: #999;
+}
+
+.modern-menu-arrow.expanded { transform: rotate(90deg); color: var(--color-highlight-blue); }
+
+.modern-submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, rgba(25, 111, 166, 0.04) 0%, rgba(16, 73, 145, 0.01) 100%);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.modern-submenu.expanded { max-height: 300px; }
+
+.modern-submenu-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 30px 12px 69px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.modern-submenu-link:hover {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.06) 0%, rgba(25, 111, 166, 0.02) 100%);
+    color: var(--color-highlight-blue);
+    border-left-color: var(--color-highlight-blue);
+}
+
+.modern-submenu-link i { width: 20px; margin-right: 12px; font-size: 16px; }
+
+/* 菜单底部样式已移除 */
+
+/* 菜单项图标颜色 - 统一设计 */
+.modern-menu-item i {
+    color: #6b7280 !important;
+    transition: color 0.3s ease;
+}
+
+.modern-menu-link:hover i {
+    color: var(--color-highlight-blue) !important;
+    text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+}
+
+/* 子菜单图标颜色 - 统一设计 */
+.modern-submenu i {
+    color: #6b7280 !important;
+    transition: color 0.3s ease;
+}
+
+.modern-submenu-link:hover i {
+    color: var(--color-highlight-blue) !important;
+    text-shadow: 0 0 2px rgba(14, 165, 233, 0.15);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .modern-menu-content { width: 78vw; max-width: 320px; }
+    .modern-menu-toggle {
+        top: 0.75rem; /* 与移动端导航栏padding一致 */
+        bottom: auto;
+        left: 12px;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .modern-menu-header {
+        padding: 0.75rem 1rem;
+        height: 65px;
+    }
+    .modern-menu-logo { font-size: 1.25rem; }
+    .modern-menu-link { padding: 12px 18px; }
+    .modern-submenu-link { padding: 10px 18px 10px 56px; }
+}
+
+/* 修复移动端布局 */
+@media (max-width: 1200px) {
+    .grid-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .grid-item, .grid-middle, .right-content {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .main-content {
+        padding-top: 90px; /* 移动端稍微减少顶部间距 */
+    }
+}
+
+@media (max-width: 768px) {
+    .search_tech {
+        height: 50px;
+        font-size: 16px;
+    }
+
+    .search-icon {
+        font-size: 16px;
+        right: 12px;
+    }
+
+    .button-container {
+        gap: 8px;
+    }
+
+    .button-container button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .init-wrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+            .left-section, .right-section { width: 100%; }
+
+    /* 移动端保持两列布局但调整间距 */
+    .left-section {
+        grid-template-columns: 1fr 1fr;
+                gap: 8px 10px;
+        max-width: 100%;
+                margin: 0 auto;
+    }
+
+    /* 移动端按钮进一步缩小 */
+    .feature-btn {
+        padding: 4px 6px;
+        font-size: 10px;
+        min-height: 28px;
+    }
+
+    .feature-btn i {
+        font-size: 10px;
+        width: 14px;
+    }
+
+            .feature-btn span { font-size: 10px; }
+}
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单容器 -->
+        <div id="inno-global-menu"></div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'cn' ? 'EN' : 'CN' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- 页面加载遮罩 -->
+        <div v-if="pageLoading" class="page-loading-overlay">
+            <div class="page-loading-content">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="loading-text">{{ currentLang === 'cn' ? '正在加载页面...' : 'Loading page...' }}</p>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <!-- 搜索区域 -->
+            <div class="custom-search">
+                <div class="search-wrapper">
+                    <input
+                        type="text"
+                        class="form-control search_tech"
+                        v-model="searchTerm"
+                        @keyup.enter="searchTechTerm"
+                        autocomplete="off"
+                        :placeholder="currentLang === 'cn' ? '搜索技术关键词...' : 'Search technology keywords...'"
+                    >
+                    <span class="search-icon" @click="searchTechTerm">
+                        <i class="fa fa-send-o"></i>
+                    </span>
+                </div>
+
+                <div class="language-control">
+                    <span class="hint-text">{{ currentLang === 'cn' ? '选择语言:' : 'Language:' }}</span>
+                    <div class="lang-selector">
+                        <button class="lang-option" :class="{active: selectedLang === 'cn'}" @click="changeLang('cn')">
+                            <i class="fa fa-check" v-if="selectedLang === 'cn'"></i>
+                            <span>中文</span>
+                        </button>
+                        <span class="separator">/</span>
+                        <button class="lang-option" :class="{active: selectedLang === 'en'}" @click="changeLang('en')">
+                            <i class="fa fa-check" v-if="selectedLang === 'en'"></i>
+                            <span>EN</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术名词按钮区域（仅显示3个快捷项，点击直接搜索） -->
+            <div class="button-container cn" v-show="selectedLang === 'cn'">
+                <button v-for="tech in quickTechs_cn" @click="quickSearch(tech)">
+                    {{tech.name}}
+                </button>
+            </div>
+            <div class="button-container en" v-show="selectedLang === 'en'">
+                <button v-for="tech in quickTechs_en" @click="quickSearch(tech)">
+                    {{tech.name}}
+                </button>
+            </div>
+
+            <!-- 三栏布局 -->
+            <div class="grid-container">
+                <!-- 第一块：技术卡片 -->
+                <div class="grid-item">
+                    <div class="card-container" v-show="isLoading">
+                        <div class="card-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>{{ currentLang === 'cn' ? '正在生成...' : 'Generating...' }}</span>
+                        </div>
+                    </div>
+                    <div id="resultSvg"></div>
+                </div>
+
+                <!-- 第二块：CI图片 -->
+                <div class="grid-middle">
+                    <div class="card-container">
+                    <div class="card-loading" v-if="isSearchingMiddle">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>{{ currentLang === 'cn' ? '正在加载图片...' : 'Loading image...' }}</span>
+                        </div>
+                        <img id="ci-image" :src="ciImageSrc" alt="CI Image" v-if="!isSearchingMiddle">
+                    </div>
+                </div>
+
+                <!-- 第三块：机器人图片 + 四项功能 -->
+                <div class="right-content">
+                    <div class="init-wrapper" v-show="!isPlaying && !hasContent && !isLoading">
+                        <!-- 机器人图片在上 -->
+                        <div class="right-section">
+                            <img src="../dashboard/dist/img/img_ai_tech_card.png" alt="AI Robot" class="robot-image">
+                        </div>
+                        <!-- 四个功能按钮在下 -->
+                        <div class="left-section">
+                            <button class="feature-btn" @click="viewRelateCompanies">
+                                <i class="fas fa-building"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术以色列公司' : 'Israeli companies related to similar tech' }}</span>
+                            </button>
+                            <button class="feature-btn" @click="viewRelateInvestments">
+                                <i class="fas fa-handshake"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，全球范围' : 'Investment to similar tech, global wise' }}</span>
+                            </button>
+                            <button class="feature-btn" disabled>
+                                <i class="fas fa-globe"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，以色列公司' : 'Investment to similar tech, Israeli companies' }}</span>
+                            </button>
+                            <button class="feature-btn" disabled>
+                                <i class="fas fa-handshake"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，中国公司' : 'Investment to similar tech, Chinese companies' }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 动画容器 -->
+                    <div class="animation-container" v-show="(isPlaying && hasContent) || isLoading">
+                        <video class="animation-video" autoplay loop muted playsinline>
+                            <source src="../dashboard/dist/img/ai_tech_card_new.mp4" type="video/mp4">
+                        </video>
+                        <div class="thinking-container">
+                            <div class="thinking-wrapper">
+                                <div class="thinking-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="thinking-text">{{ searchingText }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 内容容器 -->
+                    <div class="content-container" v-if="hasContent" :style="containerStyle">
+                        <div class="copy-button" v-if="messages.length > 0 && !messages[messages.length-1]?.isTyping" @click="copyContent">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                        <div class="chat-container">
+                            <div v-if="messages.length > 0" class="message" v-for="message in messages" :key="message.id">
+                                <div class="message-content" :class="{ 'typing': message.isTyping }" v-html="message.text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 按钮组 -->
+                    <div class="button-group" v-show="hasContent && !isPlaying && !isLoading">
+                        <div class="button-row">
+                            <button class="feature-btn" @click="viewRelateCompanies" :disabled="isLoading">
+                                <i class="fas fa-building"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术以色列公司' : 'Israeli companies related to similar tech' }}</span>
+                            </button>
+                            <button class="feature-btn" @click="viewRelateGlobalInvestments" :disabled="isLoading">
+                                <i class="fas fa-globe"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，全球范围' : 'Investment to similar tech, global wise' }}</span>
+                            </button>
+                        </div>
+                        <div class="button-row">
+                            <button class="feature-btn" disabled>
+                                <i class="fas fa-handshake"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，以色列公司' : 'Investment to similar tech, Israeli companies' }}</span>
+                            </button>
+                            <button class="feature-btn" disabled>
+                                <i class="fas fa-handshake"></i>
+                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，中国公司' : 'Investment to similar tech, Chinese companies' }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vue 3 全局构建 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 内嵌菜单系统将在这里添加 -->
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+
+    <script>
+        // Vue 3 应用
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    pageLoading: true,
+                    currentLang: 'cn',
+                    selectedLang: 'cn',
+                    searchTerm: '',
+                    searchingText: '',
+                    isLoading: false,
+                    isPlaying: false,
+                    hasContent: false,
+                    isSearchingMiddle: false,
+                    ciImageSrc: 'img/CI.png',
+                    messages: [{ id: 1, text: '', isTyping: false }],
+                    containerStyle: {
+                        height: 'auto'
+                    },
+                    apiDomain: 'https://ai.innonation.io/inno_ai_services',
+                    apiToken: 'Bearer your-api-token',
+
+                    // 默认技术卡片数据
+                    techs_cn: [
+                        {
+                            name: '电光系统',
+                            svg: `
+                                <div class="svg-wrapper cn">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="title">Smart Match 科技小百科</div>
+                                            <div class="divider"></div>
+                                            <div class="dynamic-content">
+                                                <div class="chinese-title">电光系统</div>
+                                                <div class="english-title">Electro-Optical System</div>
+                                                <div class="explanation">
+                                                    电光系统就像是高科技的"超级眼睛"。它结合了电子技术和光学技术，能够捕捉、处理和显示各种光信息。想象一下，它就像是给了普通相机一个超级大脑，不仅能在各种光线条件下看得更清楚，还能分析所看到的内容。这种系统广泛应用于军事、航空、医疗等领域，让我们能够"看见"肉眼看不到的世界。
+                                                </div>
+                                            </div>
+                                            <div class="icon-container">
+                                                <div class="icon">📷</div>
+                                                <div class="icon">🔍</div>
+                                                <div class="icon">💡</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        },
+                        {
+                            name: '量子驱动的机密计算网络安全',
+                            svg: `
+                                <div class="svg-wrapper cn">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="title">Smart Match 科技小百科</div>
+                                            <div class="divider"></div>
+                                            <div class="dynamic-content">
+                                                <div class="chinese-title">量子驱动的机密计算网络安全</div>
+                                                <div class="english-title">Quantum-driven confidential computing network security</div>
+                                                <div class="explanation">
+                                                    想象一下，这就像给你的数据穿上了一件超级隐形衣。量子技术就像是这件隐形衣的神奇材料，让数据在处理时完全隐形。机密计算则是隐形衣的设计，确保数据即使在使用中也不会被看到。而网络安全就是守护这件隐形衣的卫士，防止任何人偷走或损坏它。这种方法不仅保护数据免受当前威胁，还能抵御未来可能出现的超级计算机的攻击，为数据安全开启了一个全新的时代。
+                                                </div>
+                                            </div>
+                                            <div class="icon-container">
+                                                <div class="icon">🔒</div>
+                                                <div class="icon">🖥</div>
+                                                <div class="icon">🔗</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        },
+                        {
+                            name: '数据安全态势管理',
+                            svg: `
+                                <div class="svg-wrapper cn">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="title">Smart Match 科技小百科</div>
+                                            <div class="divider"></div>
+                                            <div class="dynamic-content">
+                                                <div class="chinese-title">数据安全态势管理</div>
+                                                <div class="english-title">Data Security Posture Management</div>
+                                                <div class="explanation">
+                                                    数据安全态势管理就像是给你的数据穿上了一套智能盔甲。想象一下，你有一个装满珍贵宝石的保险箱。DSPM不仅会帮你锁好保险箱，还会时刻监控周围环境，预测可能的威胁，并在必要时自动加强防护。它就像一个全天候的数据保镖，不断学习新的防御技能，确保你的数据始终处于最安全的状态。简而言之，DSPM让你对数据安全了如指掌，并随时准备应对各种挑战。
+                                                </div>
+                                            </div>
+                                            <div class="icon-container">
+                                                <div class="icon">🖥</div>
+                                                <div class="icon">🛡</div>
+                                                <div class="icon">👁</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        }
+                    ],
+                    techs_en: [
+                        {
+                            name: 'Electro-Optical System',
+                            svg: `
+                                <div class="svg-wrapper en">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="title">Smart Match Tech Explainer</div>
+                                            <div class="divider"></div>
+                                            <div class="dynamic-content">
+                                                <div class="english-title">Electro-Optical System</div>
+                                                <div class="explanation">
+                                                    Imagine a high-tech pair of eyes that can see beyond what humans can! An Electro-Optical System is like a super-powered camera that combines electronics and optics to detect and analyze light, turning visual information into electrical signals. It's like giving machines the ability to see and understand the world around them, just like we do with our eyes and brain, but with some extra superpowers thrown in!
+                                                </div>
+                                            </div>
+                                            <div class="icon-container">
+                                                <div class="icon">📷</div>
+                                                <div class="icon">👁</div>
+                                                <div class="icon">💻</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        },
+                        {
+                            name: 'Power Conversion Solutions',
+                            svg: `
+                                <div class="svg-wrapper en">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="title">Smart Match Tech Explainer</div>
+                                            <div class="divider"></div>
+                                            <div class="dynamic-content">
+                                                <div class="english-title">Power Conversion Solutions</div>
+                                                <div class="explanation">
+                                                    Power Conversion Solutions are like magical energy translators that help different devices speak the same electrical language. Just as a translator helps people who speak different languages understand each other, these solutions transform electricity from one form to another so that various devices can work together harmoniously.
+                                                </div>
+                                            </div>
+                                            <div class="icon-container">
+                                                <div class="icon">⚡</div>
+                                                <div class="icon">🔌</div>
+                                                <div class="icon">🔧</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        },
+                        {
+                            name: 'Data Security Posture Management',
+                            svg: `
+                                <div class="svg-wrapper en">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="title">Smart Match Tech Explainer</div>
+                                            <div class="divider"></div>
+                                            <div class="dynamic-content">
+                                                <div class="english-title">Data Security Posture Management</div>
+                                                <div class="explanation">
+                                                    Think of Data Security Posture Management as a digital health check-up for your organization's data. It's like having a vigilant guardian that constantly monitors and improves how well your data is protected, ensuring your digital assets stay safe and sound in the ever-changing landscape of cyber threats.
+                                                </div>
+                                            </div>
+                                            <div class="icon-container">
+                                                <div class="icon">🖥</div>
+                                                <div class="icon">🛡</div>
+                                                <div class="icon">👁</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        }
+                    ],
+
+                    // 默认卡片内容（使用原来版本的结构）
+                    defaultCardCN: `
+                        <div class="svg-wrapper cn">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="title">Smart Match 科技小百科</div>
+                                    <div class="divider"></div>
+                                    <div class="dynamic-content">
+                                        <div class="chinese-title">开发安全运维</div>
+                                        <div class="english-title">DevSecOps (Development, Security, and Operations)</div>
+                                        <div class="explanation">
+                                            想象一下，DevSecOps就像是一个超级厨房团队。厨师（开发者）、卫生检查员（安全专家）和服务员（运维人员）不再各自为政，而是从食材采购到上菜全程合作。这种协作确保了美味佳肴（软件）不仅口感一流，还安全卫生，并能快速送达顾客手中。这种新型"烹饪"方法让软件开发更安全、更高效，让"数字大厨"们欢呼雀跃！
+                                        </div>
+                                    </div>
+                                    <div class="icon-container">
+                                        <div class="icon">👨‍💻</div>
+                                        <div class="icon">🔒</div>
+                                        <div class="icon">🚀</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    defaultCardEN: `
+                        <div class="svg-wrapper en">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="title">Smart Match Tech Explainer</div>
+                                    <div class="divider"></div>
+                                    <div class="dynamic-content">
+                                        <div class="english-title">DevSecOps</div>
+                                        <div class="explanation">
+                                            Imagine a high-speed assembly line where security guards work alongside engineers. That's DevSecOps! It's a software development approach that bakes security into every step, from coding to deployment. By integrating security early and often, DevSecOps helps catch vulnerabilities faster than a virus scanner on steroids, ensuring safer digital products for all.
+                                        </div>
+                                    </div>
+                                    <div class="icon-container">
+                                        <div class="icon">🔒</div>
+                                        <div class="icon">🚀</div>
+                                        <div class="icon">🛡️</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    // 快捷技术名词（各语言3个）
+                    quickTechs_cn: [
+                        { name: '电光系统', term: '电光系统' },
+                        { name: '量子驱动的机密计算网络安全', term: '量子驱动的机密计算网络安全' },
+                        { name: '数据安全态势管理', term: '数据安全态势管理' }
+                    ],
+                    quickTechs_en: [
+                        { name: 'Electro-Optical System', term: 'Electro-Optical System' },
+                        { name: 'Power Conversion Solutions', term: 'Power Conversion Solutions' },
+                        { name: 'Data Security Posture Management', term: 'Data Security Posture Management' }
+                    ]
+                }
+            },
+            async mounted() {
+                console.log('Technical card app initialized');
+
+                // 初始化语言
+                this.currentLang = localStorage.getItem('inno_lang') || 'cn';
+                this.selectedLang = this.currentLang; // 同步初始化 selectedLang
+
+                // 初始化搜索文本
+                this.searchingText = this.currentLang === 'cn' ? '正在生成技术卡片...' : 'Generating tech card...';
+
+                // 快捷技术名词直接触发搜索，无需预设svg映射
+
+                // 模拟页面加载过程（仅首屏显示整页loading）
+                await this.initPage();
+
+                // 确保显示init-wrapper而不是内容
+                this.hasContent = false;
+                this.isPlaying = false;
+                this.isLoading = false;
+
+                // 设置默认技术卡片
+                this.setDefaultCard();
+            },
+            methods: {
+                // 旧的按钮svg预设逻辑已不再需要
+                setDefaultCard() {
+                    // 根据当前语言设置默认卡片
+                    setTimeout(() => {
+                        const resultSvg = document.getElementById('resultSvg');
+                        if (resultSvg) {
+                            const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                            resultSvg.innerHTML = defaultCard;
+                            console.log('Default card set successfully');
+                        } else {
+                            console.log('resultSvg element not found, retrying...');
+                            // 如果没有找到，重试一次
+                            setTimeout(() => {
+                                const retryResultSvg = document.getElementById('resultSvg');
+                                if (retryResultSvg) {
+                                    const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                                    retryResultSvg.innerHTML = defaultCard;
+                                    console.log('Default card set on retry');
+                                }
+                            }, 500);
+                        }
+                    }, 100);
+                },
+                toggleLang() {
+                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    this.selectedLang = this.currentLang; // 同步 selectedLang
+                    localStorage.setItem('inno_lang', this.currentLang);
+
+                    // 更新语言显示
+                    const langText = document.querySelector('.lang-text');
+                    if (langText) {
+                        langText.textContent = this.currentLang === 'cn' ? 'EN' : 'CN';
+                    }
+                },
+                async initPage() {
+                    try {
+                        // 模拟加载延迟
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                    } catch (error) {
+                        console.error('Page initialization error:', error);
+                    } finally {
+                        // 隐藏加载遮罩
+                        this.pageLoading = false;
+                    }
+                },
+                changeLang(lang) {
+                    this.selectedLang = lang;
+                    this.currentLang = lang; // 同步 currentLang
+                    localStorage.setItem('inno_lang', lang);
+                },
+                showSample(tech) {
+                    // 显示预定义的技术卡片，但不显示内容容器
+                    const resultSvg = document.getElementById('resultSvg');
+                    if (resultSvg && tech.svg) {
+                        resultSvg.innerHTML = tech.svg;
+                        // 注意：这里不设置hasContent为true，确保init-wrapper仍然显示
+                        this.containerStyle = {
+                            height: 'auto'
+                        };
+                    }
+                },
+                quickSearch(tech) {
+                    if (!tech || !tech.term) return;
+                    this.searchTerm = tech.term;
+                    // 直接触发查询流程
+                    this.searchTechTerm();
+                },
+                async searchTechTerm() {
+                    if (!this.searchTerm.trim()) return;
+
+                    // 确保查询过程中不显示整页loading（仅首屏使用）
+                    this.pageLoading = false;
+
+                    // 清空上一次的技术卡片内容，避免在局部loading时显示旧内容
+                    const resultSvgEl = document.getElementById('resultSvg');
+                    if (resultSvgEl) {
+                        resultSvgEl.innerHTML = '';
+                    }
+
+                    // 开始查询：右侧显示动画，隐藏init-wrapper和content-container
+                    this.isLoading = true;             // 控制左侧与右侧动画容器显示
+                    this.isPlaying = true;             // 右侧animation-container显示
+                    this.hasContent = false;           // 隐藏content-container
+                    this.isSearchingMiddle = true;     // 中间图片loading
+
+                    // 更新搜索文本为具体的技术术语
+                    this.searchingText = this.currentLang === 'cn' ?
+                        `正在生成"${this.searchTerm}"技术卡片...` :
+                        `Generating "${this.searchTerm}" tech card...`;
+
+                    // 清空之前的内容，确保content-container不显示
+                    this.messages = [];
+
+                    try {
+                        // 并行调用两个API
+                        const [techCardResponse, imageResponse] = await Promise.all([
+                            this.callSearchTechCardAPI(),
+                            this.callTechCardImageAPI()
+                        ]);
+
+                        // 处理技术卡片响应（不显示content-container，仅更新左侧卡片）
+                        if (techCardResponse.success) {
+                            const resultSvg = document.getElementById('resultSvg');
+                            if (resultSvg) {
+                                const respData = techCardResponse.data;
+                                let cardHtml = '';
+                                if (typeof respData === 'string') {
+                                    cardHtml = respData;
+                                } else if (respData && typeof respData === 'object') {
+                                    cardHtml = this.generateCardHTML(respData, this.selectedLang);
+                                }
+                                if (cardHtml) {
+                                    resultSvg.innerHTML = cardHtml;
+                                }
+                            }
+                        } else {
+                            // 如果API调用失败，显示默认卡片但不显示内容容器
+                            const resultSvg = document.getElementById('resultSvg');
+                            if (resultSvg) {
+                                const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                                resultSvg.innerHTML = defaultCard;
+                                // 注意：这里不设置hasContent为true，确保content-container不显示
+                            }
+                        }
+
+                        // 处理图片响应（兼容 dataURL / base64 / URL 三种返回）
+                        if (imageResponse.success) {
+                            const imgData = imageResponse.data;
+                            const str = typeof imgData === 'string' ? imgData : '';
+                            if (str) {
+                                if (/^data:image\//i.test(str) || /^https?:\/\//i.test(str)) {
+                                    this.ciImageSrc = str;
+                                } else {
+                                    this.ciImageSrc = 'data:image/png;base64,' + str.replace(/\s+/g, '');
+                                }
+                                this.isSearchingMiddle = false;
+                            }
+                        }
+
+                        // 不显示content-container，保持messages为空
+                        this.messages = [];
+                    } catch (error) {
+                        console.error('Search error:', error);
+                        // 如果API调用失败，显示默认卡片但不显示内容容器
+                        const resultSvg = document.getElementById('resultSvg');
+                        if (resultSvg) {
+                            const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                            resultSvg.innerHTML = defaultCard;
+                            // 注意：这里不设置hasContent为true，确保content-container不显示
+                        }
+
+                        // 清空消息，避免错误信息显示在content-container中
+                        this.messages = [];
+                    } finally {
+                        // 结束查询：关闭右侧动画与中间loading，恢复init-wrapper
+                        this.isLoading = false;
+                        this.isPlaying = false;
+                        this.isSearchingMiddle = false;
+
+                        // 保持content-container隐藏
+                        this.hasContent = false;
+
+                        // 重置搜索文本
+                        this.searchingText = this.currentLang === 'cn' ? '正在生成技术卡片...' : 'Generating tech card...';
+                    }
+                },
+                generateCardHTML(data, lang) {
+                    try {
+                        const wrapperClass = lang === 'cn' ? 'cn' : 'en';
+                        const mainTitle = lang === 'cn' ? 'Smart Match 科技小百科' : 'Smart Match Tech Explainer';
+                        const chineseTitle = lang === 'cn' && data.chineseTitle ? `<div class="chinese-title">${data.chineseTitle}</div>` : '';
+                        const englishTitle = data.englishTitle || '';
+                        const explanation = data.explanation || '';
+                        const icons = Array.isArray(data.icons) ? data.icons : [];
+
+                        return `
+                            <div class="svg-wrapper ${wrapperClass}">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="title">${mainTitle}</div>
+                                        <div class="divider"></div>
+                                        <div class="dynamic-content">
+                                            ${chineseTitle}
+                                            <div class="english-title">${englishTitle}</div>
+                                            <div class="explanation">${explanation}</div>
+                                        </div>
+                                        <div class="icon-container">
+                                            ${icons.map(icon => `<div class="icon">${icon}</div>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } catch (e) {
+                        console.error('generateCardHTML error:', e);
+                        return '';
+                    }
+                },
+                async callSearchTechCardAPI() {
+                    try {
+                        const url = `${this.apiDomain}/api/AI/SearchTechCard?techTerm=${encodeURIComponent(this.searchTerm)}&lang=${this.selectedLang}`;
+                        console.log('Calling SearchTechCard API:', url);
+
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${this.apiToken}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        console.log('SearchTechCard response:', data);
+
+                        return {
+                            success: true,
+                            data: data.Data || data
+                        };
+                    } catch (error) {
+                        console.error('SearchTechCard API error:', error);
+                        return {
+                            success: false,
+                            error: error.message
+                        };
+                    }
+                },
+                async callTechCardImageAPI() {
+                    try {
+                        const url = `${this.apiDomain}/api/techcard/image?term=${encodeURIComponent(this.searchTerm)}`;
+                        console.log('Calling TechCardImage API:', url);
+
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${this.apiToken}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        console.log('TechCardImage response:', data);
+
+                        // 兼容多种字段名并只返回字符串
+                        const payload = (data && data.Data) ? data.Data : data;
+                        let out = '';
+                        if (typeof payload === 'string') {
+                            out = payload;
+                        } else if (payload && typeof payload === 'object') {
+                            const base64 = payload.CardImageBase64 || payload.ImageBase64 || payload.Base64 || payload.base64;
+                            const dataUrl = payload.DataUrl || payload.dataUrl || payload.dataURL;
+                            const url = payload.Url || payload.URL || payload.url;
+                            if (typeof base64 === 'string' && base64.trim()) {
+                                out = base64.trim();
+                            } else if (typeof dataUrl === 'string' && dataUrl.trim()) {
+                                out = dataUrl.trim();
+                            } else if (typeof url === 'string' && url.trim()) {
+                                out = url.trim();
+                            }
+                        }
+
+                        return {
+                            success: !!out,
+                            data: out || null
+                        };
+                    } catch (error) {
+                        console.error('TechCardImage API error:', error);
+                        return {
+                            success: false,
+                            error: error.message
+                        };
+                    }
+                },
+                downloadAsPNG() {
+                    const resultSvg = document.getElementById('resultSvg');
+                    if (!resultSvg || !resultSvg.innerHTML.trim()) {
+                        alert(this.currentLang === 'cn' ? '请先搜索技术卡片内容' : 'Please search for technical card content first');
+                        return;
+                    }
+
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = resultSvg.innerHTML;
+                    tempDiv.style.width = '300px';
+                    tempDiv.style.height = '450px';
+                    tempDiv.style.background = 'white';
+                    tempDiv.style.padding = '20px';
+                    tempDiv.style.boxSizing = 'border-box';
+                    tempDiv.style.position = 'absolute';
+                    tempDiv.style.left = '-9999px';
+                    document.body.appendChild(tempDiv);
+
+                    html2canvas(tempDiv, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff'
+                    }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = `tech-card-${this.searchTerm || 'default'}.png`;
+                        link.href = canvas.toDataURL();
+                        link.click();
+
+                        document.body.removeChild(tempDiv);
+                    }).catch(error => {
+                        console.error('Download error:', error);
+                        alert(this.currentLang === 'cn' ? '下载失败，请重试' : 'Download failed, please try again');
+                        document.body.removeChild(tempDiv);
+                    });
+                },
+                viewRelateCompanies() {
+                    try {
+                        // 读取当前卡片标题（中文优先，否则英文）
+                        const grid = document.querySelector('.grid-item');
+                        let title = '';
+                        if (grid?.querySelector('.chinese-title')) {
+                            title = grid.querySelector('.chinese-title').textContent.trim();
+                        } else if (grid?.querySelector('.english-title')) {
+                            title = grid.querySelector('.english-title').textContent.trim();
+                        }
+
+                        // UI 状态：显示右侧动画与内容容器
+                        this.hasContent = true;
+                        this.isPlaying = true;
+                        this.messages = [];
+                        this.searchingText = this.selectedLang === 'cn'
+                            ? '正在查询与卡片显示技术相关的以色列公司...'
+                            : 'Checking Israeli companies related to displayed technology...';
+
+                        const url = `${this.apiDomain}/api/AI/ChatForSearchCompanyAgent?prompt=${encodeURIComponent(title || this.searchTerm)}`;
+                        fetch(url)
+                            .then(r => r.json())
+                            .then(result => {
+                                this.isPlaying = false;
+                                if (result && (result.ReturnCode === 0 || result.success)) {
+                                    const content = (result.Data || result.data || '').toString();
+                                    const formatted = this.formatMessage(content, true);
+                                    this.messages = [{ id: Date.now(), text: formatted, isTyping: false }];
+                                } else {
+                                    this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '暂无相关数据' : 'No related data'), isTyping: false }];
+                                }
+                            })
+                            .catch(err => {
+                                console.error('viewRelateCompanies error:', err);
+                                this.isPlaying = false;
+                                this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '系统错误，请稍后重试' : 'System error, please retry later'), isTyping: false }];
+                            });
+                    } catch (e) {
+                        console.error('viewRelateCompanies init error:', e);
+                    }
+                },
+                viewRelateInvestments() {
+                    try {
+                        const grid = document.querySelector('.grid-item');
+                        let title = '';
+                        if (grid?.querySelector('.english-title')) {
+                            title = grid.querySelector('.english-title').textContent.trim();
+                        } else if (grid?.querySelector('.chinese-title')) {
+                            title = grid.querySelector('.chinese-title').textContent.trim();
+                        }
+
+                        this.hasContent = true;
+                        this.isPlaying = true;
+                        this.messages = [];
+                        this.searchingText = this.selectedLang === 'cn'
+                            ? '正在查询与卡片显示技术相关的以色列公司的近期融资情况...'
+                            : 'Searching the latest funding developments related to the displayed technology (Israel companies)...';
+
+                        const url = `${this.apiDomain}/api/AI/SearchTechCardInvestment?techTerm=${encodeURIComponent(title || this.searchTerm)}&lang=${this.selectedLang}`;
+                        fetch(url)
+                            .then(r => r.json())
+                            .then(result => {
+                                this.isPlaying = false;
+                                if (result && (result.ReturnCode === 0 || result.success)) {
+                                    const content = (result.Data || result.data || '').toString();
+                                    const formatted = this.formatMessage(content, false);
+                                    this.messages = [{ id: Date.now(), text: formatted, isTyping: false }];
+                                } else {
+                                    this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '暂无相关数据' : 'No related data'), isTyping: false }];
+                                }
+                            })
+                            .catch(err => {
+                                console.error('viewRelateInvestments error:', err);
+                                this.isPlaying = false;
+                                this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '系统错误，请稍后重试' : 'System error, please retry later'), isTyping: false }];
+                            });
+                    } catch (e) {
+                        console.error('viewRelateInvestments init error:', e);
+                    }
+                },
+                formatMessage(text, moreFlag) {
+                    try {
+                        if (typeof text !== 'string') text = String(text || '');
+                        // 基础格式：加粗、链接、换行
+                        text = text.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+                        text = text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+                        text = text.replace(/(?<![\d\.])\s*(https?:\/\/[^\s]+)(?![^<]*>|[^<>]*<\/a>)/g, (m, url)=>`<a href="${url}" target="_blank" class="reference-link small-link">${url}</a>`);
+                        text = text.replace(/\n/g, '<br>');
+                        if (moreFlag) {
+                            const q = this.searchTerm || (this.selectedLang === 'cn' ? '开发安全运维' : 'DevSecOps');
+                            const link = `ai_search_israel.html?query=${encodeURIComponent(q)}`;
+                            const more = this.selectedLang === 'cn' ? '查看更多' : 'View more';
+                            text += `<br><a href="${link}" target="_blank" class="view-more-link">${more}</a>`;
+                        }
+                        return text;
+                    } catch (e) {
+                        return String(text || '');
+                    }
+                },
+                copyContent() {
+                    try {
+                        const last = this.messages[this.messages.length - 1];
+                        if (!last || last.isTyping) return;
+
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = last.text || '';
+                        const textToCopy = tempDiv.textContent || tempDiv.innerText || '';
+
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            const copyButton = document.querySelector('.copy-button');
+                            if (copyButton) {
+                                copyButton.classList.add('copied');
+                                const icon = copyButton.querySelector('i');
+                                if (icon) {
+                                    icon.classList.remove('fa-copy');
+                                    icon.classList.add('fa-check');
+                                    setTimeout(() => {
+                                        icon.classList.remove('fa-check');
+                                        icon.classList.add('fa-copy');
+                                        copyButton.classList.remove('copied');
+                                    }, 1000);
+                                }
+                            }
+                        }).catch(err => {
+                            console.error('Failed to copy text:', err);
+                        });
+                    } catch (e) {
+                        console.error('copyContent error:', e);
+                    }
+                }
+            }
+        }).mount('#app');
+
+        // 在Vue应用挂载完成后，确保默认卡片显示
+        setTimeout(() => {
+            const app = Vue.getApp?.('#app') || document.querySelector('#app').__vue_app__;
+            if (app && app.$ && app.$.setupState && app.$.setupState.setDefaultCard) {
+                app.$.setupState.setDefaultCard();
+            } else {
+                // 备用方法：直接设置默认卡片
+                const resultSvg = document.getElementById('resultSvg');
+                if (resultSvg && !resultSvg.innerHTML.trim()) {
+                    const currentLang = localStorage.getItem('inno_lang') || 'cn';
+                    const defaultCardCN = `
+                        <div class="svg-wrapper cn">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="title">Smart Match 科技小百科</div>
+                                    <div class="divider"></div>
+                                    <div class="dynamic-content">
+                                        <div class="chinese-title">开发安全运维</div>
+                                        <div class="english-title">DevSecOps (Development, Security, and Operations)</div>
+                                        <div class="explanation">
+                                            想象一下，DevSecOps就像是一个超级厨房团队。厨师（开发者）、卫生检查员（安全专家）和服务员（运维人员）不再各自为政，而是从食材采购到上菜全程合作。这种协作确保了美味佳肴（软件）不仅口感一流，还安全卫生，并能快速送达顾客手中。
+                                        </div>
+                                    </div>
+                                    <div class="icon-container">
+                                        <div class="icon">👨‍💻</div>
+                                        <div class="icon">🔒</div>
+                                        <div class="icon">🚀</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    resultSvg.innerHTML = defaultCardCN;
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
