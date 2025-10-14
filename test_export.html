@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Functionality Test</title>
+    <!-- 引入必要的库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        .test-section h3 {
+            color: #495057;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Export Functionality Test</h1>
+
+        <div class="test-section">
+            <h3>测试 ExportInv (投资数据导出)</h3>
+            <p>点击按钮测试投资数据导出功能</p>
+            <button class="test-button" onclick="testExportInv()">测试 ExportInv</button>
+        </div>
+
+        <div class="test-section">
+            <h3>测试 ExportMA (并购数据导出)</h3>
+            <p>点击按钮测试并购数据导出功能</p>
+            <button class="test-button" onclick="testExportMA()">测试 ExportMA</button>
+        </div>
+
+        <div class="test-section">
+            <h3>测试 ExportIPO (IPO数据导出)</h3>
+            <p>点击按钮测试IPO数据导出功能</p>
+            <button class="test-button" onclick="testExportIPO()">测试 ExportIPO</button>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // 模拟数据
+        const mockFundingData = [
+            {
+                company_name: "Test Company 1",
+                funding_round: "Series A",
+                industry: ["Technology", "AI"],
+                investors: [{name: "Investor A"}, {name: "Investor B"}],
+                money_raised_accurate: 5000000,
+                money_raised: "$5.0M",
+                announced_on: "2025-07-01",
+                country: "Israel",
+                _id: "test_id_1",
+                URL: "company_profile_israel.html?cId=test_id_1",
+                detailURL: "funding_round_details_israel.html?id=test_id_1"
+            },
+            {
+                company_name: "Test Company 2",
+                funding_round: "Seed",
+                industry: ["FinTech"],
+                investors: [{name: "Investor C"}],
+                money_raised_accurate: 1000000,
+                money_raised: "$1.0M",
+                announced_on: "2025-07-15",
+                country: "Israel",
+                _id: "test_id_2",
+                URL: "company_profile_israel.html?cId=test_id_2",
+                detailURL: "funding_round_details_israel.html?id=test_id_2"
+            }
+        ];
+
+        const mockAcquisitionData = [
+            {
+                acquiree_name: "Acquired Company 1",
+                acquirer_name: "Acquirer Company 1",
+                acquiree_industry: ["Technology"],
+                price_accurate: 10000000,
+                price: "$10.0M",
+                announced_on: "2025-07-10",
+                acquiree_country: "Israel",
+                acquiree_id: "acquiree_id_1",
+                acquirer_id: "acquirer_id_1",
+                _id: "acq_test_id_1"
+            }
+        ];
+
+        const mockIPOData = [
+            {
+                relationships: {
+                    funded_company: {
+                        item: {
+                            properties: {
+                                name: "IPO Company 1"
+                            }
+                        }
+                    }
+                },
+                properties: {
+                    stock_exchange_symbol: "NASDAQ",
+                    stock_symbol: "TEST",
+                    money_raised_usd: 20000000,
+                    went_public_on: "2025-07-20"
+                },
+                Price_accurate: 20000000,
+                Price: "$20.0M"
+            }
+        ];
+
+        // 导出功能实现
+        function exportToExcel(data, fileName) {
+            if (!data || data.length === 0) {
+                alert('没有数据可导出');
+                return;
+            }
+
+            // 获取列标题
+            const keys = Object.keys(data[0]);
+            const firstRow = {};
+            keys.forEach(key => {
+                firstRow[key] = key;
+            });
+
+            // 将标题行插入到数据开头
+            const exportData = [firstRow, ...data];
+
+            // 转换数据为Excel格式
+            const sheetsData = exportData.map((item, rowIndex) => {
+                return keys.map((key, columnIndex) => {
+                    return {
+                        value: item[key],
+                        position: (columnIndex > 25 ? getCharCol(columnIndex) : String.fromCharCode(65 + columnIndex)) + (rowIndex + 1),
+                    };
+                });
+            }).flat();
+
+            const content = {};
+            sheetsData.forEach(item => {
+                content[item.position] = { v: item.value };
+            });
+
+            const coordinate = Object.keys(content);
+            const workBook = {
+                SheetNames: ["SMART_MATCH"],
+                Sheets: {
+                    "SMART_MATCH": Object.assign({}, content, { "!ref": coordinate[0] + ":" + coordinate[coordinate.length - 1] }),
+                }
+            };
+
+            const excelData = XLSX.write(workBook, { bookType: "xlsx", bookSST: false, type: "binary" });
+            const blob = new Blob([string2ArrayBuffer(excelData)], { type: "application/octet-stream" });
+            saveAs(blob, fileName);
+        }
+
+        function string2ArrayBuffer(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        function getCharCol(n) {
+            let s = "";
+            let m = 0;
+            while (n > 0) {
+                m = n % 26 + 1;
+                s = String.fromCharCode(m + 64) + s;
+                n = (n - m) / 26;
+            }
+            return s;
+        }
+
+        // 测试函数
+        function testExportInv() {
+            try {
+                const exportData = [];
+                mockFundingData.forEach(item => {
+                    const newItem = {
+                        Name: item.company_name,
+                        FundingStatus: item.funding_round,
+                        Industry: item.industry ? item.industry.join(', ') : '',
+                        Investors: item.investors ? (Array.isArray(item.investors) ? item.investors.map(inv => inv.name || inv).join(', ') : item.investors) : '',
+                        MoneyRaised: item.money_raised_accurate || item.money_raised || 0,
+                        Date: item.announced_on,
+                        Region: item.country
+                    };
+                    exportData.push(newItem);
+                });
+                exportToExcel(exportData, "Investment_Search_Result_Test.xlsx");
+                showResult('ExportInv 测试成功！文件已下载', 'success');
+            } catch (error) {
+                showResult('ExportInv 测试失败: ' + error.message, 'error');
+            }
+        }
+
+        function testExportMA() {
+            try {
+                const exportData = [];
+                mockAcquisitionData.forEach(item => {
+                    const newItem = {
+                        Acquired_Organization: item.acquiree_name,
+                        Acquiring_Organization: item.acquirer_name,
+                        Industry: item.acquiree_industry ? item.acquiree_industry.join(', ') : '',
+                        Pricing_$: item.price_accurate || item.price || 0,
+                        Date: item.announced_on,
+                        Region: item.acquiree_country
+                    };
+                    exportData.push(newItem);
+                });
+                exportToExcel(exportData, "Acquisition_Search_Result_Test.xlsx");
+                showResult('ExportMA 测试成功！文件已下载', 'success');
+            } catch (error) {
+                showResult('ExportMA 测试失败: ' + error.message, 'error');
+            }
+        }
+
+        function testExportIPO() {
+            try {
+                const exportData = [];
+                mockIPOData.forEach(item => {
+                    const newItem = {
+                        Company_Name: item.relationships?.funded_company?.item?.properties?.name || '',
+                        Stock_Exchange: item.properties?.stock_exchange_symbol || '',
+                        Stock_Symbol: item.properties?.stock_symbol || '',
+                        MoneyRaised_$: item.Price_accurate || 0,
+                        IPO_Date: item.properties?.went_public_on || ''
+                    };
+                    exportData.push(newItem);
+                });
+                exportToExcel(exportData, "IPO_Search_Result_Test.xlsx");
+                showResult('ExportIPO 测试成功！文件已下载', 'success');
+            } catch (error) {
+                showResult('ExportIPO 测试失败: ' + error.message, 'error');
+            }
+        }
+
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result ' + type;
+            resultDiv.style.display = 'block';
+
+            // 3秒后隐藏结果
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

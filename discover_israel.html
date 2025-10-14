@@ -89,26 +89,6 @@
             min-height: 100vh;
         }
 
-
-        /* Language Switch */
-        .language-switch {
-            cursor: pointer;
-            padding: 0.5rem 0.75rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition-base);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            border: 1px solid var(--border-color);
-            background-color: var(--background-white);
-            color: var(--text-color);
-        }
-
-        .language-switch:hover {
-            background-color: var(--color-light-blue);
-        }
-
         /* Search Container - Simplified */
         .search-container {
             background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-deep-blue) 100%);
@@ -1103,7 +1083,7 @@
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <div class="language-switch" @click="toggleLang">
                         <i class="fa-solid fa-globe"></i>
-                        <span id="lang-text">{{ currentLang === 'cn' ? 'EN' : '中文' }}</span>
+                        <span id="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
                     </div>
                 </div>
             </div>
@@ -1180,7 +1160,7 @@
                                     @blur="hideSearch"
                                     type="text"
                                     class="modern-search-input"
-                                    :placeholder="currentLang === 'cn' ? '搜索公司名称、产品或技术...' : 'Search company name, product or technology...'"
+                                    :placeholder="currentLang === 'zh' ? '搜索公司名称、产品或技术...' : 'Search company name, product or technology...'"
                                     autocomplete="off"
                                 >
                                 <input
@@ -1191,7 +1171,7 @@
                                     @blur="hideSearch"
                                     type="text"
                                     class="modern-search-input"
-                                    :placeholder="currentLang === 'cn' ? '搜索专利技术...' : 'Search patent technology...'"
+                                    :placeholder="currentLang === 'zh' ? '搜索专利技术...' : 'Search patent technology...'"
                                     autocomplete="off"
                                 >
                                 <button @click="performSearch" class="modern-search-btn">
@@ -1696,7 +1676,7 @@
                     categoryTranslateData: [],
 
                     // 界面状态
-                    currentLang: 'cn',
+                    currentLang: 'zh',
                     loading: false,
                     israelCompanyData: [],
                     loadingIsraelCompanies: false,
@@ -1861,7 +1841,7 @@
 
                 // 语言切换
                 toggleLang() {
-                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
                 },
 
@@ -2718,7 +2698,7 @@
 
                     // 加载保存的语言
                     const savedLang = localStorage.getItem('inno_lang');
-                    if (savedLang && ['cn', 'en'].includes(savedLang)) {
+                    if (savedLang && ['zh', 'en'].includes(savedLang)) {
                         this.currentLang = savedLang;
                     }
 

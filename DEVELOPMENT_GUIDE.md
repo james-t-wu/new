@@ -663,7 +663,7 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
         <div class="ms-auto d-flex align-items-center gap-3">
             <div class="language-switch" @click="toggleLang">
                 <i class="fa-solid fa-globe"></i>
-                <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
+                <span id="lang-text">{{ currentLang === 'zh' ? '中文' : 'EN' }}</span>
             </div>
         </div>
     </div>
@@ -695,7 +695,7 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
 ```html
 <div class="language-switch" @click="toggleLang">
     <i class="fa-solid fa-globe"></i>
-    <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
+    <span id="lang-text">{{ currentLang === 'zh' ? '中文' : 'EN' }}</span>
 </div>
 ```
 
@@ -716,7 +716,7 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
             class="form-control search_tech"
             v-model="searchTerm"
             @keyup.enter="searchTechTerm"
-            :placeholder="currentLang === 'cn' ? '搜索关键词...' : 'Search keywords...'"
+            :placeholder="currentLang === 'zh' ? '搜索关键词...' : 'Search keywords...'"
         >
         <span class="search-icon" @click="searchTechTerm">
             <i class="fa fa-send-o"></i>
@@ -768,19 +768,19 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
 <div class="feature-buttons">
     <button class="feature-btn" @click="action1">
         <i class="fas fa-icon1"></i>
-        {{ currentLang === 'cn' ? '按钮1' : 'Button 1' }}
+        {{ currentLang === 'zh' ? '按钮1' : 'Button 1' }}
     </button>
     <button class="feature-btn" @click="action2">
         <i class="fas fa-icon2"></i>
-        {{ currentLang === 'cn' ? '按钮2' : 'Button 2' }}
+        {{ currentLang === 'zh' ? '按钮2' : 'Button 2' }}
     </button>
     <button class="feature-btn" @click="action3">
         <i class="fas fa-icon3"></i>
-        {{ currentLang === 'cn' ? '按钮3' : 'Button 3' }}
+        {{ currentLang === 'zh' ? '按钮3' : 'Button 3' }}
     </button>
     <button class="feature-btn" @click="action4">
         <i class="fas fa-icon4"></i>
-        {{ currentLang === 'cn' ? '按钮4' : 'Button 4' }}
+        {{ currentLang === 'zh' ? '按钮4' : 'Button 4' }}
     </button>
 </div>
 ```
@@ -828,8 +828,8 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
 ```html
 <div class="robot-section">
     <img src="https://innonation.oss-cn-beijing.aliyuncs.com/ai-robot.png" alt="AI Robot" class="robot-image">
-    <h4>{{ currentLang === 'cn' ? 'AI 智能助手' : 'AI Assistant' }}</h4>
-    <p>{{ currentLang === 'cn' ? '描述文本' : 'Description text' }}</p>
+    <h4>{{ currentLang === 'zh' ? 'AI 智能助手' : 'AI Assistant' }}</h4>
+    <p>{{ currentLang === 'zh' ? '描述文本' : 'Description text' }}</p>
 </div>
 ```
 
@@ -899,7 +899,7 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
             <div class="ms-auto d-flex align-items-center gap-3">
                 <div class="language-switch" @click="toggleLang">
                     <i class="fa-solid fa-globe"></i>
-                    <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
+                    <span id="lang-text">{{ currentLang === 'zh' ? '中文' : 'EN' }}</span>
                 </div>
             </div>
         </div>
@@ -928,16 +928,16 @@ A: 使用统一的 `ApiClient` 类进行 API 调用，它包含了标准的错�
         createApp({
             data() {
                 return {
-                    currentLang: 'cn',
+                    currentLang: 'zh',
                     // 页面特定数据
                 }
             },
 
             methods: {
                 toggleLang() {
-                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
-                    document.getElementById('lang-text').textContent = this.currentLang === 'cn' ? '中文' : 'EN';
+                    document.getElementById('lang-text').textContent = this.currentLang === 'zh' ? '中文' : 'EN';
                 },
 
                 // 页面特定方法

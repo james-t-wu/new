@@ -1170,7 +1170,7 @@ body.menu-active.menu-collapsed {
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <div class="language-switch" @click="toggleLang">
                         <i class="fa-solid fa-globe"></i>
-                        <span class="lang-text">{{ currentLang === 'cn' ? 'EN' : 'CN' }}</span>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
                     </div>
                 </div>
             </div>
@@ -1187,7 +1187,7 @@ body.menu-active.menu-collapsed {
                         v-model="searchTerm"
                         @keyup.enter="searchTechTerm"
                         autocomplete="off"
-                        :placeholder="currentLang === 'cn' ? '搜索技术关键词...' : 'Search technology keywords...'"
+                        :placeholder="currentLang === 'zh' ? '搜索技术关键词...' : 'Search technology keywords...'"
                     >
                     <span class="search-icon" @click="searchTechTerm">
                         <i class="fa fa-send-o"></i>
@@ -1195,10 +1195,10 @@ body.menu-active.menu-collapsed {
                 </div>
 
                 <div class="language-control">
-                    <span class="hint-text">{{ currentLang === 'cn' ? '选择语言:' : 'Language:' }}</span>
+                    <span class="hint-text">{{ currentLang === 'zh' ? '选择语言:' : 'Language:' }}</span>
                     <div class="lang-selector">
-                        <button class="lang-option" :class="{active: selectedLang === 'cn'}" @click="changeLang('cn')">
-                            <i class="fa fa-check" v-if="selectedLang === 'cn'"></i>
+                        <button class="lang-option" :class="{active: selectedLang === 'zh'}" @click="changeLang('zh')">
+                            <i class="fa fa-check" v-if="selectedLang === 'zh'"></i>
                             <span>中文</span>
                         </button>
                         <span class="separator">/</span>
@@ -1211,7 +1211,7 @@ body.menu-active.menu-collapsed {
             </div>
 
             <!-- 技术名词按钮区域（仅显示3个快捷项，点击直接搜索） -->
-            <div class="button-container cn" v-show="selectedLang === 'cn'">
+            <div class="button-container cn" v-show="selectedLang === 'zh'">
                 <button v-for="tech in quickTechs_cn" @click="quickSearch(tech)">
                     {{tech.name}}
                 </button>
@@ -1229,7 +1229,7 @@ body.menu-active.menu-collapsed {
                     <div class="card-container" v-show="isLoading">
                         <div class="card-loading">
                             <i class="fas fa-spinner fa-spin"></i>
-                            <span>{{ currentLang === 'cn' ? '正在生成...' : 'Generating...' }}</span>
+                            <span>{{ currentLang === 'zh' ? '正在生成...' : 'Generating...' }}</span>
                         </div>
                     </div>
                     <div id="resultSvg"></div>
@@ -1240,7 +1240,7 @@ body.menu-active.menu-collapsed {
                     <div class="card-container">
                     <div class="card-loading" v-if="isSearchingMiddle">
                         <i class="fas fa-spinner fa-spin"></i>
-                        <span>{{ currentLang === 'cn' ? '正在加载图片...' : 'Loading image...' }}</span>
+                        <span>{{ currentLang === 'zh' ? '正在加载图片...' : 'Loading image...' }}</span>
                         </div>
                         <img id="ci-image" :src="ciImageSrc" alt="CI Image" v-if="!isSearchingMiddle">
                     </div>
@@ -1257,19 +1257,19 @@ body.menu-active.menu-collapsed {
                         <div class="left-section">
                             <button class="feature-btn" @click="viewRelateCompanies">
                                 <i class="fas fa-building"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术以色列公司' : 'Israeli companies related to similar tech' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术以色列公司' : 'Israeli companies related to similar tech' }}</span>
                             </button>
                             <button class="feature-btn" @click="viewRelateInvestments">
                                 <i class="fas fa-handshake"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，全球范围' : 'Investment to similar tech, global wise' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术近期融资，全球范围' : 'Investment to similar tech, global wise' }}</span>
                             </button>
                             <button class="feature-btn" disabled>
                                 <i class="fas fa-globe"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，以色列公司' : 'Investment to similar tech, Israeli companies' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术近期融资，以色列公司' : 'Investment to similar tech, Israeli companies' }}</span>
                             </button>
                             <button class="feature-btn" disabled>
                                 <i class="fas fa-handshake"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，中国公司' : 'Investment to similar tech, Chinese companies' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术近期融资，中国公司' : 'Investment to similar tech, Chinese companies' }}</span>
                             </button>
                         </div>
                     </div>
@@ -1309,21 +1309,21 @@ body.menu-active.menu-collapsed {
                         <div class="button-row">
                             <button class="feature-btn" @click="viewRelateCompanies" :disabled="isLoading">
                                 <i class="fas fa-building"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术以色列公司' : 'Israeli companies related to similar tech' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术以色列公司' : 'Israeli companies related to similar tech' }}</span>
                             </button>
                             <button class="feature-btn" @click="viewRelateGlobalInvestments" :disabled="isLoading">
                                 <i class="fas fa-globe"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，全球范围' : 'Investment to similar tech, global wise' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术近期融资，全球范围' : 'Investment to similar tech, global wise' }}</span>
                             </button>
                         </div>
                         <div class="button-row">
                             <button class="feature-btn" disabled>
                                 <i class="fas fa-handshake"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，以色列公司' : 'Investment to similar tech, Israeli companies' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术近期融资，以色列公司' : 'Investment to similar tech, Israeli companies' }}</span>
                             </button>
                             <button class="feature-btn" disabled>
                                 <i class="fas fa-handshake"></i>
-                                <span>{{ currentLang === 'cn' ? '类似技术近期融资，中国公司' : 'Investment to similar tech, Chinese companies' }}</span>
+                                <span>{{ currentLang === 'zh' ? '类似技术近期融资，中国公司' : 'Investment to similar tech, Chinese companies' }}</span>
                             </button>
                         </div>
                     </div>
@@ -1353,8 +1353,8 @@ body.menu-active.menu-collapsed {
             data() {
                 return {
                     pageLoading: true,
-                    currentLang: 'cn',
-                    selectedLang: 'cn',
+                    currentLang: 'zh',
+                    selectedLang: 'zh',
                     searchTerm: '',
                     searchingText: '',
                     isLoading: false,
@@ -1374,7 +1374,7 @@ body.menu-active.menu-collapsed {
                         {
                             name: '电光系统',
                             svg: `
-                                <div class="svg-wrapper cn">
+                                <div class="svg-wrapper zh">
                                     <div class="card">
                                         <div class="card-content">
                                             <div class="title">Smart Match 科技小百科</div>
@@ -1399,7 +1399,7 @@ body.menu-active.menu-collapsed {
                         {
                             name: '量子驱动的机密计算网络安全',
                             svg: `
-                                <div class="svg-wrapper cn">
+                                <div class="svg-wrapper zh">
                                     <div class="card">
                                         <div class="card-content">
                                             <div class="title">Smart Match 科技小百科</div>
@@ -1424,7 +1424,7 @@ body.menu-active.menu-collapsed {
                         {
                             name: '数据安全态势管理',
                             svg: `
-                                <div class="svg-wrapper cn">
+                                <div class="svg-wrapper zh">
                                     <div class="card">
                                         <div class="card-content">
                                             <div class="title">Smart Match 科技小百科</div>
@@ -1580,14 +1580,12 @@ body.menu-active.menu-collapsed {
                 }
             },
             async mounted() {
-                console.log('Technical card app initialized');
-
                 // 初始化语言
-                this.currentLang = localStorage.getItem('inno_lang') || 'cn';
+                this.currentLang = localStorage.getItem('inno_lang') || 'zh';
                 this.selectedLang = this.currentLang; // 同步初始化 selectedLang
 
                 // 初始化搜索文本
-                this.searchingText = this.currentLang === 'cn' ? '正在生成技术卡片...' : 'Generating tech card...';
+                this.searchingText = this.currentLang === 'zh' ? '正在生成技术卡片...' : 'Generating tech card...';
 
                 // 快捷技术名词直接触发搜索，无需预设svg映射
 
@@ -1609,7 +1607,7 @@ body.menu-active.menu-collapsed {
                     setTimeout(() => {
                         const resultSvg = document.getElementById('resultSvg');
                         if (resultSvg) {
-                            const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                            const defaultCard = this.currentLang === 'zh' ? this.defaultCardCN : this.defaultCardEN;
                             resultSvg.innerHTML = defaultCard;
                             console.log('Default card set successfully');
                         } else {
@@ -1618,7 +1616,7 @@ body.menu-active.menu-collapsed {
                             setTimeout(() => {
                                 const retryResultSvg = document.getElementById('resultSvg');
                                 if (retryResultSvg) {
-                                    const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                                    const defaultCard = this.currentLang === 'zh' ? this.defaultCardCN : this.defaultCardEN;
                                     retryResultSvg.innerHTML = defaultCard;
                                     console.log('Default card set on retry');
                                 }
@@ -1627,14 +1625,14 @@ body.menu-active.menu-collapsed {
                     }, 100);
                 },
                 toggleLang() {
-                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     this.selectedLang = this.currentLang; // 同步 selectedLang
                     localStorage.setItem('inno_lang', this.currentLang);
 
                     // 更新语言显示
                     const langText = document.querySelector('.lang-text');
                     if (langText) {
-                        langText.textContent = this.currentLang === 'cn' ? 'EN' : 'CN';
+                        langText.textContent = this.currentLang === 'zh' ? 'EN' : '中文';
                     }
                 },
                 async initPage() {
@@ -1689,7 +1687,7 @@ body.menu-active.menu-collapsed {
                     this.isSearchingMiddle = true;     // 中间图片loading
 
                     // 更新搜索文本为具体的技术术语
-                    this.searchingText = this.currentLang === 'cn' ?
+                    this.searchingText = this.currentLang === 'zh' ?
                         `正在生成"${this.searchTerm}"技术卡片...` :
                         `Generating "${this.searchTerm}" tech card...`;
 
@@ -1722,7 +1720,7 @@ body.menu-active.menu-collapsed {
                             // 如果API调用失败，显示默认卡片但不显示内容容器
                             const resultSvg = document.getElementById('resultSvg');
                             if (resultSvg) {
-                                const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                                const defaultCard = this.currentLang === 'zh' ? this.defaultCardCN : this.defaultCardEN;
                                 resultSvg.innerHTML = defaultCard;
                                 // 注意：这里不设置hasContent为true，确保content-container不显示
                             }
@@ -1749,7 +1747,7 @@ body.menu-active.menu-collapsed {
                         // 如果API调用失败，显示默认卡片但不显示内容容器
                         const resultSvg = document.getElementById('resultSvg');
                         if (resultSvg) {
-                            const defaultCard = this.currentLang === 'cn' ? this.defaultCardCN : this.defaultCardEN;
+                            const defaultCard = this.currentLang === 'zh' ? this.defaultCardCN : this.defaultCardEN;
                             resultSvg.innerHTML = defaultCard;
                             // 注意：这里不设置hasContent为true，确保content-container不显示
                         }
@@ -1766,14 +1764,14 @@ body.menu-active.menu-collapsed {
                         this.hasContent = false;
 
                         // 重置搜索文本
-                        this.searchingText = this.currentLang === 'cn' ? '正在生成技术卡片...' : 'Generating tech card...';
+                        this.searchingText = this.currentLang === 'zh' ? '正在生成技术卡片...' : 'Generating tech card...';
                     }
                 },
                 generateCardHTML(data, lang) {
                     try {
-                        const wrapperClass = lang === 'cn' ? 'cn' : 'en';
-                        const mainTitle = lang === 'cn' ? 'Smart Match 科技小百科' : 'Smart Match Tech Explainer';
-                        const chineseTitle = lang === 'cn' && data.chineseTitle ? `<div class="chinese-title">${data.chineseTitle}</div>` : '';
+                        const wrapperClass = lang === 'zh' ? 'zh' : 'en';
+                        const mainTitle = lang === 'zh' ? 'Smart Match 科技小百科' : 'Smart Match Tech Explainer';
+                        const chineseTitle = lang === 'zh' && data.chineseTitle ? `<div class="chinese-title">${data.chineseTitle}</div>` : '';
                         const englishTitle = data.englishTitle || '';
                         const explanation = data.explanation || '';
                         const icons = Array.isArray(data.icons) ? data.icons : [];
@@ -1886,7 +1884,7 @@ body.menu-active.menu-collapsed {
                 downloadAsPNG() {
                     const resultSvg = document.getElementById('resultSvg');
                     if (!resultSvg || !resultSvg.innerHTML.trim()) {
-                        alert(this.currentLang === 'cn' ? '请先搜索技术卡片内容' : 'Please search for technical card content first');
+                        alert(this.currentLang === 'zh' ? '请先搜索技术卡片内容' : 'Please search for technical card content first');
                         return;
                     }
 
@@ -1915,7 +1913,7 @@ body.menu-active.menu-collapsed {
                         document.body.removeChild(tempDiv);
                     }).catch(error => {
                         console.error('Download error:', error);
-                        alert(this.currentLang === 'cn' ? '下载失败，请重试' : 'Download failed, please try again');
+                        alert(this.currentLang === 'zh' ? '下载失败，请重试' : 'Download failed, please try again');
                         document.body.removeChild(tempDiv);
                     });
                 },
@@ -1934,7 +1932,7 @@ body.menu-active.menu-collapsed {
                         this.hasContent = true;
                         this.isPlaying = true;
                         this.messages = [];
-                        this.searchingText = this.selectedLang === 'cn'
+                        this.searchingText = this.selectedLang === 'zh'
                             ? '正在查询与卡片显示技术相关的以色列公司...'
                             : 'Checking Israeli companies related to displayed technology...';
 
@@ -1948,13 +1946,13 @@ body.menu-active.menu-collapsed {
                                     const formatted = this.formatMessage(content, true);
                                     this.messages = [{ id: Date.now(), text: formatted, isTyping: false }];
                                 } else {
-                                    this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '暂无相关数据' : 'No related data'), isTyping: false }];
+                                    this.messages = [{ id: Date.now(), text: (this.selectedLang === 'zh' ? '暂无相关数据' : 'No related data'), isTyping: false }];
                                 }
                             })
                             .catch(err => {
                                 console.error('viewRelateCompanies error:', err);
                                 this.isPlaying = false;
-                                this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '系统错误，请稍后重试' : 'System error, please retry later'), isTyping: false }];
+                                this.messages = [{ id: Date.now(), text: (this.selectedLang === 'zh' ? '系统错误，请稍后重试' : 'System error, please retry later'), isTyping: false }];
                             });
                     } catch (e) {
                         console.error('viewRelateCompanies init error:', e);
@@ -1973,7 +1971,7 @@ body.menu-active.menu-collapsed {
                         this.hasContent = true;
                         this.isPlaying = true;
                         this.messages = [];
-                        this.searchingText = this.selectedLang === 'cn'
+                        this.searchingText = this.selectedLang === 'zh'
                             ? '正在查询与卡片显示技术相关的以色列公司的近期融资情况...'
                             : 'Searching the latest funding developments related to the displayed technology (Israel companies)...';
 
@@ -1987,13 +1985,13 @@ body.menu-active.menu-collapsed {
                                     const formatted = this.formatMessage(content, false);
                                     this.messages = [{ id: Date.now(), text: formatted, isTyping: false }];
                                 } else {
-                                    this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '暂无相关数据' : 'No related data'), isTyping: false }];
+                                    this.messages = [{ id: Date.now(), text: (this.selectedLang === 'zh' ? '暂无相关数据' : 'No related data'), isTyping: false }];
                                 }
                             })
                             .catch(err => {
                                 console.error('viewRelateInvestments error:', err);
                                 this.isPlaying = false;
-                                this.messages = [{ id: Date.now(), text: (this.selectedLang === 'cn' ? '系统错误，请稍后重试' : 'System error, please retry later'), isTyping: false }];
+                                this.messages = [{ id: Date.now(), text: (this.selectedLang === 'zh' ? '系统错误，请稍后重试' : 'System error, please retry later'), isTyping: false }];
                             });
                     } catch (e) {
                         console.error('viewRelateInvestments init error:', e);
@@ -2008,9 +2006,9 @@ body.menu-active.menu-collapsed {
                         text = text.replace(/(?<![\d\.])\s*(https?:\/\/[^\s]+)(?![^<]*>|[^<>]*<\/a>)/g, (m, url)=>`<a href="${url}" target="_blank" class="reference-link small-link">${url}</a>`);
                         text = text.replace(/\n/g, '<br>');
                         if (moreFlag) {
-                            const q = this.searchTerm || (this.selectedLang === 'cn' ? '开发安全运维' : 'DevSecOps');
+                            const q = this.searchTerm || (this.selectedLang === 'zh' ? '开发安全运维' : 'DevSecOps');
                             const link = `ai_search_israel.html?query=${encodeURIComponent(q)}`;
-                            const more = this.selectedLang === 'cn' ? '查看更多' : 'View more';
+                            const more = this.selectedLang === 'zh' ? '查看更多' : 'View more';
                             text += `<br><a href="${link}" target="_blank" class="view-more-link">${more}</a>`;
                         }
                         return text;
@@ -2061,7 +2059,7 @@ body.menu-active.menu-collapsed {
                 // 备用方法：直接设置默认卡片
                 const resultSvg = document.getElementById('resultSvg');
                 if (resultSvg && !resultSvg.innerHTML.trim()) {
-                    const currentLang = localStorage.getItem('inno_lang') || 'cn';
+                    const currentLang = localStorage.getItem('inno_lang') || 'zh';
                     const defaultCardCN = `
                         <div class="svg-wrapper cn">
                             <div class="card">

@@ -96,28 +96,6 @@ body {
 }
 
 
-/* 语言切换按钮 */
-.language-switch {
-	cursor: pointer;
-	padding: 0.5rem 0.75rem;
-	border-radius: 0.375rem;
-	transition: all 0.2s;
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	font-weight: 500;
-	border: 1px solid var(--border-color);
-	background-color: var(--background-white);
-	color: var(--text-color);
-	height: 40px; /* 固定高度确保对齐 */
-	min-width: 60px;
-	justify-content: center;
-}
-
-.language-switch:hover {
-	background-color: var(--color-light-blue);
-}
-
 
 /* 卡片样式 */
 .card {
@@ -1555,7 +1533,7 @@ body.menu-active .navbar-brand {
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <div class="language-switch" @click="toggleLang">
                         <i class="fa-solid fa-globe"></i>
-                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
                     </div>
                     <button class="btn btn-outline-primary btn-sm" @click="openEditModal">
                         <i class="fas fa-pen"></i> {{ t('edit') }}
@@ -2168,12 +2146,6 @@ AOS.init({
 });
 
 // Vue App
-// 修正语言代码：'cn' -> 'zh'
-let savedLang = localStorage.getItem('inno_lang') || 'zh';
-if (savedLang === 'cn') {
-	savedLang = 'zh';
-	localStorage.setItem('inno_lang', 'zh');
-}
 const DEFAULT_LANG = savedLang;
 const FALLBACK_I18N = {
 	zh: { loadingCompanyInfo: '正在加载公司信息...' },

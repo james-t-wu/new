@@ -1002,27 +1002,6 @@ body {
     padding-right: 2rem;
 }
 
-/* Language Switch */
-.language-switch {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(25, 111, 166, 0.1);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition-base);
-}
-
-.language-switch:hover {
-    background: rgba(25, 111, 166, 0.2);
-}
-
-.lang-text {
-    font-weight: 600;
-    color: var(--color-brand-blue);
-}
-
 /* Custom Animations */
 .btn {
     position: relative;

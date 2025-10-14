@@ -681,6 +681,12 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
         }
+
+        /* Loading state should be clearly visible */
+        .position-fixed.bg-white.bg-opacity-75 {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body>
@@ -708,7 +714,7 @@
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <div class="language-switch" @click="toggleLang">
                         <i class="fa-solid fa-globe"></i>
-                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : 'ZH' }}</span>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
                     </div>
                 </div>
             </div>
@@ -847,7 +853,9 @@
                                                 </td>
                                                 <td :title="item.industryStr">{{item.industryStr}}</td>
                                                 <td>
-                                                    <span class="badge bg-secondary">{{item.funding_round}}</span>
+                                                    <a :href="item.detailURL || '#'" target="_blank" class="text-decoration-none">
+                                                        <span class="badge bg-secondary">{{item.funding_round}}</span>
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <span class="fw-bold text-success">{{item.money_raised}}</span>
@@ -981,7 +989,9 @@
                                         <tbody>
                                             <tr v-for="item in acquisitionData">
                                                 <td><a :href="'company_profile_israel.html?cId=' + item.acquiree_id" target="_blank">{{item.acquiree_name}}</a></td>
-                                                <td><a :href="'company_profile_israel.html?cId=' + item.acquirer_id" target="_blank">{{item.acquirer_name}}</a></td>
+                                                <td>
+                                                    <a :href="'acquisition_details_israel.html?id=' + item._id" target="_blank">{{item.acquirer_name}}</a>
+                                                </td>
                                                 <td :title="item.industryStr">{{item.industryStr}}</td>
                                                 <td>{{item.price}}</td>
                                                 <td>{{item.announced_on}}</td>
@@ -1186,9 +1196,6 @@
 
     <!-- 全局菜单组件 -->
     <script src="common/js/inno-global-menu.js"></script>
-
-    <!-- Custom JavaScript -->
-    <script src="js/deal_israel_vue3.js"></script>
 
     <!-- Initialize AOS -->
     <script>
@@ -1792,10 +1799,10 @@
 
                 // Excel导出相关功能
                 ExportResultInv() {
-                    if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
-                        alert('导出功能仅对付费用户开放');
-                        return;
-                    }
+                    // if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
+                    //     alert('导出功能仅对付费用户开放');
+                    //     return;
+                    // }
 
                     if (this.fundingData.length > 0) {
                         const exportData = [];
@@ -1809,11 +1816,11 @@
                                 Date: item.announced_on,
                                 Region: item.country
                             };
-                            if (common.userGroup && common.userGroup.toLowerCase() == 'admin') {
-                                newItem.CompanyID = item._id;
-                                newItem.CompanyURL = "https://ai.innonation.io/dashboard/" + (item.URL || '').replace('html','aspx');
-                                newItem.FundingRoundURL = "https://ai.innonation.io/dashboard/" + (item.detailURL || '').replace('html', 'aspx');
-                            }
+                            // if (common.userGroup && common.userGroup.toLowerCase() == 'admin') {
+                            //     newItem.CompanyID = item._id;
+                            //     newItem.CompanyURL = "https://ai.innonation.io/dashboard/" + (item.URL || '').replace('html','aspx');
+                            //     newItem.FundingRoundURL = "https://ai.innonation.io/dashboard/" + (item.detailURL || '').replace('html', 'aspx');
+                            // }
                             exportData.push(newItem);
                         });
                         this.exportToExcel(exportData, "Investment_Search_Result.xlsx");
@@ -1821,10 +1828,10 @@
                 },
 
                 ExportResultMa() {
-                    if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
-                        alert('导出功能仅对付费用户开放');
-                        return;
-                    }
+                    // if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
+                    //     alert('导出功能仅对付费用户开放');
+                    //     return;
+                    // }
 
                     if (this.acquisitionData.length > 0) {
                         const exportData = [];
@@ -1837,11 +1844,11 @@
                                 Date: item.announced_on,
                                 Region: item.acquiree_country
                             };
-                            if (common.userGroup && common.userGroup.toLowerCase() == 'admin') {
-                                newItem.AcquiredOrgURL = "https://ai.innonation.io/dashboard/company_profile_israel.aspx?cId=" + item.acquiree_id;
-                                newItem.AcquiringOrgURL = "https://ai.innonation.io/dashboard/company_profile_israel.aspx?cId=" + item.acquirer_id;
-                                newItem.AcquisitionDetailURL = "https://ai.innonation.io/dashboard/acquisition_details_israel.aspx?id=" + item._id;
-                            }
+                            // if (common.userGroup && common.userGroup.toLowerCase() == 'admin') {
+                            //     newItem.AcquiredOrgURL = "https://ai.innonation.io/dashboard/company_profile_israel.aspx?cId=" + item.acquiree_id;
+                            //     newItem.AcquiringOrgURL = "https://ai.innonation.io/dashboard/company_profile_israel.aspx?cId=" + item.acquirer_id;
+                            //     newItem.AcquisitionDetailURL = "https://ai.innonation.io/dashboard/acquisition_details_israel.aspx?id=" + item._id;
+                            // }
                             exportData.push(newItem);
                         });
                         this.exportToExcel(exportData, "Acquisition_Search_Result.xlsx");
@@ -1849,10 +1856,10 @@
                 },
 
                 ExportResultIPO() {
-                    if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
-                        alert('导出功能仅对付费用户开放');
-                        return;
-                    }
+                    // if (common.userGroup && (common.userGroup.toLowerCase() == 'free_user' || common.userGroup.toLowerCase() == 'rm' || common.userGroup.toLowerCase() == 'ry')) {
+                    //     alert('导出功能仅对付费用户开放');
+                    //     return;
+                    // }
 
                     if (this.ipoData.length > 0) {
                         const exportData = [];

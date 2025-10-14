@@ -21,7 +21,7 @@
     // ===== 配置常量 =====
     const CONTAINER_SELECTOR = '#inno-global-menu';
     	let lang = (localStorage.getItem('inno_lang') || 'zh').toLowerCase();
-	if (lang === 'cn') lang = 'zh';
+	if (lang === 'zh') lang = 'zh';
 	const DEFAULT_LANG = lang;
     const I18N_BASE_PATH = 'common/i18n/menu.';
 

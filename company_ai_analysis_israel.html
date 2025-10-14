@@ -40,27 +40,6 @@
             min-height: 100vh;
         }
 
-
-        /* 语言切换按钮 */
-        .language-switch {
-            cursor: pointer;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            border: 1px solid var(--border-color);
-            background-color: var(--background-white);
-            color: var(--text-color);
-        }
-
-        .language-switch:hover {
-            background-color: var(--color-light-blue);
-        }
-
-
        
 
         /* 页面容器 */
@@ -687,7 +666,7 @@
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <div class="language-switch" @click="toggleLang">
                         <i class="fa-solid fa-globe"></i>
-                        <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
+                        <span id="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
                     </div>
                 </div>
             </div>
@@ -700,7 +679,7 @@
                     <div class="card-header">
                         <h1 class="card-title">
                             <i class="fas fa-brain"></i>
-                            {{ currentLang === 'cn' ? '公司智能分析报告' : 'AI Powered Company Analysis Report' }}
+                            {{ currentLang === 'zh' ? '公司智能分析报告' : 'AI Powered Company Analysis Report' }}
                         </h1>
                     </div>
                     <div class="card-body">
@@ -711,7 +690,7 @@
                                     <!-- 公司名称 -->
                                     <div class="form-group">
                                         <label for="company_name">
-                                            {{ currentLang === 'cn' ? '公司名称' : 'Company Name' }}
+                                            {{ currentLang === 'zh' ? '公司名称' : 'Company Name' }}
                                             <span class="required-star">*</span>
                                         </label>
                                         <input
@@ -720,7 +699,7 @@
                                             id="company_name"
                                             v-model="company_name"
                                             required
-                                            :placeholder="currentLang === 'cn' ? '请输入公司名称' : 'Enter company name'"
+                                            :placeholder="currentLang === 'zh' ? '请输入公司名称' : 'Enter company name'"
                                         >
                                     </div>
 
@@ -728,7 +707,7 @@
                                     <div class="hebrew-selection-group">
                                         <div class="hebrew-selection-row">
                                             <label for="output_hebrew" class="hebrew-selection-label">
-                                                {{ currentLang === 'cn' ? '希伯来语输出' : 'Hebrew Output' }}
+                                                {{ currentLang === 'zh' ? '希伯来语输出' : 'Hebrew Output' }}
                                             </label>
                                             <select class="form-control hebrew-select" id="output_hebrew" v-model="output_hebrew">
                                                 <option value="yes">Yes</option>
@@ -736,28 +715,28 @@
                                             </select>
                                         </div>
                                         <div class="helper-text">
-                                            {{ currentLang === 'cn' ? '结果包含中文和英文，如需希伯来语版本请选择YES。' : 'Result is in Chinese and English, please choose YES if you also need in Hebrew version.' }}
+                                            {{ currentLang === 'zh' ? '结果包含中文和英文，如需希伯来语版本请选择YES。' : 'Result is in Chinese and English, please choose YES if you also need in Hebrew version.' }}
                                         </div>
                                     </div>
 
                                     <!-- 公司介绍 -->
                                     <div class="form-group">
                                         <label for="company_introduction">
-                                            {{ currentLang === 'cn' ? '公司相关素材（推荐）' : 'Company Materials (Recommend)' }}
+                                            {{ currentLang === 'zh' ? '公司相关素材（推荐）' : 'Company Materials (Recommend)' }}
                                         </label>
                                         <textarea
                                             class="form-control"
                                             id="company_introduction"
                                             v-model="company_introcution"
                                             rows="6"
-                                            :placeholder="currentLang === 'cn' ? '请输入公司介绍、产品信息或其他相关材料...' : 'Enter company introduction, product information or other relevant materials...'"
+                                            :placeholder="currentLang === 'zh' ? '请输入公司介绍、产品信息或其他相关材料...' : 'Enter company introduction, product information or other relevant materials...'"
                                         ></textarea>
                                     </div>
 
                                     <!-- 文件上传 -->
                                     <div class="form-group">
                                         <label for="file-upload">
-                                            {{ currentLang === 'cn' ? '上传公司相关附件（可选）' : 'Upload company file（Optional）' }}
+                                            {{ currentLang === 'zh' ? '上传公司相关附件（可选）' : 'Upload company file（Optional）' }}
                                         </label>
                                         <div class="file-upload-wrapper" id="upload-wrapper">
                                             <input
@@ -770,10 +749,10 @@
                                             <div class="file-upload-content" v-if="!selectedFile">
                                                 <i class="fas fa-cloud-upload upload-icon"></i>
                                                 <div class="upload-text">
-                                                    {{ currentLang === 'cn' ? '点击或拖拽文件到此处' : 'Click or drag files here' }}
+                                                    {{ currentLang === 'zh' ? '点击或拖拽文件到此处' : 'Click or drag files here' }}
                                                 </div>
                                                 <div class="upload-hint">
-                                                    {{ currentLang === 'cn' ? '支持 .txt, .doc, .docx, .pdf 格式' : 'Support .txt, .doc, .docx, .pdf formats' }}
+                                                    {{ currentLang === 'zh' ? '支持 .txt, .doc, .docx, .pdf 格式' : 'Support .txt, .doc, .docx, .pdf formats' }}
                                                 </div>
                                             </div>
                                             <div v-if="selectedFile" class="selected-file-container">
@@ -784,7 +763,7 @@
                                                 <button type="button"
                                                         class="delete-file-btn"
                                                         @click.prevent.stop="deleteFile"
-                                                        :title="currentLang === 'cn' ? '删除文件' : 'Delete file'">
+                                                        :title="currentLang === 'zh' ? '删除文件' : 'Delete file'">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </div>
@@ -794,27 +773,27 @@
                                     <!-- URL输入 -->
                                     <div class="form-group">
                                         <label for="URL_official_web">
-                                            {{ currentLang === 'cn' ? '公司网站链接（可选）' : 'Company website link (Optional)' }}
+                                            {{ currentLang === 'zh' ? '公司网站链接（可选）' : 'Company website link (Optional)' }}
                                         </label>
                                         <input
                                             type="url"
                                             class="form-control"
                                             id="URL_official_web"
                                             v-model="URL_official_web"
-                                            :placeholder="currentLang === 'cn' ? 'https://example.com' : 'https://example.com'"
+                                            :placeholder="currentLang === 'zh' ? 'https://example.com' : 'https://example.com'"
                                         >
                                     </div>
 
                                     <div class="form-group">
                                         <label for="URL_anylink">
-                                            {{ currentLang === 'cn' ? '相关链接（可选）' : 'Related link (Optional)' }}
+                                            {{ currentLang === 'zh' ? '相关链接（可选）' : 'Related link (Optional)' }}
                                         </label>
                                         <input
                                             type="url"
                                             class="form-control"
                                             id="URL_anylink"
                                             v-model="URL_anylink"
-                                            :placeholder="currentLang === 'cn' ? '新闻报道、介绍文章等链接' : 'News articles, introduction links, etc.'"
+                                            :placeholder="currentLang === 'zh' ? '新闻报道、介绍文章等链接' : 'News articles, introduction links, etc.'"
                                         >
                                     </div>
 
@@ -823,11 +802,11 @@
                                         <button type="submit" class="btn btn-primary" :disabled="loading">
                                             <span v-if="loading">
                                                 <i class="fas fa-spinner fa-spin"></i>
-                                                {{ currentLang === 'cn' ? '分析中...' : 'Analyzing...' }}
+                                                {{ currentLang === 'zh' ? '分析中...' : 'Analyzing...' }}
                                             </span>
                                             <span v-else>
                                                 <i class="fas fa-rocket"></i>
-                                                {{ currentLang === 'cn' ? '开始分析' : 'Start Analysis' }}
+                                                {{ currentLang === 'zh' ? '开始分析' : 'Start Analysis' }}
                                             </span>
                                         </button>
                                     </div>
@@ -838,51 +817,51 @@
                             <div class="intro-section">
                                 <h3>
                                     <i class="fas fa-lightbulb"></i>
-                                    {{ currentLang === 'cn' ? '工具介绍' : 'About This Tool' }}
+                                    {{ currentLang === 'zh' ? '工具介绍' : 'About This Tool' }}
                                 </h3>
                                 <p>
-                                    {{ currentLang === 'cn'
+                                    {{ currentLang === 'zh'
                                         ? '公司简介生成器是一款智能工具，帮助您快速生成高质量、多语言版本的公司简介，适用于需要简短而专业的公司介绍的使用场景（如演讲、报告、官网等）。'
                                         : 'The company profile generator is an intelligent tool that helps you quickly generate high-quality company profiles in multiple languages. It is applicable to usage scenarios where brief yet professional company introductions are needed (such as in speeches, reports, official websites, etc.).'
                                     }}
                                 </p>
 
                                 <h4 style="color: var(--color-deep-blue); font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 1rem 0;">
-                                    {{ currentLang === 'cn' ? '使用方式：' : 'How to Use:' }}
+                                    {{ currentLang === 'zh' ? '使用方式：' : 'How to Use:' }}
                                 </h4>
 
                                 <p>
                                     <strong>
-                                        {{ currentLang === 'cn'
+                                        {{ currentLang === 'zh'
                                             ? '1. 直接输入：'
                                             : '1. Direct Input:'
                                         }}
                                     </strong>
-                                    {{ currentLang === 'cn'
+                                    {{ currentLang === 'zh'
                                         ? '输入公司名称和相关材料到文本框中。'
                                         : 'Enter the company name and paste relevant materials into the text box.'
                                     }}
                                 </p>
                                 <p>
                                     <strong>
-                                        {{ currentLang === 'cn'
+                                        {{ currentLang === 'zh'
                                             ? '2. 上传文档：'
                                             : '2. Upload Documents:'
                                         }}
                                     </strong>
-                                    {{ currentLang === 'cn'
+                                    {{ currentLang === 'zh'
                                         ? '支持上传PDF、Word等文档，自动提取并优化内容。'
                                         : 'Upload files to extract company information and refine content.'
                                     }}
                                 </p>
                                 <p>
                                     <strong>
-                                        {{ currentLang === 'cn'
+                                        {{ currentLang === 'zh'
                                             ? '3. 提供链接：'
                                             : '3. Submit Links:'
                                         }}
                                     </strong>
-                                    {{ currentLang === 'cn'
+                                    {{ currentLang === 'zh'
                                         ? '提供公司网站、新闻报道等链接，自动提取关键信息。'
                                         : 'Provide company websites or news links for automatic information extraction.'
                                     }}
@@ -898,7 +877,7 @@
                                 <div class="dot"></div>
                             </div>
                             <div class="loading-text">
-                                {{ currentLang === 'cn' ? '正在分析公司信息...' : 'Analyzing company information...' }}
+                                {{ currentLang === 'zh' ? '正在分析公司信息...' : 'Analyzing company information...' }}
                             </div>
                         </div>
 
@@ -962,7 +941,7 @@
                     }
 
                     const retryDelay = Math.min(2000 * Math.pow(2, retry), 30000);
-                    const loadingText = app.currentLang === 'cn'
+                    const loadingText = app.currentLang === 'zh'
                         ? `请求重试中 (${retry + 1}/${maxRetries})...`
                         : `Retrying request (${retry + 1}/${maxRetries})...`;
 
@@ -975,7 +954,7 @@
         const app = createApp({
             data() {
                 return {
-                    currentLang: 'cn',
+                    currentLang: 'zh',
                     pageLoading: true,  // 页面初始加载状态
                     URL_official_web: '',
                     company_name: '',
@@ -1002,8 +981,8 @@
                 async initializePage() {
                     try {
                         // 初始化语言
-                        this.currentLang = localStorage.getItem('inno_lang') || 'cn';
-                        document.getElementById('lang-text').textContent = this.currentLang === 'cn' ? '中文' : 'EN';
+                        this.currentLang = localStorage.getItem('inno_lang') || 'zh';
+                        document.getElementById('lang-text').textContent = this.currentLang === 'zh' ? 'EN' : '中文';
 
                         // 等待DOM完全加载
                         await this.$nextTick();
@@ -1065,9 +1044,9 @@
                 },
 
                 toggleLang() {
-                    this.currentLang = this.currentLang === 'cn' ? 'en' : 'cn';
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
-                    document.getElementById('lang-text').textContent = this.currentLang === 'cn' ? '中文' : 'EN';
+                    document.getElementById('lang-text').textContent = this.currentLang === 'zh' ? 'EN' : '中文';
                 },
 
                 initializeFileUpload() {
@@ -1135,7 +1114,7 @@
                         document.getElementById('company_name').style.borderColor = 'var(--error-color)';
                         this.loading = false;
                         await this.showNotification(
-                            this.currentLang === 'cn' ? '公司名必须填写' : 'Company name is required',
+                            this.currentLang === 'zh' ? '公司名必须填写' : 'Company name is required',
                             'error'
                         );
                         return;
@@ -1151,7 +1130,7 @@
                     if (!hasUrl && !hasIntro && !hasFile) {
                         this.loading = false;
                         await this.showNotification(
-                            this.currentLang === 'cn'
+                            this.currentLang === 'zh'
                                 ? '请至少提供以下一项：\n1. 公司相关素材\n2. 上传公司相关附件\n3. 网络连接'
                                 : 'Please provide at least one of the following:\n1. Company materials\n2. Upload company files\n3. Network links',
                             'error'
@@ -1257,7 +1236,7 @@
                             });
                         } else {
                             await this.showNotification(
-                                response.data.Message || (this.currentLang === 'cn' ? '未知错误' : 'Unknown error'),
+                                response.data.Message || (this.currentLang === 'zh' ? '未知错误' : 'Unknown error'),
                                 'error'
                             );
                         }
@@ -1265,13 +1244,13 @@
                         console.error('Analysis failed:', error);
                         let errorMsg;
                         if (error.code === 'ECONNABORTED') {
-                            errorMsg = this.currentLang === 'cn' ? '请求超时，请稍后重试' : 'Request timeout, please try again later';
+                            errorMsg = this.currentLang === 'zh' ? '请求超时，请稍后重试' : 'Request timeout, please try again later';
                         } else if (error.response) {
-                            errorMsg = this.currentLang === 'cn' ? `请求失败: ${error.response.status}` : `Request failed: ${error.response.status}`;
+                            errorMsg = this.currentLang === 'zh' ? `请求失败: ${error.response.status}` : `Request failed: ${error.response.status}`;
                         } else if (error.request) {
-                            errorMsg = this.currentLang === 'cn' ? '网络连接失败，请检查网络' : 'Network connection failed, please check your network';
+                            errorMsg = this.currentLang === 'zh' ? '网络连接失败，请检查网络' : 'Network connection failed, please check your network';
                         } else {
-                            errorMsg = this.currentLang === 'cn' ? '请求发生错误：' + (error.message || '未知错误') : 'Request error: ' + (error.message || 'Unknown error');
+                            errorMsg = this.currentLang === 'zh' ? '请求发生错误：' + (error.message || '未知错误') : 'Request error: ' + (error.message || 'Unknown error');
                         }
                         await this.showNotification(errorMsg, 'error');
                     } finally {

@@ -38,7 +38,7 @@
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <div class="language-switch" @click="toggleLang">
                         <i class="fa-solid fa-globe"></i>
-                        <span class="lang-text">{{ t(currentLang === 'zh' ? 'EN' : 'ZH') }}</span>
+                        <span class="lang-text">{{ t(currentLang === 'zh' ? 'EN' : '中文') }}</span>
                     </div>
                 </div>
             </div>
@@ -168,7 +168,7 @@
                     try {
                         const response = await axios.get('../data/locale.json');
                         // 根据当前语言选择正确的翻译对象
-                        const langKey = this.currentLang === 'zh' ? 'cn' : 'en';
+                        const langKey = this.currentLang === 'zh' ? 'zh' : 'en';
                         this.translations = response.data[langKey] || {};
                         this.inputPlaceholder = this.t('assistant-ask');
                     } catch (error) {
