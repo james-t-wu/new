@@ -550,41 +550,66 @@
                                         <span name="message-next-page">{{ t('next') }}</span>
                                     </button>
                                 </div>
-
-                                <!-- 详情模态框 -->
-                                <div class="detail-modal" v-if="showModal" @click.self="closeModal">
-                                    <div class="modal-backdrop" @click="closeModal"></div>
-                                    <div class="modal-content" :class="{ 'modal-closing': isClosing }">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" v-if="!isEnglish">{{ selectedItem.ChineseTitle }}</h4>
-                                            <h4 class="modal-title" v-if="isEnglish">{{ selectedItem.EnglishTitle }}</h4>
-                                            <div class="close" @click="closeModal">
-                                                <i class="fas fa-times"></i>
-                                            </div>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="modal-text" v-if="!isEnglish" v-html="selectedItem.ChineseContent"></div>
-                                            <div class="modal-text" v-if="isEnglish" v-html="selectedItem.EnglishContent"></div>
-
-                                            <div class="modal-references" v-if="selectedItem.Reference">
-                                                <strong>{{ t('references') }}:</strong>
-                                                <div v-for="ref in selectedItem.Reference.split('\n')" :key="ref">
-                                                    <a :href="ref" target="_blank" class="reference-link">{{ ref }}</a>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <div class="modal-date">
-                                                    <strong>{{ t('news-date') }}:</strong> {{ selectedItem.Date }}
-                                                </div>
-                                                <div class="modal-type">
-                                                    <strong>{{ t('news-type') }}:</strong> {{ selectedItem.Type }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详情模态框 - 移到根层级 -->
+        <div class="detail-modal" v-if="showModal" :class="{'modal-closing': isClosing}">
+            <div class="modal-backdrop" @click="closeModal"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" @click="closeModal">&times;</span>
+                    <h4 class="modal-title" v-if="!isEnglish">{{ selectedItem.ChineseTitle }}</h4>
+                    <h4 class="modal-title" v-if="isEnglish">{{ selectedItem.EnglishTitle }}</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 新闻内容 -->
+                    <div class="modal-content-section">
+                        <div class="modal-text" v-if="!isEnglish">
+                            {{ selectedItem.ChineseContent || selectedItem.ChineseSummary || '暂无内容' }}
+                        </div>
+                        <div class="modal-text" v-if="isEnglish">
+                            {{ selectedItem.EnglishContent || selectedItem.EnglishSummary || 'No content available' }}
+                        </div>
+                    </div>
+
+                    <!-- 原文链接 -->
+                    <div class="modal-original-link" v-if="selectedItem.Url">
+                        <a :href="selectedItem.Url" target="_blank" class="original-link-button">
+                            <i class="fas fa-external-link-alt me-2"></i>
+                            <span v-if="!isEnglish">查看原文</span>
+                            <span v-if="isEnglish">Read Original Article</span>
+                        </a>
+                    </div>
+
+                    <!-- 参考资料 -->
+                    <div class="modal-references" v-if="selectedItem.Reference">
+                        <div class="references-title">
+                            <i class="fas fa-link me-2"></i>
+                            <strong>{{ t('references') }}</strong>
+                        </div>
+                        <div class="references-list">
+                            <div v-for="(ref, index) in selectedItem.Reference.split('\n')" :key="index" class="reference-item">
+                                <a :href="ref" target="_blank" class="reference-link">
+                                    <i class="fas fa-angle-right me-2"></i>{{ ref }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 元信息 -->
+                    <div class="modal-meta">
+                        <div class="modal-date">
+                            <i class="far fa-calendar-alt me-2"></i>
+                            <strong>{{ t('news-date') }}:</strong> {{ selectedItem.Date }}
+                        </div>
+                        <div class="modal-type" v-if="selectedItem.Type">
+                            <i class="fas fa-tag me-2"></i>
+                            <strong>{{ t('news-type') }}:</strong> {{ selectedItem.Type }}
                         </div>
                     </div>
                 </div>
