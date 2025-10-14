@@ -1523,6 +1523,12 @@ body.menu-active .navbar-brand {
 	.modern-menu-link { padding: 12px 18px; }
 	.modern-submenu-link { padding: 10px 18px 10px 56px; }
 }
+
+/* Loading state should be clearly visible */
+.position-fixed.bg-white.bg-opacity-75 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(5px);
+}
     </style>
 </head>
 <body>
@@ -1537,7 +1543,6 @@ body.menu-active .navbar-brand {
                 <div class="spinner-border text-primary mb-3" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                <p class="text-muted fw-medium">{{ t('updating') }}</p>
             </div>
         </div>
 

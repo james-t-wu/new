@@ -130,14 +130,30 @@
             margin-bottom: 1rem;
             color: var(--border-color);
         }
+
+        /* Loading state should be clearly visible */
+        .position-fixed.bg-white.bg-opacity-75 {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body>
-    <!-- 全局菜单挂载点 -->
-    <div id="inno-global-menu"></div>
-
     <!-- Vue 应用挂载点 -->
     <div id="app" v-cloak>
+        <!-- 全局菜单挂载点 -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        
         <!-- 导航栏 -->
         <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container">
@@ -152,19 +168,6 @@
                 </div>
             </div>
         </nav>
-
-        <!-- Loading State -->
-        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
-            <div class="text-center">
-                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
-                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                
-                
-                <p class="text-muted fw-medium">{{ t('loading') || 'Loading funding round details...' }}</p>
-            </div>
-        </div>
 
         <!-- 主要内容区域 -->
         <div class="container page-container">

@@ -1080,6 +1080,16 @@
         <!-- 全局菜单挂载点（公共组件渲染） -->
         <div id="inno-global-menu"></div>
 
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
         <!-- 隐藏的元素用于兼容原始脚本 -->
         <div id="translate_trigger" style="display: none;">中文</div>
         <div id="discover_israel" style="display: contents;"></div>
@@ -1098,19 +1108,6 @@
                 </div>
             </div>
         </nav>
-
-        <!-- Loading State -->
-        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
-            <div class="text-center">
-                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
-                <div class="spinner-border text-primary mb-3" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                
-                
-                <p>{{ t('loading') }}</p>
-            </div>
-        </div>
 
         <!-- Main Content -->
         <div class="main-content page-container">
@@ -1928,6 +1925,17 @@
                 InitRecentView: function() {
                     const _self = this;
                     _self.recentViewData = [];
+
+                    // 检查是否已登录
+                    const apiToken = getCookie('api_token');
+                    if (!apiToken) {
+                        // 未登录，不加载最近查看数据
+                        console.log('Not logged in, skipping recent views');
+                        _self.showRecentFlag = false;
+                        common.hideMask();
+                        return;
+                    }
+
                     _self.showRecentFlag = true;
                     // 从API获取最近查看的数据
                     axios.get(common.APIDomain + "/api/User/Get" + _self.recentViewType + "RecentViews?size=15")
@@ -1941,7 +1949,7 @@
                             common.hideMask();
                         })
                         .catch(function(error) {
-                            console.error('Error loading recent views:', error);
+                            console.log('Failed to load recent views:', error.message);
                             _self.showRecentFlag = false;
                             common.hideMask();
                         });
@@ -2602,60 +2610,71 @@
                 async loadIsraelCompanies() {
                     // Load Israel company data from API (recent funding rounds)
                     this.loadingIsraelCompanies = true;
+
+                    // 检查是否已登录
+                    const apiToken = getCookie('api_token');
+
                     try {
-                        // 计算日期范围：当前日期往前3个月
-                        const endDate = new Date();
-                        const startDate = new Date();
-                        startDate.setMonth(startDate.getMonth() - 3);
+                        if (apiToken) {
+                            // 已登录，尝试调用 API
+                            try {
+                                // 计算日期范围：当前日期往前3个月
+                                const endDate = new Date();
+                                const startDate = new Date();
+                                startDate.setMonth(startDate.getMonth() - 3);
 
-                        // 格式化日期为 YYYY-MM-DD
-                        const formatDate = (date) => {
-                            const year = date.getFullYear();
-                            const month = String(date.getMonth() + 1).padStart(2, '0');
-                            const day = String(date.getDate()).padStart(2, '0');
-                            return `${year}-${month}-${day}`;
-                        };
-
-                        const sd = formatDate(startDate);
-                        const ed = formatDate(endDate);
-
-                        // 调用 Funding API
-                        const url = `${common.APIDomain}/api/Funding/Search?page=1&pageSize=15&sd=${sd}&ed=${ed}&country=Israel`;
-
-                        const response = await axios.get(url);
-
-                        if (response.data.ReturnCode === 0 && response.data.Data && response.data.Data.data) {
-                            // 将 API 返回的数据映射为与 JSON 文件一致的格式
-                            this.israelCompanyData = response.data.Data.data.map(item => {
-                                return {
-                                    id: item.company_id || item._id,
-                                    name: item.company_name || 'Unknown',
-                                    category: item.industry && item.industry.length > 0 ? item.industry.join(', ') : 'Technology',
-                                    type: 'Company',
-                                    logo: item.logo || '',
-                                    // 保留原始数据以便后续使用
-                                    funding_round: item.funding_round,
-                                    money_raised: item.money_raised,
-                                    announced_on: item.announced_on
+                                // 格式化日期为 YYYY-MM-DD
+                                const formatDate = (date) => {
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    return `${year}-${month}-${day}`;
                                 };
-                            });
+
+                                const sd = formatDate(startDate);
+                                const ed = formatDate(endDate);
+
+                                // 调用 Funding API
+                                const url = `${common.APIDomain}/api/Funding/Search?page=1&pageSize=15&sd=${sd}&ed=${ed}&country=Israel`;
+
+                                const response = await axios.get(url);
+
+                                if (response.data.ReturnCode === 0 && response.data.Data && response.data.Data.data) {
+                                    // 将 API 返回的数据映射为与 JSON 文件一致的格式
+                                    this.israelCompanyData = response.data.Data.data.map(item => {
+                                        return {
+                                            id: item.company_id || item._id,
+                                            name: item.company_name || 'Unknown',
+                                            category: item.industry && item.industry.length > 0 ? item.industry.join(', ') : 'Technology',
+                                            type: 'Company',
+                                            logo: item.logo || '',
+                                            // 保留原始数据以便后续使用
+                                            funding_round: item.funding_round,
+                                            money_raised: item.money_raised,
+                                            announced_on: item.announced_on
+                                        };
+                                    });
+                                } else {
+                                    throw new Error('API returned no data');
+                                }
+                            } catch (apiError) {
+                                console.log('API call failed, using fallback data');
+                                // API 失败，降级到 JSON 文件
+                                const fallbackResponse = await axios.get("/data/company_israel.json?timestamp=202302202");
+                                this.israelCompanyData = fallbackResponse.data['Data'];
+                            }
                         } else {
-                            // 如果 API 调用失败，使用空数组
-                            this.israelCompanyData = [];
+                            // 未登录，直接使用静态 JSON 文件数据
+                            console.log('Not logged in, using static data');
+                            const fallbackResponse = await axios.get("/data/company_israel.json?timestamp=202302202");
+                            this.israelCompanyData = fallbackResponse.data['Data'];
                         }
 
                         this.loadingIsraelCompanies = false;
                         common.hideMask();
                     } catch (error) {
                         console.error('Error loading Israel companies:', error);
-                        // API 失败时，尝试降级使用 JSON 文件
-                        try {
-                            const fallbackResponse = await axios.get("/data/company_israel.json?timestamp=202302202");
-                            this.israelCompanyData = fallbackResponse.data['Data'];
-                        } catch (fallbackError) {
-                            console.error('Fallback also failed:', fallbackError);
-                            this.israelCompanyData = [];
-                        }
+                        this.israelCompanyData = [];
                         this.loadingIsraelCompanies = false;
                         common.hideMask();
                     }

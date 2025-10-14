@@ -623,3 +623,10 @@
         border: 1px solid #ddd;
     }
 }
+
+
+/* Loading state should be clearly visible */
+.position-fixed.bg-white.bg-opacity-75 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(5px);
+}

@@ -49,9 +49,6 @@
                 <div class="spinner-border text-primary mb-3" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                
-                
-                <p class="text-muted fw-medium">{{ t('loadingReportInfo') }}</p>
             </div>
         </div>
 
@@ -494,6 +491,7 @@ createApp({
 			// Use all available report data from original file (2025, 2024, 2023)
 			const availableReports = [
 				// 2025年报告
+				{ year: 2025, month: 9, key: '2025-09' },
 				{ year: 2025, month: 8, key: '2025-08' },
 				{ year: 2025, month: 7, key: '2025-07' },
 				{ year: 2025, month: 6, key: '2025-06' },

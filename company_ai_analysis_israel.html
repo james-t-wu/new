@@ -654,40 +654,44 @@
                 font-size: 1rem;
             }
         }
+
+        /* Loading state should be clearly visible */
+        .position-fixed.bg-white.bg-opacity-75 {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body>
-    <!-- 全局菜单挂载点 -->
-    <div id="inno-global-menu"></div>
-
-    <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                INNONATION <b>AI</b>
-            </a>
-            <div class="ms-auto d-flex align-items-center gap-3">
-                <div class="language-switch" @click="toggleLang">
-                    <i class="fa-solid fa-globe"></i>
-                    <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <!-- Vue 应用挂载点 -->
     <div id="app" v-cloak>
-        <!-- 初始加载状态 -->
+        <!-- 全局菜单挂载点 -->
+        <div id="inno-global-menu"></div>
+
+        <!-- Loading State -->
         <div v-if="pageLoading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
             <div class="text-center">
-                <div class="spinner-border text-primary mb-3" role="status" style="color: var(--color-brand-blue) !important;">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                <p class="text-muted fw-medium">
-                    {{ currentLang === 'cn' ? '正在加载页面...' : 'Loading page...' }}
-                </p>
             </div>
         </div>
+    
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="lang-text">{{ currentLang === 'cn' ? '中文' : 'EN' }}</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
         <div class="main-content">
             <div class="page-container">

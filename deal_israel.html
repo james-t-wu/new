@@ -684,11 +684,11 @@
     </style>
 </head>
 <body>
-    <!-- 全局菜单容器 -->
-    <div id="inno-global-menu"></div>
-
     <!-- Vue App Container -->
     <div id="app" v-cloak>
+        <!-- 全局菜单容器 -->
+        <div id="inno-global-menu"></div>
+
         <!-- Loading State -->
         <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
             <div class="text-center">
@@ -696,9 +696,6 @@
                 <div class="spinner-border text-primary mb-3" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                
-                
-                <p class="text-muted fw-medium">{{ t('loadingDealData') }}</p>
             </div>
         </div>
 

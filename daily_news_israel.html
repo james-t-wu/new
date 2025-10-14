@@ -42,6 +42,16 @@
         <!-- 全局菜单挂载点（公共组件渲染） -->
         <div id="inno-global-menu"></div>
 
+        <!-- Loading State -->
+        <div v-if="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+            <div class="text-center">
+                <div class="loading-logo" style="font-weight: 700; font-size: 2rem; color: #104991; margin-bottom: 1.5rem;">INNONATION <b>AI</b></div>
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
         <!-- 导航栏 -->
         <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container">
@@ -123,9 +133,9 @@
 
                             <div class="box-body position-relative">
                                 <!-- 加载遮罩层 -->
-                                <div class="loading-overlay" v-show="loading">
+                                <!-- <div class="loading-overlay" v-show="loading">
                                     <div class="loading-spinner"></div>
-                                </div>
+                                </div> -->
 
                                 <!-- 新闻卡片网格 -->
                                 <div class="card-grid">
