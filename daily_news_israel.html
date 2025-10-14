@@ -264,7 +264,7 @@
                 return {
                     // 基础配置
                     currentPage: 1,
-                    pageSize: 8,
+                    pageSize: 12,
                     total: 0,
 
                     // 新闻数据
@@ -416,11 +416,10 @@
                     this.loading = true;
 
                     try {
-                        const response = await axios.get(common.APIDomain + '/api/Notion/SearchRSSNews', {
+                        const response = await axios.get(common.APIDomain + '/api/News/GetRSSNews', {
                             params: {
                                 page: this.currentPage,
-                                pageSize: this.pageSize,
-                                type: this.activeTab
+                                pageSize: this.pageSize
                             }
                         });
 

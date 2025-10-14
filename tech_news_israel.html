@@ -860,11 +860,12 @@
                         console.log('Loading tech news, page:', this.currentPage);
 
                         // 固定使用科技新闻API端点
-                        const apiUrl = '/api/Notion/SearchIsraelNews';
+                        const apiUrl = '/api/News/GetRSSNews';
 
                         const apiParams = {
                             page: this.currentPage,
-                            pageSize: this.pageSize
+                            pageSize: this.pageSize,
+                            type: 'israel'
                         };
 
                         console.log('API URL:', common.APIDomain + apiUrl);
