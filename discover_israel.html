@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="common/css/variables.css">
     <link rel="stylesheet" href="common/css/components.css">
 	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <link rel="stylesheet" href="common/css/user-profile.css">
 
     <!-- 页面特定样式 -->
     <link rel="stylesheet" href="css/discover_israel.css">
@@ -1496,6 +1497,7 @@
 
     <!-- 全局菜单组件 -->
     <script src="common/js/inno-global-menu.js"></script>
+    <script src="common/js/user-profile.js"></script>
 
 
     <!-- 第三方库依赖 -->
@@ -1689,7 +1691,7 @@
 
                     // Translations
                     translations: {
-                        cn: {
+                        zh: {
                             discoverTitle: '发现企业',
                             discoverSubtitle: '搜索全球以色列公司、专利和技术',
                             company: '公司',
@@ -2546,15 +2548,15 @@
                         } else if (logo.indexOf('/res_image') > -1) {
                             logo = logo.replace('/res_image', 'https://images.crunchbase.com/image');
                         }
-                        return `background-image: url('${logo}') !important; background-size: cover; background-position: center;`;
+                        return `background-image: url('${logo}') !important; background-size: contain; background-repeat: no-repeat; background-position: center;`;
                     } else {
                         // 根据类型返回默认图标
                         if (type === 'Person') {
-                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/investor-avatar.png') !important; background-size: cover; background-position: center;";
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/investor-avatar.png') !important; background-size: contain; background-repeat: no-repeat; background-position: center;";
                         } else if (type === 'App') {
-                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/app_logo.png') !important; background-size: cover; background-position: center;";
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/app_logo.png') !important; background-size: contain; background-repeat: no-repeat; background-position: center;";
                         } else {
-                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/company-icon.png') !important; background-size: cover; background-position: center;";
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/company-icon.png') !important; background-size: contain; background-repeat: no-repeat; background-position: center;";
                         }
                     }
                 },

@@ -1,0 +1,228 @@
+/**
+ * INNONATION AI - User Profile Dropdown Component
+ * 用户资料下拉菜单组件样式
+ */
+
+/* 用户资料按钮容器 */
+.user-profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* 用户头像按钮 */
+.user-avatar-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-brand-blue, #196fa6) 0%, var(--color-deep-blue, #104991) 100%);
+    border: 2px solid var(--background-white, #ffffff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all var(--transition-base, 0.2s ease-in-out);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.user-avatar-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(25, 111, 166, 0.3);
+}
+
+/* 用户头像图片 */
+.user-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* 默认头像图标 */
+.user-avatar-icon {
+    color: var(--background-white, #ffffff);
+    font-size: 20px;
+}
+
+/* 下拉菜单容器 */
+.user-profile-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: var(--background-white, #ffffff);
+    border-radius: var(--border-radius-lg, 0.75rem);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color, #e2e8f0);
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-base, 0.2s ease-in-out);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.user-profile-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* 用户信息头部 */
+.user-profile-header {
+    padding: 1.25rem;
+    background: linear-gradient(135deg, var(--color-brand-blue, #196fa6) 0%, var(--color-deep-blue, #104991) 100%);
+    color: var(--background-white, #ffffff);
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-profile-avatar-large {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 0.75rem;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-profile-avatar-large .user-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-profile-avatar-large .user-avatar-icon {
+    font-size: 32px;
+    color: var(--background-white, #ffffff);
+}
+
+.user-profile-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--background-white, #ffffff);
+}
+
+.user-profile-membership {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    color: var(--background-white, #ffffff);
+}
+
+.user-profile-expiry {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 0.25rem;
+    color: var(--background-white, #ffffff);
+}
+
+/* 菜单项列表 */
+.user-profile-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.user-profile-menu-item {
+    margin: 0;
+}
+
+.user-profile-menu-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    color: var(--text-color, #1e293b);
+    text-decoration: none;
+    transition: all var(--transition-base, 0.2s ease-in-out);
+    font-size: 0.9375rem;
+    border-left: 3px solid transparent;
+}
+
+.user-profile-menu-link:hover {
+    background: var(--color-light-blue, #f4f8fb);
+    border-left-color: var(--color-brand-blue, #196fa6);
+    color: var(--color-brand-blue, #196fa6);
+}
+
+.user-profile-menu-link i {
+    width: 20px;
+    margin-right: 0.75rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* 退出按钮特殊样式 */
+.user-profile-menu-link.logout {
+    color: var(--error-color, #e74c3c);
+}
+
+.user-profile-menu-link.logout:hover {
+    background: rgba(231, 76, 60, 0.1);
+    border-left-color: var(--error-color, #e74c3c);
+    color: var(--error-color, #e74c3c);
+}
+
+/* 分隔线 */
+.user-profile-divider {
+    height: 1px;
+    background: var(--border-color, #e2e8f0);
+    margin: 0.5rem 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .user-avatar-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .user-avatar-icon {
+        font-size: 18px;
+    }
+
+    .user-profile-dropdown {
+        min-width: 200px;
+        right: -0.5rem;
+    }
+
+    .user-profile-header {
+        padding: 1rem;
+    }
+
+    .user-profile-avatar-large {
+        width: 50px;
+        height: 50px;
+    }
+
+    .user-profile-avatar-large .user-avatar-icon {
+        font-size: 28px;
+    }
+
+    .user-profile-name {
+        font-size: 0.9375rem;
+    }
+
+    .user-profile-membership {
+        font-size: 0.8125rem;
+    }
+
+    .user-profile-menu-link {
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* 防止点击外部时意外选中文本 */
+.user-profile-container * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}

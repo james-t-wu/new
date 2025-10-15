@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="common/css/variables.css">
     <link rel="stylesheet" href="common/css/components.css">
     <link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <link rel="stylesheet" href="common/css/user-profile.css">
 
     <!-- Page Specific CSS -->
     <link rel="stylesheet" href="css/investment_statistic_israel.css">
@@ -133,7 +134,11 @@
                                             <span class="company-name">{{ item.company_name }}</span>
                                         </a>
                                     </td>
-                                    <td class="text-uppercase">{{ item.funding_round }}</td>
+                                    <td>
+                                        <a :href="item.detailURL || '#'" target="_blank" class="text-decoration-none">
+                                            <span class="badge bg-secondary">{{ item.funding_round }}</span>
+                                        </a>
+                                    </td>
                                     <td class="industry-cell" :title="item.industryStr">{{ item.industryStr }}</td>
                                     <td class="investor-cell" :title="item.investorStr">{{ item.investorStr }}</td>
                                     <td class="amount-cell">{{ item.money_raised }}</td>
@@ -175,6 +180,7 @@
     <script src="common/js/common-utils.js"></script>
     <script src="common/js/api-client.js"></script>
     <script src="common/js/inno-global-menu.js"></script>
+    <script src="common/js/user-profile.js"></script>
 
     <script>
         // Initialize AOS
@@ -529,28 +535,28 @@
                         // Handle t_api_images path
                         if (logo.indexOf('/image/t_api_images/') > -1) {
                             const newUrl = logo.replace('/image/t_api_images', 'https://images.crunchbase.com/image/upload');
-                            return `background-image: url('${newUrl}') !important; background-size: cover; background-position: center;`;
+                            return `background-image: url('${newUrl}') !important; background-size: contain; background-repeat: no-repeat; background-position: center;`;
                         }
                         // Handle res.cloudinary.com path
                         if (logo.indexOf('res.cloudinary.com/crunchbase-production') > -1) {
                             const newUrl = logo.replace('res.cloudinary.com/crunchbase-production', 'images.crunchbase.com');
-                            return `background-image: url('${newUrl}') !important; background-size: cover; background-position: center;`;
+                            return `background-image: url('${newUrl}') !important; background-size: contain; background-repeat: no-repeat; background-position: center;`;
                         }
                         // Handle res_image path
                         if (logo.indexOf('/res_image') > -1) {
                             const newUrl = logo.replace('/res_image', 'https://images.crunchbase.com/image');
-                            return `background-image: url('${newUrl}') !important; background-size: cover; background-position: center;`;
+                            return `background-image: url('${newUrl}') !important; background-size: contain; background-repeat: no-repeat; background-position: center;`;
                         }
                         // Default logo URL
-                        return `background-image: url('${logo}') !important; background-size: cover; background-position: center;`;
+                        return `background-image: url('${logo}') !important; background-size: contain; background-repeat: no-repeat; background-position: center;`;
                     } else {
                         // Fallback images based on type
                         if (type === 'Person') {
-                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/investor-avatar.png') !important; background-size: cover; background-position: center;";
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/investor-avatar.png') !important; background-size: contain; background-repeat: no-repeat; background-position: center;";
                         } else if (type === 'App') {
-                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/app_logo.png') !important; background-size: cover; background-position: center;";
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/app_logo.png') !important; background-size: contain; background-repeat: no-repeat; background-position: center;";
                         } else {
-                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/company-icon.png') !important; background-size: cover; background-position: center;";
+                            return "background-image: url('https://innonation.oss-cn-beijing.aliyuncs.com/logo/company-icon.png') !important; background-size: contain; background-repeat: no-repeat; background-position: center;";
                         }
                     }
                 },

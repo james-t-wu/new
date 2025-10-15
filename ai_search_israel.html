@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="common/css/variables.css">
     <link rel="stylesheet" href="common/css/components.css">
 	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <link rel="stylesheet" href="common/css/user-profile.css">
 
     <!-- Page-specific Styles -->
     <link rel="stylesheet" href="css/ai_search_israel.css">
@@ -110,6 +111,9 @@
     <!-- 全局菜单组件 -->
     <script src="common/js/inno-global-menu.js"></script>
 
+    <!-- 用户资料组件 -->
+    <script src="common/js/user-profile.js"></script>
+
     <script>
     // 确保菜单按钮隐藏逻辑正常工作
     document.addEventListener('DOMContentLoaded', function() {
@@ -168,7 +172,7 @@
                     try {
                         const response = await axios.get('../data/locale.json');
                         // 根据当前语言选择正确的翻译对象
-                        const langKey = this.currentLang === 'zh' ? 'zh' : 'en';
+                        const langKey = this.currentLang === 'zh' ? 'cn' : 'en';
                         this.translations = response.data[langKey] || {};
                         this.inputPlaceholder = this.t('assistant-ask');
                     } catch (error) {
@@ -181,7 +185,7 @@
                     return this.translations[key] || key;
                 },
                 async toggleLang() {
-                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'cn';
                     localStorage.setItem('inno_lang', this.currentLang);
                     window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
                     await this.loadI18n();

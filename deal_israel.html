@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="common/css/variables.css">
     <link rel="stylesheet" href="common/css/components.css">
 	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <link rel="stylesheet" href="common/css/user-profile.css">
 
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="css/deal_israel.css">
@@ -1197,6 +1198,9 @@
     <!-- 全局菜单组件 -->
     <script src="common/js/inno-global-menu.js"></script>
 
+    <!-- 用户资料组件 -->
+    <script src="common/js/user-profile.js"></script>
+
     <!-- Initialize AOS -->
     <script>
         AOS.init({
@@ -1495,12 +1499,16 @@
                 async toggleLang() {
                     this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
-                    // Dispatch language change event for global menu
+                    // Dispatch language change event for global menu and user profile
                     window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
                     await this.loadI18n();
                     // Update global menu language
-                    if (window.InnoMenu) {
-                        await window.InnoMenu.setLang(this.currentLang);
+                    if (window.InnoGlobalMenu) {
+                        await window.InnoGlobalMenu.switchLanguage(this.currentLang);
+                    }
+                    // Update user profile language
+                    if (window.UserProfile) {
+                        await window.UserProfile.setLang(this.currentLang);
                     }
                 },
                 // Helper method to replace Vue 2 filters

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="common/css/variables.css">
     <link rel="stylesheet" href="common/css/components.css">
 	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <link rel="stylesheet" href="common/css/user-profile.css">
     <!-- 页面特定样式 -->
     <link rel="stylesheet" href="css/company_ai_analysis_israel.css">
 
@@ -40,7 +41,10 @@
             min-height: 100vh;
         }
 
-       
+        /* 主内容区域 - 为固定导航栏留出空间 */
+        .main-content {
+            padding-top: 100px;
+        }
 
         /* 页面容器 */
         .page-container {
@@ -554,6 +558,9 @@
 
         /* 响应式设计 */
         @media (max-width: 768px) {
+            .main-content {
+                padding-top: 80px;
+            }
 
             .page-container {
                 padding: 0 0.75rem;
@@ -915,6 +922,7 @@
 
     <!-- 全局菜单组件 -->
     <script src="common/js/inno-global-menu.js"></script>
+    <script src="common/js/user-profile.js"></script>
 
     <!-- 页面逻辑 -->
     <script>
