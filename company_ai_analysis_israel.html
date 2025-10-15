@@ -1023,9 +1023,7 @@
                         // 给菜单组件一点时间加载
                         setTimeout(() => {
                             if (window.InnoGlobalMenu) {
-                                console.log('Initializing InnoGlobalMenu...');
                                 window.InnoGlobalMenu.init().then(() => {
-                                    console.log('InnoGlobalMenu initialized successfully');
                                     resolve();
                                 }).catch((error) => {
                                     console.error('InnoGlobalMenu initialization failed:', error);

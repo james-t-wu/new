@@ -607,7 +607,6 @@
             window.common = {
                 APIDomain: 'https://ai.innonation.io/inno_ai_services',
                 hideMask: function() {
-                    console.log('hideMask called');
                 }
             };
         }
@@ -638,13 +637,11 @@
 
     <!-- Vue 应用 -->
     <script>
-        console.log('Starting Vue application initialization...');
-
+  
         // Check if Vue is loaded properly
         if (typeof Vue === 'undefined') {
             console.error('Vue is not loaded properly!');
         } else {
-            console.log('Vue is loaded successfully, version:', Vue.version);
         }
 
         const { createApp } = Vue;
@@ -720,8 +717,7 @@
             },
 
             async mounted() {
-                console.log('Vue app mounted, starting initialization...');
-
+    
                 // 立即滚动到顶部，防止浏览器自动恢复滚动位置
                 if ('scrollRestoration' in history) {
                     history.scrollRestoration = 'manual';
@@ -731,16 +727,9 @@
                 document.body.scrollTop = 0;
 
                 try {
-                    console.log('Getting current language...');
                     this.getCurrentLang();
-
-                    console.log('Loading i18n translations...');
                     await this.loadI18n();
-
-                    console.log('Initializing data...');
                     await this.initData();
-
-                    console.log('Vue app initialization completed successfully');
                 } catch (error) {
                     console.error('Error during Vue app initialization:', error);
                     this.appLoading = false; // Ensure loading state is cleared even on error
@@ -813,9 +802,7 @@
 
                 async initData() {
                     try {
-                        console.log('Starting to load news data...');
                         await this.loadNews();
-                        console.log('News data loaded successfully, items:', this.newsList.length);
                     } catch (error) {
                         console.error('Failed to load data:', error);
                         // Set some demo data so the page is not completely empty
@@ -830,11 +817,9 @@
                             }
                         ];
                         this.total = 1;
-                        console.log('Set demo data due to API error');
-                    } finally {
+                        } finally {
                         this.appLoading = false;
-                        console.log('App loading completed, appLoading set to false');
-                        // 确保页面显示在顶部
+                            // 确保页面显示在顶部
                         this.$nextTick(() => {
                             window.scrollTo(0, 0);
                         });
@@ -869,13 +854,11 @@
                         }
                     ];
                     this.total = this.newsList.length;
-                    console.log('Set fallback data');
-                },
+                    },
 
                 async loadNews() {
                     try {
-                        console.log('Loading tech news, page:', this.currentPage);
-
+        
                         // 固定使用科技新闻API端点
                         const apiUrl = '/api/News/GetRSSNews';
 
@@ -885,17 +868,13 @@
                             type: 'israel'
                         };
 
-                        console.log('API URL:', common.APIDomain + apiUrl);
-                        console.log('API Params:', apiParams);
-
+        
                         const response = await axios.get(common.APIDomain + apiUrl, {
                             params: apiParams,
                             timeout: 30000 // 30 second timeout
                         });
 
-                        console.log('API Response status:', response.status);
-                        console.log('API Response data structure:', Object.keys(response.data || {}));
-
+          
                         // 使用与dashboard版本相同的数据结构解析
                         if (response.data && response.data.ReturnCode === 0) {
                             // Dashboard版本期望的数据结构: response.Data.Items 和 response.Data.Total
@@ -903,11 +882,7 @@
                                 this.newsList = response.data.Data.Items || [];
                                 this.total = response.data.Data.Total || 0;
 
-                                console.log('Processed news data (dashboard format):');
-                                console.log('- News items count:', this.newsList.length);
-                                console.log('- Total count:', this.total);
-                                console.log('- First item sample:', this.newsList[0]);
-                            } else {
+                                      } else {
                                 console.warn('Data structure not as expected, missing Data property');
                                 this.newsList = [];
                                 this.total = 0;
@@ -955,8 +930,7 @@
                             }
                         ];
                         this.total = this.newsList.length;
-                        console.log('Set fallback demo data');
-                    }
+                              }
                 },
 
                 goToPage(page) {
@@ -1000,24 +974,13 @@
         // Global error handler
         app.config.errorHandler = (err, instance, info) => {
             console.error('Vue Error:', err);
-            console.error('Error Info:', info);
         };
 
         // Note: Vue DevTools will automatically connect if available in browser extension
 
         // Mount the app with error handling
         try {
-            console.log('Mounting Vue app...');
             const mountedApp = app.mount('#app');
-            console.log('Vue app mounted successfully:', mountedApp);
-
-            // Add debug info
-            setTimeout(() => {
-                console.log('Vue app state check:');
-                console.log('- newsList length:', mountedApp.newsList?.length || 0);
-                console.log('- appLoading:', mountedApp.appLoading);
-                console.log('- isEnglish:', mountedApp.isEnglish);
-            }, 1000);
         } catch (error) {
             console.error('Failed to mount Vue app:', error);
             // Show error message on page
@@ -1034,8 +997,7 @@
         setTimeout(() => {
             const appElement = document.getElementById('app');
             if (appElement && appElement.innerHTML.includes('v-cloak')) {
-                console.warn('Vue app may not have mounted properly, adding fallback content');
-                // Add visible fallback content
+                  // Add visible fallback content
                 const fallbackDiv = document.createElement('div');
                 fallbackDiv.innerHTML = `
                     <div class="container mt-5">

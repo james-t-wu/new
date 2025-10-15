@@ -1527,7 +1527,6 @@
             },
             hideMask: function() {
                 // Hide loading mask
-                console.log('Hide loading mask');
             }
         };
 
@@ -1865,7 +1864,6 @@
                 readState: function(data) {
                     if (data) {
                         this.locationURL = data.id;
-                        console.log(this.locationURL);
                     }
                 },
 
@@ -1910,7 +1908,6 @@
                     const apiToken = getCookie('api_token');
                     if (!apiToken) {
                         // 未登录，不加载最近查看数据
-                        console.log('Not logged in, skipping recent views');
                         _self.showRecentFlag = false;
                         common.hideMask();
                         return;
@@ -1929,7 +1926,6 @@
                             common.hideMask();
                         })
                         .catch(function(error) {
-                            console.log('Failed to load recent views:', error.message);
                             _self.showRecentFlag = false;
                             common.hideMask();
                         });
@@ -2527,12 +2523,6 @@
                         // 更新locationURL和浏览器历史
                         this.locationURL = newURL;
                         history.pushState({ id: newURL }, '', newURL);
-
-                        console.log('URL updated for search type change:', {
-                            from: oldType,
-                            to: newType,
-                            newURL: newURL
-                        });
                     } catch (error) {
                         console.error('Error updating search type URL:', error);
                     }
@@ -2638,14 +2628,12 @@
                                     throw new Error('API returned no data');
                                 }
                             } catch (apiError) {
-                                console.log('API call failed, using fallback data');
                                 // API 失败，降级到 JSON 文件
                                 const fallbackResponse = await axios.get("/data/company_israel.json?timestamp=202302202");
                                 this.israelCompanyData = fallbackResponse.data['Data'];
                             }
                         } else {
                             // 未登录，直接使用静态 JSON 文件数据
-                            console.log('Not logged in, using static data');
                             const fallbackResponse = await axios.get("/data/company_israel.json?timestamp=202302202");
                             this.israelCompanyData = fallbackResponse.data['Data'];
                         }

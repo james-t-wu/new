@@ -1334,13 +1334,10 @@
             methods: {
                 async loadI18n() {
                     try {
-                        console.log('Loading i18n for language:', this.currentLang);
                         const res = await axios.get('common/i18n/deal_israel.' + this.currentLang + '.json');
-                        console.log('i18n loaded successfully:', res.data);
                         this.translations = { ...(FALLBACK_I18N[this.currentLang] || {}), ...(res.data || {}) };
                     } catch (e) {
                         console.error('Failed to load i18n:', e);
-                        console.log('Using fallback translations');
                         this.translations = FALLBACK_I18N[this.currentLang] || {};
                     }
                 },
@@ -1383,21 +1380,18 @@
                             _self.fundingData = [];
                             _self.sub_industry = '';
                             // 移除自动调用：_self.InitFundingList();
-                            console.log('切换到投资标签，等待用户搜索');
                         }
                         if (e.target.hash == '#ma') {
                             _self.searchType = 'ma';
                             _self.page = 1;
                             _self.acquisitionData = [];
                             // 移除自动调用：_self.InitAcquisitionList();
-                            console.log('切换到并购标签，等待用户搜索');
                         }
                         if (e.target.hash == '#ipo') {
                             _self.searchType = 'ipo';
                             _self.page = 1;
                             _self.ipoData = [];
                             // 移除自动调用：_self.InitIPOList();
-                            console.log('切换到IPO标签，等待用户搜索');
                         }
                     });
                 },
@@ -1432,17 +1426,14 @@
                         this.country_inv = this.country;
                         this.category_inv = this.category;
                         this.InitFundingList();
-                        console.log('loadInitialData: 投资模式，加载默认数据');
                     } else if (this.type === 'ma') {
                         this.searchType = 'ma';
                         this.country_ma = this.country;
                         this.category_ma = this.category;
                         this.InitAcquisitionList();
-                        console.log('loadInitialData: 并购模式，加载默认数据');
                     } else if (this.type === 'ipo') {
                         this.searchType = 'ipo';
                         this.InitIPOList();
-                        console.log('loadInitialData: IPO模式，加载默认数据');
                     }
                 },
 
@@ -1559,7 +1550,6 @@
 
                 // Deal functionality methods
                 goInv() {
-                    console.log('goInv: 用户点击搜索按钮');
                     this.page = 1;
                     this.fundingData = [];
                     this.sub_industry = '';
@@ -1575,7 +1565,6 @@
                 },
 
                 goMa() {
-                    console.log('goMa: 用户点击搜索按钮');
                     this.page = 1;
                     this.minPrice = document.getElementById('min-price').value;
                     this.maxPrice = document.getElementById('max-price').value;
@@ -1591,7 +1580,6 @@
                 },
 
                 goIPO() {
-                    console.log('goIPO: 用户点击搜索按钮');
                     this.page = 1;
                     this.ipoData = [];
                     this.scrollFlag = true; // 重置为true，允许加载更多
@@ -1603,12 +1591,10 @@
                 InitFundingList() {
                     // 防重复调用检查
                     if (this._isLoadingLock || this.showFlag) {
-                        console.log('InitFundingList: 阻止重复调用');
                         return;
                     }
 
                     this._isLoadingLock = true; // 设置锁定
-                    console.log('InitFundingList: 开始调用，页码:', this.page);
 
                     // Get date values from DOM, but fall back to the data values if DOM is empty
                     const domStartDate = document.getElementById('start-day').value;
@@ -1671,7 +1657,6 @@
                         }
                         this.showFlag = false;
                         this._isLoadingLock = false; // 释放锁定
-                        console.log('InitFundingList: 调用完成');
                     }).catch(error => {
                         console.error('InitFundingList: 调用失败', error);
                         this.showFlag = false;
@@ -1682,12 +1667,10 @@
                 InitAcquisitionList() {
                     // 防重复调用检查
                     if (this._isLoadingLock || this.showFlag) {
-                        console.log('InitAcquisitionList: 阻止重复调用');
                         return;
                     }
 
                     this._isLoadingLock = true; // 设置锁定
-                    console.log('InitAcquisitionList: 开始调用，页码:', this.page);
 
                     // Get date values from DOM, but fall back to the data values if DOM is empty
                     const domStartDate = document.getElementById('start-day-ma').value;
@@ -1735,7 +1718,6 @@
                         }
                         this.showFlag = false;
                         this._isLoadingLock = false; // 释放锁定
-                        console.log('InitAcquisitionList: 调用完成');
                     }).catch(error => {
                         console.error('InitAcquisitionList: 调用失败', error);
                         this.showFlag = false;
@@ -1746,12 +1728,10 @@
                 InitIPOList() {
                     // 防重复调用检查
                     if (this._isLoadingLock || this.showFlag) {
-                        console.log('InitIPOList: 阻止重复调用');
                         return;
                     }
 
                     this._isLoadingLock = true; // 设置锁定
-                    console.log('InitIPOList: 开始调用，页码:', this.page);
 
                     // Get date values from DOM, but fall back to the data values if DOM is empty
                     const domStartDate = document.getElementById('start-day-ipo').value;
@@ -1789,7 +1769,6 @@
                         }
                         this.showFlag = false;
                         this._isLoadingLock = false; // 释放锁定
-                        console.log('InitIPOList: 调用完成');
                     }).catch(error => {
                         console.error('InitIPOList: 调用失败', error);
                         this.showFlag = false;
@@ -1947,8 +1926,7 @@
                     if (!this.scrollFlag || this.showFlag || this._isLoadingLock) {
                         return;
                     }
-                    console.log('loadMoreInv: 用户点击加载更多');
-                    this.page++;
+                      this.page++;
                     this.InitFundingList();
                 },
 
@@ -1956,8 +1934,7 @@
                     if (!this.scrollFlag || this.showFlag || this._isLoadingLock) {
                         return;
                     }
-                    console.log('loadMoreMa: 用户点击加载更多');
-                    this.page++;
+                            this.page++;
                     this.InitAcquisitionList();
                 },
 
@@ -1965,8 +1942,7 @@
                     if (!this.scrollFlag || this.showFlag || this._isLoadingLock) {
                         return;
                     }
-                    console.log('loadMoreIPO: 用户点击加载更多');
-                    this.page++;
+                              this.page++;
                     this.InitIPOList();
                 },
 
@@ -2012,7 +1988,6 @@
                 scrollFun() {
                     // 完全禁用滚动加载功能，防止自动API调用
                     // 用户明确要求只在点击搜索时调用API，不需要滚动加载
-                    console.log('scrollFun: 滚动加载已禁用，仅支持手动搜索');
                     return;
 
                     /* 原滚动加载逻辑已禁用
@@ -2027,7 +2002,6 @@
 
                     if (resultH < 0.02) {
                         if (this.scrollFlag && !this.showFlag && !this._isLoadingLock) {
-                            console.log('scrollFun: 触发滚动加载，页码:', this.page + 1);
                             this.scrollFlag = false;
                             this.page++;
                             if (this.searchType == 'inv') {

@@ -570,28 +570,23 @@ createApp({
 			// For English reports, add -en suffix (matching original file pattern)
 			const reportSuffix = this.currentLang === 'en' ? '-en' : '';
 			const reportUrl = `/new/report/${report.id}${reportSuffix}.html`;
-			console.log('Opening report:', report.name, 'at URL:', reportUrl);
-			window.open(reportUrl, '_blank');
+				window.open(reportUrl, '_blank');
 		},
 
 		// Generate annual report
 		generateAnnualReport() {
-			console.log('Generating annual report');
 		},
 
 		// View sample report
 		viewSampleReport() {
-			console.log('Viewing sample report');
 		},
 
 		// View sample by type
 		viewSample(type) {
-			console.log('Viewing sample:', type);
 		},
 
 		// Contact service
 		contactService() {
-			console.log('Contacting service');
 		},
 
 		// View current report from modal

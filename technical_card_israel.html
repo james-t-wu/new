@@ -1609,16 +1609,13 @@ body.menu-active.menu-collapsed {
                         if (resultSvg) {
                             const defaultCard = this.currentLang === 'zh' ? this.defaultCardCN : this.defaultCardEN;
                             resultSvg.innerHTML = defaultCard;
-                            console.log('Default card set successfully');
-                        } else {
-                            console.log('resultSvg element not found, retrying...');
-                            // 如果没有找到，重试一次
+                          } else {
+                              // 如果没有找到，重试一次
                             setTimeout(() => {
                                 const retryResultSvg = document.getElementById('resultSvg');
                                 if (retryResultSvg) {
                                     const defaultCard = this.currentLang === 'zh' ? this.defaultCardCN : this.defaultCardEN;
                                     retryResultSvg.innerHTML = defaultCard;
-                                    console.log('Default card set on retry');
                                 }
                             }, 500);
                         }
@@ -1802,8 +1799,7 @@ body.menu-active.menu-collapsed {
                 async callSearchTechCardAPI() {
                     try {
                         const url = `${this.apiDomain}/api/AI/SearchTechCard?techTerm=${encodeURIComponent(this.searchTerm)}&lang=${this.selectedLang}`;
-                        console.log('Calling SearchTechCard API:', url);
-
+  
                         const response = await fetch(url, {
                             method: 'GET',
                             headers: {
@@ -1817,8 +1813,7 @@ body.menu-active.menu-collapsed {
                         }
 
                         const data = await response.json();
-                        console.log('SearchTechCard response:', data);
-
+  
                         return {
                             success: true,
                             data: data.Data || data
@@ -1834,8 +1829,7 @@ body.menu-active.menu-collapsed {
                 async callTechCardImageAPI() {
                     try {
                         const url = `${this.apiDomain}/api/techcard/image?term=${encodeURIComponent(this.searchTerm)}`;
-                        console.log('Calling TechCardImage API:', url);
-
+  
                         const response = await fetch(url, {
                             method: 'GET',
                             headers: {
@@ -1849,8 +1843,7 @@ body.menu-active.menu-collapsed {
                         }
 
                         const data = await response.json();
-                        console.log('TechCardImage response:', data);
-
+    
                         // 兼容多种字段名并只返回字符串
                         const payload = (data && data.Data) ? data.Data : data;
                         let out = '';

@@ -2388,19 +2388,15 @@ createApp({
 					}
 					
 					// 新闻数据 - 从GetDetailInfo的news节点获取
-					console.log('Checking for news data in company profile:', this.companyProfile.relationships?.news);
 					if (this.companyProfile.relationships?.news?.items && this.companyProfile.relationships.news.items.length > 0) {
 						this.newsData = this.companyProfile.relationships.news.items;
 						this.NewsTotal = this.companyProfile.relationships.news.paging?.total_items || this.newsData.length;
-						console.log('Found news data:', this.newsData.length, 'items');
 						this.newsData.forEach(news => {
 							news.title = news.title || '';
 							news.url = news.url || '#';
 							news.Date = news.post_date || '';
 						});
-						console.log('Processed news data:', this.newsData);
 					} else {
-						console.log('No news data found in company profile');
 						this.newsData = [];
 						this.NewsTotal = 0;
 					}
@@ -2415,14 +2411,6 @@ createApp({
 					// Tab计数 & 图表
 					this.updateTabCounts();
 					this.initCharts();
-					
-					// 确保所有数据都已加载完成
-					console.log('Company profile loaded successfully:', {
-						name: this.companyName,
-						fundingTotal: this.fundingTotal,
-						acquisitionTotal: this.acquisitionTotal,
-						newsTotal: this.NewsTotal
-					});
 				}
 			} catch (error) { 
 				console.error('Failed to load company profile:', error); 
@@ -2476,7 +2464,7 @@ createApp({
 			
 			if (this.isCreatingChart) return;
 			if (!(this.FRXData?.length && this.FRYData?.length)) {
-				console.log('No funding data available for chart');
+				console.error('No funding data available for chart');
 				return;
 			}
 			
@@ -2485,7 +2473,6 @@ createApp({
 				try {
 					const ctx = document.getElementById('fundingChart'); 
 					if (!ctx) { 
-						console.log('Chart canvas not found');
 						this.isCreatingChart = false; 
 						return; 
 					}
@@ -2494,7 +2481,7 @@ createApp({
 						try { 
 							this.fundingChartInstance.destroy(); 
 						} catch(e) {
-							console.log('Error destroying chart instance:', e);
+							console.error('Error destroying chart instance:', e);
 						} 
 					}
 					
@@ -2636,7 +2623,6 @@ createApp({
 					}
 					
 					this.fundingChartInstance = new Chart(ctx, chartConfig);
-					console.log('Chart created successfully:', this.chartMode);
 				} catch (error) {
 					console.error('Error creating chart:', error);
 				} finally {
@@ -2704,10 +2690,10 @@ createApp({
 			window.history.back(); 
 		},
 		openEditModal(){ 
-			console.log('Open edit modal'); 
+			
 		},
 		openCreateNewsModal(){ 
-			console.log('Open create news modal'); 
+			
 		},
 		async openAIAnalysis(){ 
 			this.showAIModal = true; 

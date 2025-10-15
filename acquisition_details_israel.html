@@ -530,11 +530,7 @@
                         const apiDomain = 'https://ai.innonation.io/inno_ai_services';
                         const url = `${apiDomain}/api/Company/GetAcquisitionInfo?aId=${this.aId}`;
 
-                        console.log('Fetching acquisition data from:', url);
-
                         const response = await axios.get(url);
-
-                        console.log('API Response:', response.data);
 
                         if (response.data.ReturnCode === 0 && response.data.Data) {
                             this.acquisitionData = response.data.Data;
@@ -545,8 +541,6 @@
                             this.acquisitionData.Price = (priceUsd == null || priceUsd === '')
                                 ? '—'
                                 : '$' + this.nFormatter(priceUsd, 2);
-
-                            console.log('Acquisition data loaded successfully');
                         } else {
                             console.error('API returned error or no data');
                         }
