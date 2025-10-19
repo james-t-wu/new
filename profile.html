@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>个人资料 - Innonation</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://innonation.oss-cn-beijing.aliyuncs.com/shortcut/in.jpg">
+
+    <!-- 引入现代CSS框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- 使用通用样式 -->
+    <link rel="stylesheet" href="common/css/variables.css">
+    <link rel="stylesheet" href="common/css/components.css">
+	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+	<link rel="stylesheet" href="common/css/user-profile.css">
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        /* Profile Page Styles */
+:root {
+	--primary-blue: #1e40af;
+	--secondary-blue: #3b82f6;
+	--accent-orange: #f59e0b;
+	--success-green: #10b981;
+	--warning-yellow: #f59e0b;
+	--error-red: #ef4444;
+	--dark-gray: #1f2937;
+	--light-gray: #f9fafb;
+	--border-gray: #e5e7eb;
+
+	/* 主色调 - 使用统一的CSS变量命名 */
+	--color-brand-blue: #196fa6;
+	--color-deep-blue: #104991;
+	--color-highlight-blue: #0ea5e9;
+	--color-action-blue: #196fa6;
+	--color-light-blue: #f4f8fb;
+
+	/* 文字颜色 */
+	--text-color: #1e293b;
+	--light-text: #64748b;
+
+	/* 背景颜色 */
+	--background-light: #f8fbfd;
+	--background-white: #ffffff;
+
+	/* 强调和状态颜色 */
+	--accent-color: #f39c12;
+	--success-color: #27ae60;
+	--warning-color: #f59e0b;
+	--error-color: #e74c3c;
+	--info-color: #8e44ad;
+
+	/* 阴影效果 */
+	--card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+	/* 边框和间距 */
+	--border-color: #e2e8f0;
+	--border-radius: 0.5rem;
+	--border-radius-lg: 0.75rem;
+	--border-radius-xl: 1rem;
+
+	/* 过渡动画 */
+	--transition-base: 0.2s ease-in-out;
+	--transition-slow: 0.3s ease-in-out;
+}
+
+body {
+	font-family: 'Roboto', 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', sans-serif !important;
+	color: var(--text-color) !important;
+	background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%) !important;
+	line-height: 1.6;
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+}
+
+/* 隐藏Vue未编译内容 */
+[v-cloak] {
+	display: none;
+}
+
+/* 导航栏样式 */
+.navbar {
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
+	border-bottom: 1px solid rgba(25, 111, 166, 0.1);
+	padding: 1rem 0;
+	margin-bottom: 2rem;
+	box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--color-brand-blue) !important;
+	text-decoration: none;
+}
+
+.navbar-brand b {
+	color: var(--color-deep-blue);
+}
+
+/* 页面容器 */
+.page-container {
+	padding-bottom: 2rem;
+}
+
+/* 卡片样式 */
+.card {
+	background-color: var(--background-white);
+	border-radius: var(--border-radius-lg);
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	transition: all var(--transition-base);
+	position: relative;
+	overflow: visible;
+	margin-bottom: 1.5rem;
+}
+
+.card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--color-brand-blue), var(--color-deep-blue));
+	opacity: 0;
+	transition: opacity var(--transition-base);
+}
+
+.card:hover {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+	transform: translateY(-1px);
+	border-color: rgba(25, 111, 166, 0.15);
+}
+
+.card:hover::before {
+	opacity: 1;
+}
+
+.card-header {
+	padding: 1.5rem;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	background: rgba(248, 250, 252, 0.5);
+}
+
+.card-header h5 {
+	margin: 0;
+	color: var(--text-color);
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.card-header h5 i {
+	color: var(--color-brand-blue);
+}
+
+.card-body {
+	padding: 2rem;
+}
+
+/* 用户头像 - 卡片内小尺寸 */
+.profile-avatar-container {
+	position: absolute;
+	top: 1.5rem;
+	right: 1.5rem;
+	z-index: 10;
+}
+
+.profile-avatar {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	border: 3px solid white;
+	box-shadow: 0 2px 10px rgba(25, 111, 166, 0.2);
+	object-fit: cover;
+	display: block;
+}
+
+.profile-avatar-placeholder {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	border: 3px solid white;
+	box-shadow: 0 2px 10px rgba(25, 111, 166, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, var(--color-brand-blue), var(--color-deep-blue));
+	color: white;
+	font-size: 2rem;
+}
+
+.profile-user-info {
+	margin-bottom: 1.5rem;
+	padding-right: 100px; /* 为头像留出空间 */
+}
+
+.profile-user-name {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: var(--text-color);
+	margin-bottom: 0.25rem;
+}
+
+.profile-user-email {
+	font-size: 0.95rem;
+	color: var(--light-text);
+}
+
+/* 表单样式 */
+.form-group {
+	margin-bottom: 1.5rem;
+}
+
+.form-label {
+	font-weight: 500;
+	color: var(--text-color);
+	margin-bottom: 0.5rem;
+	display: block;
+}
+
+.form-label .required {
+	color: var(--error-color);
+	margin-left: 0.25rem;
+}
+
+.form-control {
+	border: 2px solid var(--border-color);
+	border-radius: var(--border-radius);
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	transition: all var(--transition-base);
+	width: 100%;
+}
+
+.form-control:focus {
+	border-color: var(--color-brand-blue);
+	box-shadow: 0 0 0 0.2rem rgba(25, 111, 166, 0.15);
+	outline: none;
+}
+
+.form-control:disabled {
+	background-color: var(--light-gray);
+	cursor: not-allowed;
+}
+
+/* 密码输入框容器 */
+.password-input-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.password-input-container .form-control {
+	padding-right: 3rem;
+}
+
+.password-toggle {
+	position: absolute;
+	right: 0.75rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	color: var(--light-text);
+	cursor: pointer;
+	padding: 0.5rem;
+	font-size: 1.1rem;
+	transition: color var(--transition-base);
+	z-index: 10;
+}
+
+.password-toggle:hover {
+	color: var(--color-brand-blue);
+}
+
+.password-toggle:focus {
+	outline: none;
+}
+
+.form-text {
+	font-size: 0.875rem;
+	color: var(--light-text);
+	margin-top: 0.5rem;
+	display: block;
+}
+
+/* 按钮样式 */
+.btn {
+	padding: 0.75rem 2rem;
+	border-radius: var(--border-radius);
+	font-weight: 500;
+	font-size: 1rem;
+	transition: all var(--transition-base);
+	border: none;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	text-decoration: none;
+}
+
+.btn-primary {
+	background: linear-gradient(135deg, var(--color-brand-blue), var(--color-deep-blue));
+	color: white;
+}
+
+.btn-primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(25, 111, 166, 0.3);
+}
+
+.btn-primary:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.btn-secondary {
+	background: var(--light-gray);
+	color: var(--text-color);
+}
+
+.btn-secondary:hover {
+	background: var(--border-color);
+}
+
+/* 标签页样式 */
+.nav-tabs {
+	border-bottom: 2px solid var(--border-color);
+	margin-bottom: 1.5rem;
+}
+
+.nav-tabs .nav-link {
+	border: none;
+	border-bottom: 3px solid transparent;
+	color: var(--light-text);
+	font-weight: 500;
+	padding: 1rem 1.5rem;
+	transition: all var(--transition-base);
+}
+
+.nav-tabs .nav-link:hover {
+	color: var(--color-brand-blue);
+	border-bottom-color: var(--color-brand-blue);
+}
+
+.nav-tabs .nav-link.active {
+	color: var(--color-brand-blue);
+	border-bottom-color: var(--color-brand-blue);
+	background: none;
+}
+
+/* 验证提示 */
+.validation-error {
+	color: var(--error-color);
+	font-size: 0.875rem;
+	margin-top: 0.5rem;
+	display: none;
+}
+
+.validation-error.show {
+	display: block;
+}
+
+/* 表格样式 */
+.table {
+	width: 100%;
+	margin-bottom: 0;
+}
+
+.table thead th {
+	background: var(--light-gray);
+	color: var(--text-color);
+	font-weight: 600;
+	border: none;
+	padding: 1rem;
+}
+
+.table tbody td {
+	padding: 1rem;
+	border-top: 1px solid var(--border-color);
+	vertical-align: middle;
+}
+
+.table tbody tr:hover {
+	background: rgba(25, 111, 166, 0.05);
+}
+
+/* 加载状态 */
+.loading-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.9);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+
+.spinner-border {
+	width: 3rem;
+	height: 3rem;
+	border: 0.25rem solid var(--color-brand-blue);
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+	to { transform: rotate(360deg); }
+}
+
+/* 消息提示 */
+.alert {
+	padding: 1rem 1.5rem;
+	border-radius: var(--border-radius);
+	margin-bottom: 1.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.alert-success {
+	background: rgba(16, 185, 129, 0.1);
+	border: 1px solid var(--success-green);
+	color: var(--success-green);
+}
+
+.alert-danger {
+	background: rgba(239, 68, 68, 0.1);
+	border: 1px solid var(--error-red);
+	color: var(--error-red);
+}
+
+.alert-info {
+	background: rgba(25, 111, 166, 0.1);
+	border: 1px solid var(--color-brand-blue);
+	color: var(--color-brand-blue);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+	.page-container {
+		padding-top: 80px;
+	}
+
+	.card-body {
+		padding: 1.5rem;
+	}
+
+	.btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.nav-tabs .nav-link {
+		padding: 0.75rem 1rem;
+		font-size: 0.9rem;
+	}
+
+	.profile-avatar-container {
+		position: static;
+		text-align: center;
+		margin-bottom: 1rem;
+	}
+
+	.profile-user-info {
+		padding-right: 0;
+		text-align: center;
+	}
+
+	.card-header {
+		text-align: center;
+		padding-bottom: 1rem;
+	}
+
+	.card-header h5 {
+		justify-content: center;
+		margin-bottom: 1rem;
+	}
+}
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 全局菜单挂载点 -->
+        <div id="inno-global-menu"></div>
+
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    INNONATION <b>AI</b>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="language-switch" @click="toggleLang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
+                    </div>
+                    <!-- 用户Profile挂载点 -->
+                    <div id="user-profile-mount"></div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Loading State -->
+        <div v-if="loading" class="loading-overlay">
+            <div class="text-center">
+                <div class="spinner-border"></div>
+                <p class="mt-3">{{ t('loading') }}</p>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="container page-container">
+            <!-- 标签页导航 -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">
+                        <i class="fas fa-user-edit"></i> {{ t('editProfile') }}
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation" v-if="showPasswordTab">
+                    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">
+                        <i class="fas fa-key"></i> {{ t('changePassword') }}
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation" v-if="showExportTab">
+                    <button class="nav-link" id="export-tab" data-bs-toggle="tab" data-bs-target="#export" type="button" role="tab">
+                        <i class="fas fa-download"></i> {{ t('dataExportHistory') }}
+                    </button>
+                </li>
+            </ul>
+
+            <!-- 标签页内容 -->
+            <div class="tab-content">
+                <!-- 编辑资料 -->
+                <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-header">
+                            <h5><i class="fas fa-user-circle"></i> {{ t('personalInformation') }}</h5>
+                            <!-- 用户头像 - 右上角 -->
+                            <div class="profile-avatar-container">
+                                <img v-if="userProfile.avatar" :src="userProfile.avatar" alt="User Avatar" class="profile-avatar">
+                                <div v-else class="profile-avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- 用户信息 -->
+                            <div class="profile-user-info">
+                                <div class="profile-user-name">{{ userProfile.firstName }} {{ userProfile.lastName }}</div>
+                                <div class="profile-user-email">{{ userProfile.email }}</div>
+                            </div>
+                            <div v-if="message.text" :class="'alert alert-' + message.type">
+                                <i :class="message.type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
+                                {{ message.text }}
+                            </div>
+
+                            <form @submit.prevent="updateProfile">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('email') }}</label>
+                                            <input type="email" class="form-control" v-model="userProfile.email" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('phone') }}<span class="required">*</span></label>
+                                            <input type="tel" class="form-control" v-model="userProfile.phone" required maxlength="20">
+                                            <div class="validation-error" :class="{ show: errors.phone }">{{ errors.phone }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('firstName') }}<span class="required">*</span></label>
+                                            <input type="text" class="form-control" v-model="userProfile.firstName" required maxlength="16">
+                                            <div class="validation-error" :class="{ show: errors.firstName }">{{ errors.firstName }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('lastName') }}<span class="required">*</span></label>
+                                            <input type="text" class="form-control" v-model="userProfile.lastName" required maxlength="16">
+                                            <div class="validation-error" :class="{ show: errors.lastName }">{{ errors.lastName }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">{{ t('company') }}<span class="required">*</span></label>
+                                    <input type="text" class="form-control" v-model="userProfile.company" required maxlength="30">
+                                    <div class="validation-error" :class="{ show: errors.company }">{{ errors.company }}</div>
+                                </div>
+
+                                <div class="form-text text-muted mb-3">
+                                    {{ t('profileNote') }}
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" :disabled="saving">
+                                    <i class="fas fa-save"></i>
+                                    <span v-if="!saving">{{ t('update') }}</span>
+                                    <span v-else>{{ t('saving') }}...</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 修改密码 -->
+                <div class="tab-pane fade" id="password" role="tabpanel" v-if="showPasswordTab">
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lock"></i> {{ t('changePassword') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div v-if="passwordMessage.text" :class="'alert alert-' + passwordMessage.type">
+                                <i :class="passwordMessage.type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
+                                {{ passwordMessage.text }}
+                            </div>
+
+                            <form @submit.prevent="changePassword">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('oldPassword') }}<span class="required">*</span></label>
+                                            <div class="password-input-container">
+                                                <input :type="showOldPassword ? 'text' : 'password'" class="form-control" v-model="passwordForm.oldPassword" required maxlength="12">
+                                                <button type="button" class="password-toggle" @click="toggleOldPassword" :aria-label="showOldPassword ? 'Hide password' : 'Show password'">
+                                                    <i :class="showOldPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="validation-error" :class="{ show: passwordErrors.oldPassword }">{{ passwordErrors.oldPassword }}</div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('newPassword') }}<span class="required">*</span></label>
+                                            <div class="password-input-container">
+                                                <input :type="showNewPassword ? 'text' : 'password'" class="form-control" v-model="passwordForm.newPassword" required maxlength="12">
+                                                <button type="button" class="password-toggle" @click="toggleNewPassword" :aria-label="showNewPassword ? 'Hide password' : 'Show password'">
+                                                    <i :class="showNewPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="validation-error" :class="{ show: passwordErrors.newPassword }">{{ passwordErrors.newPassword }}</div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">{{ t('confirmPassword') }}<span class="required">*</span></label>
+                                            <div class="password-input-container">
+                                                <input :type="showConfirmPassword ? 'text' : 'password'" class="form-control" v-model="passwordForm.confirmPassword" required maxlength="12">
+                                                <button type="button" class="password-toggle" @click="toggleConfirmPassword" :aria-label="showConfirmPassword ? 'Hide password' : 'Show password'">
+                                                    <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="validation-error" :class="{ show: passwordErrors.confirmPassword }">{{ passwordErrors.confirmPassword }}</div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary" :disabled="changingPassword">
+                                            <i class="fas fa-key"></i>
+                                            <span v-if="!changingPassword">{{ t('update') }}</span>
+                                            <span v-else>{{ t('updating') }}...</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据导出历史 -->
+                <div class="tab-pane fade" id="export" role="tabpanel" v-if="showExportTab">
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-header">
+                            <h5><i class="fas fa-history"></i> {{ t('dataExportHistory') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ t('fileName') }}</th>
+                                            <th>{{ t('totalCount') }}</th>
+                                            <th>{{ t('exportCount') }}</th>
+                                            <th>{{ t('status') }}</th>
+                                            <th>{{ t('createDate') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in exportData" :key="item.id">
+                                            <td><a :href="item.download_link" :download="item.file_name">{{ item.file_name }}</a></td>
+                                            <td>{{ item.total_count }}</td>
+                                            <td>{{ item.download_count }}</td>
+                                            <td class="text-uppercase">{{ item.status }}</td>
+                                            <td>{{ item.created_at }}</td>
+                                        </tr>
+                                        <tr v-if="exportData.length === 0">
+                                            <td colspan="5" class="text-center text-muted">{{ t('noData') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- 全局菜单组件 -->
+    <script src="common/js/inno-global-menu.js"></script>
+    <!-- 用户Profile组件 -->
+    <script src="common/js/user-profile.js"></script>
+
+    <!-- 认证检查脚本 - JWT通用验证 -->
+    <script src="common/js/auth-check.js"></script>
+
+    <script>
+// Initialize AOS animations
+AOS.init({
+	duration: 800,
+	easing: 'ease-in-out',
+	once: true
+});
+
+// Vue App
+const { createApp } = Vue;
+
+createApp({
+	data() {
+		return {
+			currentLang: localStorage.getItem('inno_lang') || 'zh',
+			loading: true,
+			saving: false,
+			changingPassword: false,
+			showPasswordTab: true, // 显示修改密码标签
+			showExportTab: true, // 显示导出历史标签
+			userProfile: {
+				phone: '',
+				email: '',
+				firstName: '',
+				lastName: '',
+				company: '',
+				avatar: ''
+			},
+			passwordForm: {
+				oldPassword: '',
+				newPassword: '',
+				confirmPassword: ''
+			},
+			showOldPassword: false,
+			showNewPassword: false,
+			showConfirmPassword: false,
+			exportData: [],
+			message: {
+				text: '',
+				type: 'info'
+			},
+			passwordMessage: {
+				text: '',
+				type: 'info'
+			},
+			errors: {},
+			passwordErrors: {},
+			translations: {
+				zh: {
+					loading: '加载中',
+					editProfile: '编辑资料',
+					changePassword: '修改密码',
+					dataExportHistory: '数据导出历史',
+					personalInformation: '个人信息',
+					phone: '手机号码',
+					email: '邮箱地址',
+					firstName: '名字',
+					lastName: '姓氏',
+					company: '公司名称',
+					oldPassword: '旧密码',
+					newPassword: '新密码',
+					confirmPassword: '确认密码',
+					update: '更新',
+					saving: '保存中',
+					updating: '更新中',
+					profileNote: '请填写完整的个人信息以便我们为您提供更好的服务',
+					fileName: '文件名',
+					totalCount: '总数',
+					exportCount: '导出数量',
+					status: '状态',
+					createDate: '创建日期',
+					noData: '暂无数据',
+					updateSuccess: '更新成功',
+					updateFailed: '更新失败',
+					passwordMismatch: '两次密码输入不一致',
+					passwordSameAsOld: '新密码不能与旧密码相同',
+					passwordTooShort: '密码长度不能少于6位',
+					passwordTooShort8: '密码长度不能少于8位',
+					passwordTooLong: '密码长度不能超过12位',
+					emailInvalid: '邮箱格式不正确',
+					fieldRequired: '此字段为必填项',
+					sessionExpired: '会话已过期，请重新登录'
+				},
+				en: {
+					loading: 'Loading',
+					editProfile: 'Edit Profile',
+					changePassword: 'Change Password',
+					dataExportHistory: 'Data Export History',
+					personalInformation: 'Personal Information',
+					phone: 'Phone',
+					email: 'Email',
+					firstName: 'First Name',
+					lastName: 'Last Name',
+					company: 'Company',
+					oldPassword: 'Old Password',
+					newPassword: 'New Password',
+					confirmPassword: 'Confirm Password',
+					update: 'Update',
+					saving: 'Saving',
+					updating: 'Updating',
+					profileNote: 'Please fill in your complete personal information so we can serve you better',
+					fileName: 'File Name',
+					totalCount: 'Total Count',
+					exportCount: 'Export Count',
+					status: 'Status',
+					createDate: 'Create Date',
+					noData: 'No Data',
+					updateSuccess: 'Update Successful',
+					updateFailed: 'Update Failed',
+					passwordMismatch: 'Passwords do not match',
+					passwordSameAsOld: 'New password cannot be the same as old password',
+					passwordTooShort: 'Password must be at least 6 characters',
+					passwordTooShort8: 'Password must be at least 8 characters',
+					passwordTooLong: 'Password may not be greater than 12 characters',
+					emailInvalid: 'Invalid email format',
+					fieldRequired: 'This field is required',
+					sessionExpired: 'Session expired, please login again'
+				}
+			}
+		}
+	},
+
+	async mounted() {
+		console.log('Profile page mounting...');
+
+		try {
+			// 等待认证检查完成
+			console.log('Waiting for auth check...');
+			await this.waitForAuthCheck();
+			console.log('Auth check completed');
+
+			// 初始化用户信息
+			console.log('Initializing profile...');
+			await this.initializeProfile();
+			console.log('Profile initialized successfully');
+
+			// 调试信息：显示用户数据
+			console.log('User profile data:', this.userProfile);
+
+		} catch (error) {
+			console.error('Profile initialization failed:', error);
+
+			// 显示详细错误信息
+			this.message = {
+				text: `Failed to load user profile: ${error.message}`,
+				type: 'danger'
+			};
+
+			// 如果是认证失败，3秒后跳转到登录页面
+			if (error.message.includes('Auth check timeout') || error.message.includes('Token validation failed') || error.message.includes('Access Token has expired') || error.message.includes('Authentication failed')) {
+				setTimeout(() => {
+					window.location.href = '/home_israel.aspx';
+				}, 3000);
+			}
+		} finally {
+			this.loading = false;
+			console.log('Loading state set to false');
+		}
+	},
+
+	methods: {
+		t(key) {
+			return this.translations[this.currentLang][key] || key;
+		},
+
+		async waitForAuthCheck() {
+			console.log('Starting waitForAuthCheck...');
+
+			// 检查是否有基本的认证信息
+			const apiToken = this.getCookie('api_token');
+			const userId = this.getCookie('userId');
+
+			console.log('Available auth data:', {
+				hasApiToken: !!apiToken,
+				hasUserId: !!userId,
+				apiTokenLength: apiToken ? apiToken.length : 0
+			});
+
+			return new Promise((resolve, reject) => {
+				// 首先检查是否有任何认证数据
+				if (!apiToken && !userId) {
+					console.error('No authentication data found');
+					reject(new Error('No authentication data found'));
+					return;
+				}
+
+				// 检查是否已经通过认证
+				if (window.AuthCheck && window.AuthCheck.isAuthenticated()) {
+					console.log('Already authenticated');
+					resolve();
+					return;
+				}
+
+				// 等待认证检查完成，最多等待10秒
+				let attempts = 0;
+				const maxAttempts = 100; // 10秒
+
+				const checkInterval = setInterval(() => {
+					attempts++;
+
+					if (window.AuthCheck && window.AuthCheck.isAuthenticated()) {
+						console.log('Authentication successful after', attempts, 'attempts');
+						clearInterval(checkInterval);
+						resolve();
+					} else if (attempts >= maxAttempts) {
+						console.error('Auth check timeout after', attempts, 'attempts');
+						clearInterval(checkInterval);
+						reject(new Error('Auth check timeout'));
+					} else {
+						console.log('Auth check attempt', attempts, 'of', maxAttempts);
+					}
+				}, 100);
+			});
+		},
+
+		async toggleLang() {
+			this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+			localStorage.setItem('inno_lang', this.currentLang);
+			window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
+		},
+
+		async initializeProfile() {
+			// 从Session/Cookie获取用户信息
+			await this.loadUserFromSession();
+			// 加载导出历史（如果是管理员）
+			await this.loadExportHistory();
+		},
+
+		async loadUserFromSession() {
+			try {
+				// 只从SessionStorage获取user_profile_data
+				const sessionUser = sessionStorage.getItem('user_profile_data');
+				if (sessionUser) {
+					try {
+						const userData = JSON.parse(sessionUser);
+						console.log('✅ Found user_profile_data in SessionStorage:', userData);
+
+						// 映射SessionStorage数据到用户配置文件
+						const profileData = {
+							Email: userData.Email || userData.email || '',
+							Phone: userData.Phone || userData.phone || userData.phone_number || '',
+							First_name: userData.First_name || userData.first_name || userData.given_name || userData.FirstName || '',
+							Last_name: userData.Last_name || userData.last_name || userData.family_name || userData.LastName || '',
+							Remark: userData.Remark || userData.company || userData['custom:company'] || userData.Company || '',
+							HeadImageURL: userData.HeadImageURL || userData.headImageURL || userData.picture || userData.UserLogo || ''
+						};
+
+						this.populateUserProfile(profileData);
+						console.log('✅ User data loaded from SessionStorage (user_profile_data):', profileData);
+						return;
+					} catch (parseError) {
+						console.error('❌ Failed to parse user_profile_data:', parseError);
+						throw new Error('Failed to parse user profile data');
+					}
+				}
+
+				console.error('❌ No user_profile_data found in SessionStorage');
+				throw new Error('User data not found in session storage');
+			} catch (error) {
+				console.error('❌ Failed to load user profile:', error);
+				throw error;
+			}
+		},
+
+		populateUserProfile(userData) {
+			// 映射用户数据到Vue组件的userProfile对象
+			// 支持多种命名约定以兼容不同的数据源
+			this.userProfile = {
+				phone: userData.Phone || userData.phone || userData.phone_number || '',
+				email: userData.Email || userData.email || '',
+				firstName: userData.First_name || userData.firstName || userData.given_name || userData.first_name || '',
+				lastName: userData.Last_name || userData.lastName || userData.family_name || userData.last_name || '',
+				company: userData.Remark || userData.company || userData['custom:company'] || '',
+				avatar: userData.HeadImageURL || userData.avatar || userData.picture || userData.headImageURL || ''
+			};
+
+			console.log('✅ User profile populated:', this.userProfile);
+		},
+
+		async loadUserFromAPI(userId) {
+			try {
+				console.log('📝 Loading user from UserInfo.asmx/Get with userId:', userId);
+
+				// 调用 UserInfo.asmx/Get 方法 (使用 GET 方式)
+				const response = await axios.get(`/user/UserInfo.asmx/Get?userId=${encodeURIComponent(userId)}`, {
+					timeout: 5000
+				});
+
+				console.log('✅ UserInfo.asmx response:', response.data);
+
+				if (response.data) {
+					// 直接使用返回的用户数据
+					const userData = response.data;
+
+					// 映射到统一格式
+					const profileData = {
+						Email: userData.Email || '',
+						Phone: userData.Phone || '',
+						First_name: userData.First_name || '',
+						Last_name: userData.Last_name || '',
+						Remark: userData.Remark || '',
+						HeadImageURL: userData.HeadImageURL || '',
+						Group: userData.Group || '',
+						ExpirationDate: userData.ExpirationDate || '',
+						Expired: userData.Expired || false
+					};
+
+					this.populateUserProfile(profileData);
+					console.log('✅ User data loaded from UserInfo.asmx:', profileData);
+					return;
+				}
+
+				throw new Error('Invalid response from UserInfo.asmx');
+			} catch (error) {
+				console.error('❌ Failed to load user from UserInfo.asmx:', error);
+
+				// 降级方案1: 尝试从 inno_ai_services API
+				try {
+					const apiDomain = this.getAPIDomain();
+					const token = this.getCookie('api_token') || this.getCookie('access_token');
+
+					if (token) {
+						console.log('📝 Trying fallback API: /api/User/GetInfo');
+						const response = await axios.get(`${apiDomain}/api/User/GetInfo`, {
+							headers: {
+								'Authorization': `Bearer ${token}`,
+								'Content-Type': 'application/json'
+							},
+							timeout: 5000
+						});
+
+						if (response.data && response.data.ReturnCode === 0) {
+							const userData = response.data.Data;
+							this.populateUserProfile(userData);
+							console.log('✅ User data loaded from fallback API:', userData);
+							return;
+						}
+					}
+				} catch (fallbackError) {
+					console.error('❌ Fallback API also failed:', fallbackError);
+				}
+
+				// 降级方案2: 从 JWT token 提取基本信息
+				const token = this.getCookie('api_token');
+				if (token) {
+					const payload = this.parseJWTPayload(token);
+					if (payload) {
+						console.log('📝 Using JWT token data as last resort');
+						const userData = {
+							Email: payload.email || payload.username || '',
+							Phone: payload.phone_number || '',
+							First_name: payload.given_name || payload.first_name || '',
+							Last_name: payload.family_name || payload.last_name || '',
+							Remark: payload.company || payload['custom:company'] || '',
+							HeadImageURL: payload.picture || payload.headImageURL || ''
+						};
+
+						this.populateUserProfile(userData);
+						console.log('✅ User data loaded from JWT token (last resort):', userData);
+						return;
+					}
+				}
+
+				throw error;
+			}
+		},
+
+		async loadExportHistory() {
+			try {
+				const userId = this.getCookie('userId') || this.getCookie('UserID');
+				const userGroup = this.getCookie('UserGroup') || '';
+
+				// 只有管理员才显示导出历史
+				if (userGroup.toLowerCase() !== 'admin') {
+					this.showExportTab = false;
+					return;
+				}
+
+				this.showExportTab = true;
+				const apiDomain = this.getAPIDomain();
+				const url = `${apiDomain}/api/Company/DownloadList?userId=${userId}&page=1&pageSize=20`;
+
+				const response = await axios.get(url);
+				if (response.data && response.data.ReturnCode === 0) {
+					this.exportData = response.data.Data.data || [];
+				}
+			} catch (error) {
+				console.error('Failed to load export history:', error);
+				this.exportData = [];
+			}
+		},
+
+		getAPIDomain() {
+			// 从配置获取API域名，支持多个配置源
+			const apiDomain = window.apiDomain ||
+							window.innoApiDomain ||
+							'https://ai.innonation.io/inno_ai_services';
+			return apiDomain;
+		},
+
+		parseJWTPayload(token) {
+			try {
+				console.log('Parsing JWT token...');
+				const parts = token.split('.');
+				if (parts.length !== 3) {
+					console.error('Invalid JWT format - expected 3 parts, got', parts.length);
+					return null;
+				}
+
+				const payload = parts[1];
+				console.log('JWT payload:', payload);
+
+				// URL-safe Base64 decoding
+				let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+
+				// Add padding if needed
+				while (base64.length % 4) {
+					base64 += '=';
+				}
+
+				const decoded = atob(base64);
+				console.log('Decoded payload:', decoded);
+
+				const parsed = JSON.parse(decoded);
+				console.log('Parsed JWT payload:', parsed);
+
+				return parsed;
+			} catch (error) {
+				console.error('Failed to parse JWT:', error);
+				return null;
+			}
+		},
+
+		validateProfile() {
+			this.errors = {};
+			let isValid = true;
+
+			// 验证电话号码
+			if (!this.userProfile.phone || !this.userProfile.phone.trim()) {
+				this.errors.phone = this.t('fieldRequired');
+				isValid = false;
+			}
+
+			// 验证名字
+			if (!this.userProfile.firstName || !this.userProfile.firstName.trim()) {
+				this.errors.firstName = this.t('fieldRequired');
+				isValid = false;
+			}
+
+			// 验证姓氏
+			if (!this.userProfile.lastName || !this.userProfile.lastName.trim()) {
+				this.errors.lastName = this.t('fieldRequired');
+				isValid = false;
+			}
+
+			// 验证公司
+			if (!this.userProfile.company || !this.userProfile.company.trim()) {
+				this.errors.company = this.t('fieldRequired');
+				isValid = false;
+			}
+
+			return isValid;
+		},
+
+		async updateProfile() {
+			if (!this.validateProfile()) {
+				return;
+			}
+
+			this.saving = true;
+			this.message = { text: '', type: 'info' };
+
+			try {
+				const accessToken = this.getCookie('access_token');
+				if (!accessToken) {
+					this.message = {
+						text: this.t('sessionExpired') || 'Session expired, please login again',
+						type: 'danger'
+					};
+					setTimeout(() => {
+						window.location.href = '/home_israel.aspx';
+					}, 2000);
+					return;
+				}
+
+				console.log('📝 Updating user profile via UserInfo.asmx/Update...');
+
+				// 调用 UserInfo.asmx/Update 方法
+				// ASP.NET ASMX WebService: 必须使用POST + application/json才能返回JSON格式
+				// GET请求返回的是XML格式,无法直接解析
+				const response = await axios.post('https://ai.innonation.io/user/UserInfo.asmx/Update', {
+					accessToken: accessToken,
+					firstName: this.userProfile.firstName.trim(),
+					lastName: this.userProfile.lastName.trim(),
+					company: this.userProfile.company.trim(),
+					phone: this.userProfile.phone.trim(),
+					email: this.userProfile.email.trim()
+				}, {
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					timeout: 10000
+				});
+
+				console.log('✅ UserInfo.asmx/Update response:', response.data);
+
+				// ASP.NET ASMX的JSON响应被包裹在.d属性中
+				// 注意：response.data.d 已经是解析后的对象，不需要再次JSON.parse
+				const result = response.data.d || response.data;
+				console.log('📊 Parsed result:', result);
+
+				// 检查是否401认证失败
+				if (result && result.ReturnCode === 401) {
+					console.log('🔄 401 authentication error in response, redirecting to login page...');
+					this.message = {
+						text: this.t('sessionExpired'),
+						type: 'danger'
+					};
+					setTimeout(() => {
+						window.location.href = '/home_israel.aspx';
+					}, 2000);
+					return;
+				}
+
+				if (result && result.ReturnCode === 0) {
+					this.message = {
+						text: this.t('updateSuccess'),
+						type: 'success'
+					};
+
+					// 更新SessionStorage，模拟原始ASP.NET的Session["user"]行为
+					// 重要：保存所有命名变体以确保兼容性
+					const updatedUserData = {
+						// 邮箱
+						Email: this.userProfile.email,
+						email: this.userProfile.email,
+						// 名字 (优先使用 First_name 和 Last_name - 带下划线的Pascal Case)
+						First_name: this.userProfile.firstName,
+						firstName: this.userProfile.firstName,
+						first_name: this.userProfile.firstName,
+						given_name: this.userProfile.firstName,
+						// 姓氏
+						Last_name: this.userProfile.lastName,
+						lastName: this.userProfile.lastName,
+						last_name: this.userProfile.lastName,
+						family_name: this.userProfile.lastName,
+						// 公司
+						Remark: this.userProfile.company,
+						company: this.userProfile.company,
+						Company: this.userProfile.company,
+						// 电话
+						Phone: this.userProfile.phone,
+						phone: this.userProfile.phone,
+						phone_number: this.userProfile.phone,
+						// 头像
+						HeadImageURL: this.userProfile.avatar,
+						avatar: this.userProfile.avatar,
+						headImageURL: this.userProfile.avatar,
+						picture: this.userProfile.avatar
+					};
+
+					// 保存到SessionStorage，只使用user_profile_data键
+					sessionStorage.setItem('user_profile_data', JSON.stringify(updatedUserData));
+
+					console.log('✅ User profile updated and saved to SessionStorage:', updatedUserData);
+
+					// 🔄 重要:立即更新当前页面Vue组件,确保界面实时显示最新数据
+					// Vue的响应式系统会自动更新绑定的界面元素(用户名、邮箱等)
+					this.userProfile = {
+						phone: updatedUserData.Phone,
+						email: updatedUserData.Email,
+						firstName: updatedUserData.First_name,
+						lastName: updatedUserData.Last_name,
+						company: updatedUserData.Remark,
+						avatar: updatedUserData.HeadImageURL
+					};
+
+					console.log('✅ UI data refreshed with updated profile');
+
+					// 更新全局菜单显示的用户名(如果存在)
+					if (window.InnoGlobalMenu && typeof window.InnoGlobalMenu.updateUserInfo === 'function') {
+						window.InnoGlobalMenu.updateUserInfo({
+							name: `${updatedUserData.First_name} ${updatedUserData.Last_name}`,
+							email: updatedUserData.Email,
+							company: updatedUserData.Remark
+						});
+						console.log('✅ Global menu updated with new user info');
+					}
+
+					// 如果原始ASP.NET页面有hidden字段，也更新那些字段
+					const hiddenFields = ['UserID', 'Email', 'FirstName', 'LastName', 'Company'];
+					hiddenFields.forEach(fieldName => {
+						const field = document.getElementById(fieldName);
+						if (field) {
+							switch (fieldName) {
+								case 'Email':
+									field.value = this.userProfile.email;
+									break;
+								case 'FirstName':
+									field.value = this.userProfile.firstName;
+									break;
+								case 'LastName':
+									field.value = this.userProfile.lastName;
+									break;
+								case 'Company':
+									field.value = this.userProfile.company;
+									break;
+							}
+						}
+					});
+
+					// 触发全局用户数据更新事件（如果有其他组件需要监听）
+					window.dispatchEvent(new CustomEvent('user_profile_updated', {
+						detail: updatedUserData
+					}));
+				} else {
+					this.message = {
+						text: result?.Message || response.data?.Message || this.t('updateFailed'),
+						type: 'danger'
+					};
+				}
+			} catch (error) {
+				console.error('❌ Failed to update profile:', error);
+
+				// 处理特殊错误信息
+				let errorMessage = this.t('updateFailed');
+
+				// 检查ASMX响应结构 (response.data.d.ReturnCode)
+				let asmxResult = null;
+				if (error.response?.data?.d && typeof error.response.data.d === 'object') {
+					asmxResult = error.response.data.d;
+				} else if (error.response?.data && typeof error.response.data === 'object') {
+					asmxResult = error.response.data;
+				}
+
+				// 详细的401检测逻辑
+				const isAuthError =
+					// HTTP 401状态码
+					error.response?.status === 401 ||
+					// ASMX ReturnCode 401
+					(asmxResult && asmxResult.ReturnCode === 401) ||
+					// 各种认证错误消息
+					error.message?.includes('Authentication failed') ||
+					error.message?.includes('Access Token has expired') ||
+					error.message?.includes('Token validation failed') ||
+					error.message?.includes('Auth check timeout') ||
+					// ASMX响应中的错误消息
+					asmxResult?.Message?.includes('Authentication failed') ||
+					asmxResult?.Message?.includes('Access Token has expired') ||
+					asmxResult?.Error?.includes('Authentication failed') ||
+					asmxResult?.Error?.includes('Access Token has expired') ||
+					// HTTP响应中的错误消息
+					error.response?.data?.Message?.includes('Authentication failed') ||
+					error.response?.data?.Message?.includes('Access Token has expired');
+
+				if (isAuthError) {
+					errorMessage = this.t('sessionExpired');
+					console.log('🔄 401 authentication error detected, redirecting to login page...');
+					setTimeout(() => {
+						window.location.href = '/home_israel.aspx';
+					}, 2000);
+				} else if (error.response?.data?.Message) {
+					errorMessage = error.response.data.Message;
+				} else if (asmxResult?.Message) {
+					errorMessage = asmxResult.Message;
+				} else if (error.message) {
+					errorMessage = error.message;
+				}
+
+				this.message = {
+					text: errorMessage,
+					type: 'danger'
+				};
+			} finally {
+				this.saving = false;
+				// 5秒后清除消息
+				setTimeout(() => {
+					this.message = { text: '', type: 'info' };
+				}, 5000);
+			}
+		},
+
+		validatePassword() {
+			this.passwordErrors = {};
+			let isValid = true;
+
+			// 验证旧密码
+			if (!this.passwordForm.oldPassword) {
+				this.passwordErrors.oldPassword = this.t('fieldRequired');
+				isValid = false;
+			} else if (this.passwordForm.oldPassword.length < 8) {
+				this.passwordErrors.oldPassword = this.t('passwordTooShort8');
+				isValid = false;
+			} else if (this.passwordForm.oldPassword.length > 12) {
+				this.passwordErrors.oldPassword = this.t('passwordTooLong');
+				isValid = false;
+			}
+
+			// 验证新密码
+			if (!this.passwordForm.newPassword) {
+				this.passwordErrors.newPassword = this.t('fieldRequired');
+				isValid = false;
+			} else if (this.passwordForm.newPassword.length < 8) {
+				this.passwordErrors.newPassword = this.t('passwordTooShort8');
+				isValid = false;
+			} else if (this.passwordForm.newPassword.length > 12) {
+				this.passwordErrors.newPassword = this.t('passwordTooLong');
+				isValid = false;
+			} else if (this.passwordForm.oldPassword && this.passwordForm.newPassword === this.passwordForm.oldPassword) {
+				this.passwordErrors.newPassword = this.t('passwordSameAsOld');
+				isValid = false;
+			}
+
+			// 验证确认密码
+			if (!this.passwordForm.confirmPassword) {
+				this.passwordErrors.confirmPassword = this.t('fieldRequired');
+				isValid = false;
+			} else if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
+				this.passwordErrors.confirmPassword = this.t('passwordMismatch');
+				isValid = false;
+			}
+
+			return isValid;
+		},
+
+		async changePassword() {
+			if (!this.validatePassword()) {
+				return;
+			}
+
+			this.changingPassword = true;
+			this.passwordMessage = { text: '', type: 'info' };
+
+			try {
+				const accessToken = this.getCookie('access_token');
+				if (!accessToken) {
+					this.passwordMessage = {
+						text: this.t('sessionExpired') || 'Session expired, please login again',
+						type: 'danger'
+					};
+					setTimeout(() => {
+						window.location.href = '/home_israel.aspx';
+					}, 2000);
+					return;
+				}
+
+				console.log('📝 Changing password via UserInfo.asmx/ChangePassword...');
+
+				// Call UserInfo.asmx/ChangePassword method
+				const response = await axios.post('https://ai.innonation.io/user/UserInfo.asmx/ChangePassword', {
+					accessToken: accessToken,
+					oldPassword: this.passwordForm.oldPassword,
+					newPassword: this.passwordForm.newPassword,
+					phone: this.userProfile.phone || ''
+				}, {
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					timeout: 10000
+				});
+
+				console.log('✅ UserInfo.asmx/ChangePassword response:', response.data);
+
+				// ASP.NET ASMX wraps JSON response in .d property
+				const result = response.data.d || response.data;
+				console.log('📊 Parsed result:', result);
+
+				// Check for 401 authentication failure
+				if (result && result.ReturnCode === 401) {
+					console.log('🔄 401 authentication error in response, redirecting to login page...');
+					this.passwordMessage = {
+						text: this.t('sessionExpired'),
+						type: 'danger'
+					};
+					setTimeout(() => {
+						window.location.href = '/home_israel.aspx';
+					}, 2000);
+					return;
+				}
+
+				if (result && result.ReturnCode === 0) {
+					this.passwordMessage = {
+						text: this.t('updateSuccess'),
+						type: 'success'
+					};
+					// 清空表单
+					this.passwordForm = {
+						oldPassword: '',
+						newPassword: '',
+						confirmPassword: ''
+					};
+				} else {
+					this.passwordMessage = {
+						text: result?.Message || response.data?.Message || this.t('updateFailed'),
+						type: 'danger'
+					};
+				}
+			} catch (error) {
+				console.error('Failed to change password:', error);
+
+				// 处理特殊错误信息
+				let errorMessage = this.t('updateFailed');
+
+				// 检查ASMX响应结构 (response.data.d.ReturnCode)
+				let asmxResult = null;
+				if (error.response?.data?.d && typeof error.response.data.d === 'object') {
+					asmxResult = error.response.data.d;
+				} else if (error.response?.data && typeof error.response.data === 'object') {
+					asmxResult = error.response.data;
+				}
+
+				// 详细的401检测逻辑
+				const isAuthError =
+					// HTTP 401状态码
+					error.response?.status === 401 ||
+					// ASMX ReturnCode 401
+					(asmxResult && asmxResult.ReturnCode === 401) ||
+					// 各种认证错误消息
+					error.message?.includes('Authentication failed') ||
+					error.message?.includes('Access Token has expired') ||
+					error.message?.includes('Token validation failed') ||
+					error.message?.includes('Auth check timeout') ||
+					// ASMX响应中的错误消息
+					asmxResult?.Message?.includes('Authentication failed') ||
+					asmxResult?.Message?.includes('Access Token has expired') ||
+					asmxResult?.Error?.includes('Authentication failed') ||
+					asmxResult?.Error?.includes('Access Token has expired') ||
+					// HTTP响应中的错误消息
+					error.response?.data?.Message?.includes('Authentication failed') ||
+					error.response?.data?.Message?.includes('Access Token has expired');
+
+				if (isAuthError) {
+					errorMessage = this.t('sessionExpired');
+					console.log('🔄 401 authentication error detected, redirecting to login page...');
+					setTimeout(() => {
+						window.location.href = '/home_israel.aspx';
+					}, 2000);
+				} else if (error.response?.data?.Message) {
+					errorMessage = error.response.data.Message;
+				} else if (asmxResult?.Message) {
+					errorMessage = asmxResult.Message;
+				} else if (error.message) {
+					errorMessage = error.message;
+				}
+
+				this.passwordMessage = {
+					text: errorMessage,
+					type: 'danger'
+				};
+			} finally {
+				this.changingPassword = false;
+				// 5秒后清除消息
+				setTimeout(() => {
+					this.passwordMessage = { text: '', type: 'info' };
+				}, 5000);
+			}
+		},
+
+		getCookie(name) {
+			const value = `; ${document.cookie}`;
+			const parts = value.split(`; ${name}=`);
+			if (parts.length === 2) return parts.pop().split(';').shift();
+			return null;
+		},
+
+		toggleOldPassword() {
+			this.showOldPassword = !this.showOldPassword;
+		},
+
+		toggleNewPassword() {
+			this.showNewPassword = !this.showNewPassword;
+		},
+
+		toggleConfirmPassword() {
+			this.showConfirmPassword = !this.showConfirmPassword;
+		}
+	}
+}).mount('#app');
+    </script>
+</body>
+</html>

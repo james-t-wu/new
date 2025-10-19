@@ -83,32 +83,197 @@
     }
 
     // ===== 用户数据获取 =====
-    function getUserData() {
+    async function getUserData() {
         // 尝试从多个来源获取用户数据
         try {
-            // 1. 从 cookie 中获取
-            const userCookie = getCookie('user_info');
-            if (userCookie) {
-                return JSON.parse(decodeURIComponent(userCookie));
+            // 1. 从 cookie 中获取 user_id (Cookie 是权威来源)
+            const userId = getCookie('user_id') || localStorage.getItem('userId');
+
+            // 2. 检查缓存的用户数据（使用userId作为key，确保不同用户有不同缓存）
+            const cacheKey = `user_profile_data_${userId}`;
+            const cacheTimeKey = `user_profile_cache_time_${userId}`;
+            const cachedUser = sessionStorage.getItem(cacheKey);
+            if (cachedUser && userId) {
+                const userData = JSON.parse(cachedUser);
+                // 检查缓存是否过期（5分钟）
+                const cacheTime = sessionStorage.getItem(cacheTimeKey);
+                if (cacheTime && (Date.now() - parseInt(cacheTime)) < 300000) {
+                    logInfo(`Using cached user data for userId: ${userId}`);
+                    return transformUserData(userData);
+                }
             }
 
-            // 2. 从 localStorage 中获取
-            const userLocal = localStorage.getItem('user_info');
-            if (userLocal) {
-                return JSON.parse(userLocal);
+            // 调试日志
+            console.log('[UserProfile Debug] Cookie user_id:', getCookie('user_id'));
+            console.log('[UserProfile Debug] localStorage userId:', localStorage.getItem('userId'));
+            console.log('[UserProfile Debug] Final userId:', userId);
+
+            if (!userId || userId === '' || userId === 'null' || userId === 'undefined') {
+                logInfo('No userId found, using default data');
+                return getDefaultUserData();
             }
 
-            // 3. 从全局变量获取（如果存在）
-            if (window.currentUser) {
-                return window.currentUser;
+            // 3. 调用 UserInfo.asmx Get 方法获取用户信息
+            logInfo(`Fetching user data for userId: ${userId}`);
+            const userData = await fetchUserFromWebService(userId);
+
+            if (userData) {
+                // 缓存用户数据（使用userId作为key）
+                const cacheKey = `user_profile_data_${userId}`;
+                const cacheTimeKey = `user_profile_cache_time_${userId}`;
+                sessionStorage.setItem(cacheKey, JSON.stringify(userData));
+                sessionStorage.setItem(cacheTimeKey, Date.now().toString());
+
+                // 同步localStorage的userId
+                localStorage.setItem('userId', userId);
+
+                return transformUserData(userData);
             }
 
-            // 4. 返回默认数据
+            // 4. 如果获取失败，返回默认数据
+            logInfo('Failed to fetch user data, using default');
             return getDefaultUserData();
         } catch (error) {
             logError('Failed to get user data', error);
             return getDefaultUserData();
         }
+    }
+
+    /**
+     * 从 WebService 获取用户信息
+     * @param {string} userId - 用户ID
+     * @returns {Promise<Object|null>} 用户数据或null
+     */
+    async function fetchUserFromWebService(userId) {
+        try {
+            // 检测环境并使用相应的 API URL
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // 根据环境决定使用相对路径还是绝对路径
+            // 使用 GET 方式,参数作为查询字符串
+            const baseUrl = isLocalhost
+                ? 'https://ai.innonation.io/user/UserInfo.asmx/Get'  // 本地开发使用绝对路径
+                : '/user/UserInfo.asmx/Get';  // 生产环境使用相对路径
+
+            // 构建带参数的 URL (GET 方式)
+            const apiUrl = `${baseUrl}?userId=${encodeURIComponent(userId)}`;
+
+            console.log('[UserProfile Debug] Environment:', isLocalhost ? 'localhost' : 'production');
+            console.log('[UserProfile Debug] API URL:', apiUrl);
+            console.log('[UserProfile Debug] Calling UserInfo.asmx/Get with userId:', userId);
+
+            // 使用 GET 方式调用
+            const fetchOptions = {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            };
+
+            // 生产环境添加 credentials
+            if (!isLocalhost) {
+                fetchOptions.credentials = 'include';
+            }
+
+            const response = await fetch(apiUrl, fetchOptions);
+
+            console.log('[UserProfile Debug] Response status:', response.status, response.statusText);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            console.log('[UserProfile Debug] Response data:', result);
+
+            // 处理不同的响应格式
+            let userData = null;
+
+            // 方式1: POST 调用时,数据包裹在 'd' 属性中
+            if (result.d) {
+                userData = typeof result.d === 'string' ? JSON.parse(result.d) : result.d;
+            }
+            // 方式2: GET 调用时,直接返回用户对象
+            else if (result.Id || result.Email) {
+                userData = result;
+            }
+
+            if (userData) {
+                console.log('[UserProfile Debug] Parsed user data:', userData);
+                logInfo('User data fetched successfully from WebService');
+                return userData;
+            }
+
+            logError('Invalid response format from WebService', result);
+            return null;
+        } catch (error) {
+            logError('Error fetching user from WebService', error);
+            console.error('[UserProfile Debug] Fetch error details:', error);
+
+            // 如果是本地开发环境且 API 调用失败,提供友好提示
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                console.warn('[UserProfile] ⚠️ 本地开发环境检测到 API 调用失败');
+                console.warn('[UserProfile] 💡 请确保:');
+                console.warn('[UserProfile]    1. 后端服务正在运行');
+                console.warn('[UserProfile]    2. 或者将前端部署到与后端相同的域名进行测试');
+                console.warn('[UserProfile] 📌 将使用默认用户数据显示界面');
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * 转换后端用户数据为前端需要的格式
+     * @param {Object} userData - 后端返回的用户数据
+     * @returns {Object} 前端格式的用户数据
+     */
+    function transformUserData(userData) {
+        if (!userData) return getDefaultUserData();
+
+        // 计算会员类型
+        let membership = 'FREE';
+        let membershipLabel = 'Free User';
+
+        if (userData.Group) {
+            membership = userData.Group.toUpperCase();
+        }
+
+        // 格式化到期时间
+        let expiry = '';
+        if (userData.ExpirationDate) {
+            try {
+                const expirationTimestamp = parseInt(userData.ExpirationDate);
+                const expirationDate = new Date(expirationTimestamp * 1000);
+
+                // 格式化为 "Mon.DD.YYYY" 格式
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month = months[expirationDate.getMonth()];
+                const day = expirationDate.getDate();
+                const year = expirationDate.getFullYear();
+                expiry = `${month}.${day}.${year}`;
+            } catch (error) {
+                logError('Failed to parse expiration date', error);
+            }
+        }
+
+        // 构建用户名称
+        let name = 'User';
+        if (userData.First_name && userData.Last_name) {
+            name = `${userData.Last_name} ${userData.First_name}`;
+        } else if (userData.Email) {
+            name = userData.Email.split('@')[0];
+        }
+
+        return {
+            name: name,
+            membership: membership,
+            expiry: expiry,
+            avatarUrl: userData.HeadImageURL || null,
+            email: userData.Email || '',
+            userId: userData.Id || '',
+            expired: userData.Expired || false
+        };
     }
 
     function getDefaultUserData() {
@@ -162,7 +327,7 @@
                     <!-- 菜单项 -->
                     <ul class="user-profile-menu">
                         <li class="user-profile-menu-item">
-                            <a href="/dashboard/profile_israel.aspx" class="user-profile-menu-link">
+                            <a href="/new/profile.html" class="user-profile-menu-link">
                                 <i class="fas fa-user-circle"></i>
                                 <span>${t('profile')}</span>
                             </a>
@@ -236,8 +401,8 @@
             // 加载翻译
             await loadTranslations(state.lang);
 
-            // 获取用户数据
-            state.userData = getUserData();
+            // 获取用户数据 (现在是异步的)
+            state.userData = await getUserData();
 
             // 渲染组件
             targetElement.innerHTML = getUserProfileTemplate(state.userData);
@@ -309,13 +474,28 @@
             return state.lang;
         },
 
-        // 重新渲染组件
+        // 重新渲染组件 (会清除缓存并重新获取用户数据)
         async refresh() {
+            // 清除缓存
+            this.clearCache();
+
             const container = document.getElementById(COMPONENT_ID);
             if (container) {
                 return await render(container);
             }
             return false;
+        },
+
+        // 清除用户数据缓存
+        clearCache() {
+            // 清除所有user_profile相关的缓存
+            const keys = Object.keys(sessionStorage);
+            keys.forEach(key => {
+                if (key.startsWith('user_profile_data_') || key.startsWith('user_profile_cache_time_')) {
+                    sessionStorage.removeItem(key);
+                }
+            });
+            logInfo('User profile cache cleared');
         },
 
         // 销毁组件
@@ -325,6 +505,7 @@
                 container.remove();
             }
             state.isInitialized = false;
+            this.clearCache();
             logInfo('User profile component destroyed');
         }
     };

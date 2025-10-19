@@ -292,6 +292,21 @@
         parseToken: parseJWTToken,
         isTokenExpired: isTokenExpired,
         getCookie: getCookie,
-        markTokenAsSet: markTokenAsSet
+        markTokenAsSet: markTokenAsSet,
+        checkAuthentication: async function() {
+            return new Promise((resolve, reject) => {
+                if (hasToken()) {
+                    validateToken().then(isValid => {
+                        if (isValid) {
+                            resolve();
+                        } else {
+                            reject(new Error('Token validation failed'));
+                        }
+                    }).catch(reject);
+                } else {
+                    reject(new Error('No token found'));
+                }
+            });
+        }
     };
 })();

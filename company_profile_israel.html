@@ -1539,15 +1539,6 @@ body.menu-active .navbar-brand {
                         <i class="fa-solid fa-globe"></i>
                         <span class="lang-text">{{ currentLang === 'zh' ? 'EN' : '中文' }}</span>
                     </div>
-                    <button class="btn btn-outline-primary btn-sm" @click="openEditModal">
-                        <i class="fas fa-pen"></i> {{ t('edit') }}
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm" @click="openEditDescModal">
-                        <i class="fas fa-file-alt"></i> {{ t('editDescription') }}
-                    </button>
-                    <button class="btn btn-primary btn-sm" @click="openCreateNewsModal">
-                        <i class="fas fa-plus"></i> {{ t('createNews') }}
-                    </button>
                 </div>
             </div>
         </nav>
@@ -1562,6 +1553,19 @@ body.menu-active .navbar-brand {
                      <!-- 公司概览与详情合并卡片 -->
                      <div class="card" data-aos="fade-up">
                          <div class="card-body">
+                             <!-- 编辑按钮组 - 仅admin可见 -->
+                             <div v-if="isAdmin" class="d-flex justify-content-end gap-2 mb-3">
+                                 <button class="btn btn-outline-primary btn-sm" @click="openEditModal">
+                                     <i class="fas fa-pen"></i> {{ t('edit') }}
+                                 </button>
+                                 <button class="btn btn-outline-primary btn-sm" @click="openEditDescModal">
+                                     <i class="fas fa-file-alt"></i> {{ t('editDescription') }}
+                                 </button>
+                                 <button class="btn btn-primary btn-sm" @click="openCreateNewsModal">
+                                     <i class="fas fa-plus"></i> {{ t('createNews') }}
+                                 </button>
+                             </div>
+
                              <!-- 公司名称和Logo -->
                              <div class="d-flex align-items-center gap-4 mb-4">
                                  <div class="company-logo" :class="{ 'gradient-bg': !companyLogo }" :style="companyLogo ? `background-image: url('${companyLogo}')` : ''">
@@ -2199,6 +2203,7 @@ createApp({
 			aiAnalysisLoading: false,
 			aiAnalysis: null,
 			canEdit: false, // 将在 mounted() 中根据用户登录状态设置
+			isAdmin: false, // 将在 mounted() 中根据用户角色设置
 			// Tabs configuration (not used)
 			tabs: [],
 			// Edit modal
@@ -2266,6 +2271,9 @@ createApp({
 		// 检查用户是否已登录（有有效的API token）
 		this.canEdit = !!this.getApiToken();
 
+		// 检查用户是否为admin
+		await this.checkUserRole();
+
 		// 最终确保页面在顶部
 		this.$nextTick(() => {
 			setTimeout(() => {
@@ -2324,6 +2332,42 @@ createApp({
 			const parts = value.split(`; ${name}=`);
 			if (parts.length === 2) return parts.pop().split(';').shift();
 			return null;
+		},
+		// Check if user is admin by getting user info from UserInfo.asmx
+		async checkUserRole() {
+			try {
+				// Get userId from Cookie (not localStorage) - Cookie is the authoritative source
+				const userId = this.getCookie('user_id');
+				if (!userId) {
+					console.log('No userId found in cookie, user is not admin');
+					this.isAdmin = false;
+					return;
+				}
+
+				console.log('📝 Checking user role for userId:', userId);
+
+				// Sync localStorage with Cookie to ensure consistency
+				localStorage.setItem('userId', userId);
+
+				// Call UserInfo.asmx/Get to get user info including Group
+				const response = await axios.get(`/user/UserInfo.asmx/Get?userId=${encodeURIComponent(userId)}`, {
+					timeout: 5000
+				});
+
+				console.log('✅ UserInfo.asmx response:', response.data);
+
+				if (response.data && response.data.Group) {
+					// Check if user belongs to admin group
+					this.isAdmin = response.data.Group.toLowerCase() === 'admin';
+					console.log(`User Group: ${response.data.Group}, isAdmin: ${this.isAdmin}`);
+				} else {
+					console.log('No Group found in user data, user is not admin');
+					this.isAdmin = false;
+				}
+			} catch (error) {
+				console.error('❌ Failed to check user role:', error);
+				this.isAdmin = false;
+			}
 		},
 		// Load company profile - 参考原始脚本，只调用GetDetailInfo
 		async loadCompanyProfile() {
