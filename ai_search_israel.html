@@ -173,10 +173,10 @@
             methods: {
                 async loadI18n() {
                     try {
-                        const response = await axios.get('../data/locale.json');
-                        // 根据当前语言选择正确的翻译对象
-                        const langKey = this.currentLang === 'zh' ? 'zh' : 'en';
-                        this.translations = response.data[langKey] || {};
+                        // 根据当前语言加载对应的i18n文件
+                        const langFile = `ai_search_israel.${this.currentLang}.json`;
+                        const response = await axios.get(`common/i18n/${langFile}`);
+                        this.translations = response.data || {};
                         this.inputPlaceholder = this.t('assistant-ask');
                     } catch (error) {
                         console.error('Failed to load i18n:', error);

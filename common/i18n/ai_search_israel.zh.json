@@ -1,0 +1,21 @@
+{
+  "smart-match-ai-assistant": "Smart Match 智能查询助手",
+  "new-chat": "新对话",
+  "small-assistant": "Smart Match小助手",
+  "assistant-welcome": "欢迎使用查询聊天助手",
+  "assistant-function": "我的主要功能：",
+  "assistant-function1": "- 以色列科技公司查询推荐",
+  "assistant-function2": "- 借助AI对公司进行总结",
+  "assistant-function3": "- 公司详细页链接（融资记录、基于AI的分析报告等更多内容）",
+  "assistant-ask": "您可以这样问我：",
+  "assistant-ask1": "- 请推荐几个农业公司",
+  "assistant-ask2": "- 和Taboola相类似的公司有哪些",
+  "assistant-ask3": "- 用到激光技术治疗眼科疾病的公司有哪些",
+  "assistant-ask4": "- 您也可以只输入具体的公司名称，例如：Taboola",
+  "link-to-search": "您也可以<a href='discover_israel.aspx'>点击此处链接</a>，回到传统查询页面，使用关键词和行业筛选等方式进行公司查询。",
+  "ai-greeting": "你好！我是您的智能助手，可以帮您查询以色列科技创新企业信息。",
+  "ai-question1": "请推荐几个农业技术公司",
+  "ai-question2": "用到激光技术治疗眼科疾病的公司有哪些",
+  "EN": "EN",
+  "中文": "中文"
+}

@@ -1,0 +1,21 @@
+{
+  "smart-match-ai-assistant": "Smart Match AI Search Assistant",
+  "new-chat": "New Chat",
+  "small-assistant": "Smart Match Assistant",
+  "assistant-welcome": "Welcome to the query chat assistant.",
+  "assistant-function": "My main functions are:",
+  "assistant-function1": "- Recommendations for Israeli technology companies",
+  "assistant-function2": "- Providing AI-generated summaries of companies",
+  "assistant-function3": "- Links to company detail pages, including funding records, AI-based analysis reports, and more",
+  "assistant-ask": "You can ask me questions like:",
+  "assistant-ask1": "- Please recommend a few agricultural companies",
+  "assistant-ask2": "- What are some companies that are similar to Taboola?",
+  "assistant-ask3": "- Which companies utilize laser technology for the treatment of eye diseases?",
+  "assistant-ask4": "- You may also enter the name of a specific company directly, for example: Taboola.",
+  "link-to-search": "You can <a href='discover_israel.aspx'>click here</a> to return to the traditional inquiry page, where you can search for companies by using keywords and industry filters.",
+  "ai-greeting": "I am your intelligent assistant, here to help you explore infomation related to Israeli technology companies. ",
+  "ai-question1": "Please recommend some agricultural companies.",
+  "ai-question2": "Which companies utilize laser technology for the treatment of eye diseases?",
+  "EN": "EN",
+  "中文": "中文"
+}
