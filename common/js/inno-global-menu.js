@@ -415,6 +415,20 @@
                     font-size: 0.9rem;
                 }
 
+                /* 选中状态样式 */
+                .modern-menu-link.active {
+                    background: var(--color-light-blue, #f4f8fb);
+                    border-left-color: var(--color-brand-blue, #196fa6);
+                    color: var(--color-brand-blue, #196fa6);
+                    font-weight: 600;
+                }
+
+                .modern-submenu-link.active {
+                    background: var(--background-white, #ffffff);
+                    color: var(--color-brand-blue, #196fa6);
+                    font-weight: 600;
+                }
+
                 /* 折叠状态样式 */
                 .modern-menu-content.collapsed .menu-logo-text,
                 .modern-menu-content.collapsed .modern-menu-link span {
@@ -483,6 +497,90 @@
         `;
 
         document.head.insertAdjacentHTML('beforeend', styles);
+    }
+
+    // ===== 高亮当前页面菜单项 =====
+    function highlightCurrentPage(container) {
+        try {
+            // 获取当前页面路径
+            const currentPath = window.location.pathname;
+            const currentSearch = window.location.search;
+            const currentUrl = currentPath + currentSearch;
+
+            // 规范化路径函数
+            const normalizePath = (path) => {
+                if (!path) return '';
+                // 移除开头的斜杠并转为小写
+                return path.replace(/^\/+/, '').toLowerCase();
+            };
+
+            const normalizedCurrentPath = normalizePath(currentPath);
+            const normalizedCurrentUrl = normalizePath(currentUrl);
+
+            // 获取所有菜单链接及其匹配得分
+            const menuLinks = container.querySelectorAll('.modern-menu-link, .modern-submenu-link');
+            const matches = [];
+
+            menuLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (!href || href === '#') return;
+
+                const normalizedHref = normalizePath(href);
+                if (!normalizedHref) return;
+
+                let matchScore = 0;
+                let isMatch = false;
+
+                // 1. 优先级最高: 完全匹配 (路径 + 查询参数)
+                if (normalizedCurrentUrl === normalizedHref) {
+                    matchScore = 1000;
+                    isMatch = true;
+                }
+                // 2. 次优先级: 路径完全匹配 + 查询参数包含
+                else if (normalizedCurrentUrl.startsWith(normalizedHref) && normalizedHref.includes('?')) {
+                    matchScore = 900;
+                    isMatch = true;
+                }
+                // 3. 第三优先级: 仅路径完全匹配 (当前页面无参数,菜单项也无参数)
+                else if (normalizedCurrentPath === normalizedHref && !normalizedHref.includes('?') && !currentSearch) {
+                    matchScore = 800;
+                    isMatch = true;
+                }
+                // 4. 最低优先级: 路径包含匹配 (仅当菜单项无参数时)
+                else if (!normalizedHref.includes('?') && normalizedCurrentPath.includes(normalizedHref)) {
+                    matchScore = normalizedHref.length; // 越长的匹配越精确
+                    isMatch = true;
+                }
+
+                if (isMatch) {
+                    matches.push({ link, href, score: matchScore });
+                }
+            });
+
+            // 如果有多个匹配,选择得分最高的
+            if (matches.length > 0) {
+                // 按得分降序排序
+                matches.sort((a, b) => b.score - a.score);
+
+                // 只高亮得分最高的那个
+                const bestMatch = matches[0];
+                bestMatch.link.classList.add('active');
+
+                // 如果是子菜单项，展开父菜单
+                if (bestMatch.link.classList.contains('modern-submenu-link')) {
+                    const parentMenuItem = bestMatch.link.closest('.modern-menu-item');
+                    if (parentMenuItem) {
+                        parentMenuItem.classList.add('active');
+                    }
+                }
+
+                logInfo(`Menu item highlighted: ${bestMatch.href} (score: ${bestMatch.score})`);
+            } else {
+                logInfo('No matching menu item found for current page');
+            }
+        } catch (error) {
+            logError('Failed to highlight current page', error);
+        }
     }
 
     // ===== 事件绑定 =====
@@ -623,6 +721,9 @@
 
             // 绑定事件
             bindEvents(container);
+
+            // 高亮当前页面菜单项
+            highlightCurrentPage(container);
 
             logInfo('Menu rendered successfully');
             return true;

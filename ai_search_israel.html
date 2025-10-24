@@ -175,7 +175,7 @@
                     try {
                         const response = await axios.get('../data/locale.json');
                         // 根据当前语言选择正确的翻译对象
-                        const langKey = this.currentLang === 'zh' ? 'cn' : 'en';
+                        const langKey = this.currentLang === 'zh' ? 'zh' : 'en';
                         this.translations = response.data[langKey] || {};
                         this.inputPlaceholder = this.t('assistant-ask');
                     } catch (error) {
@@ -188,7 +188,7 @@
                     return this.translations[key] || key;
                 },
                 async toggleLang() {
-                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'cn';
+                    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
                     window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
                     await this.loadI18n();

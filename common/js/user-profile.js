@@ -336,7 +336,7 @@
                             <div class="user-profile-divider"></div>
                         </li>
                         <li class="user-profile-menu-item">
-                            <a href="/signout.aspx" class="user-profile-menu-link logout">
+                            <a href="/signout.aspx?redirect=Israel" class="user-profile-menu-link logout">
                                 <i class="fas fa-sign-out-alt"></i>
                                 <span>${t('signOut')}</span>
                             </a>
