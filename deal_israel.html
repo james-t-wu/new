@@ -33,6 +33,21 @@
 
     <!-- 自定义下拉控件样式 -->
     <style>
+        /* Bootstrap Datepicker 样式修复 - 确保不被固定导航栏遮挡 */
+        .datepicker {
+            z-index: 1060 !important;
+        }
+
+        .datepicker-dropdown {
+            z-index: 1060 !important;
+        }
+
+        /* 确保日期选择器下拉框正确定位 */
+        .datepicker.dropdown-menu {
+            z-index: 1060 !important;
+            position: absolute !important;
+        }
+
         /* 美化的下拉选择控件 */
         .custom-select {
             position: relative;
@@ -1306,11 +1321,6 @@
                 try {
                     await this.loadI18n();
 
-                    // Initialize the Vue app functionality from deal_israel_vue3.js
-                    if (window.DealIsraelApp) {
-                        window.DealIsraelApp.init(this);
-                    }
-
                     // Load initial data based on URL parameters first
                     this.loadInitialData();
 
@@ -1347,6 +1357,31 @@
                         console.error('Failed to load i18n:', e);
                         this.translations = FALLBACK_I18N[this.currentLang] || {};
                     }
+                },
+
+                // Initialize date picker filters
+                InitFilter() {
+                    // Common datepicker configuration
+                    const datepickerConfig = {
+                        format: 'yyyy-mm-dd',
+                        autoclose: true,
+                        todayHighlight: true,
+                        orientation: 'bottom auto',
+                        container: 'body',
+                        zIndexOffset: 10000
+                    };
+
+                    // Initialize Investment tab date pickers
+                    $('#start-day').datepicker(datepickerConfig);
+                    $('#end-day').datepicker(datepickerConfig);
+
+                    // Initialize M&A tab date pickers
+                    $('#start-day-ma').datepicker(datepickerConfig);
+                    $('#end-day-ma').datepicker(datepickerConfig);
+
+                    // Initialize IPO tab date pickers
+                    $('#start-day-ipo').datepicker(datepickerConfig);
+                    $('#end-day-ipo').datepicker(datepickerConfig);
                 },
 
                 // Initialize application configuration
