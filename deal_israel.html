@@ -757,9 +757,10 @@
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#ma">{{ t('ma') }}</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- IPO tab temporarily hidden -->
+                        <!-- <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#ipo">{{ t('ipo') }}</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <div class="card-body">
@@ -1421,19 +1422,51 @@
                             _self.page = 1;
                             _self.fundingData = [];
                             _self.sub_industry = '';
-                            // 移除自动调用：_self.InitFundingList();
+
+                            // Auto-query when switching to Investment tab
+                            _self.$nextTick(() => {
+                                _self.InitFundingList();
+                            });
                         }
                         if (e.target.hash == '#ma') {
                             _self.searchType = 'ma';
                             _self.page = 1;
                             _self.acquisitionData = [];
-                            // 移除自动调用：_self.InitAcquisitionList();
+
+                            // Set M&A tab date values if empty and auto-query
+                            _self.$nextTick(() => {
+                                const startDayMa = document.getElementById('start-day-ma');
+                                const endDayMa = document.getElementById('end-day-ma');
+
+                                if (startDayMa && !startDayMa.value) {
+                                    const dates = _self.getLastMonthDates();
+                                    startDayMa.value = dates.firstDay;
+                                    endDayMa.value = dates.lastDay;
+                                }
+
+                                // Auto-query when switching to M&A tab
+                                _self.InitAcquisitionList();
+                            });
                         }
                         if (e.target.hash == '#ipo') {
                             _self.searchType = 'ipo';
                             _self.page = 1;
                             _self.ipoData = [];
-                            // 移除自动调用：_self.InitIPOList();
+
+                            // Set IPO tab date values if empty and auto-query
+                            _self.$nextTick(() => {
+                                const startDayIpo = document.getElementById('start-day-ipo');
+                                const endDayIpo = document.getElementById('end-day-ipo');
+
+                                if (startDayIpo && !startDayIpo.value) {
+                                    const dates = _self.getLastMonthDates();
+                                    startDayIpo.value = dates.firstDay;
+                                    endDayIpo.value = dates.lastDay;
+                                }
+
+                                // Auto-query when switching to IPO tab
+                                _self.InitIPOList();
+                            });
                         }
                     });
                 },
@@ -1449,17 +1482,26 @@
                     this.ses = urlParams.get('ses') || '';
                     this.type = urlParams.get('type') || 'inv';
 
-                    // Set default dates if not provided (following original logic)
+                    // Set default dates if not provided - automatically use last month
                     if (!this.startTime || !this.endTime) {
-                        // Set default dates like the original code: 2025-07-01 to 2025-07-31
-                        this.startTime = '2025-07-01';
-                        this.endTime = '2025-07-31';
+                        const dates = this.getLastMonthDates();
+                        this.startTime = dates.firstDay;
+                        this.endTime = dates.lastDay;
                     }
 
-                    // Set date picker values
+                    // Set date picker values for all tabs
                     this.$nextTick(() => {
+                        // Investment tab dates
                         document.getElementById('start-day').value = this.startTime;
                         document.getElementById('end-day').value = this.endTime;
+
+                        // M&A tab dates
+                        document.getElementById('start-day-ma').value = this.startTime;
+                        document.getElementById('end-day-ma').value = this.endTime;
+
+                        // IPO tab dates
+                        document.getElementById('start-day-ipo').value = this.startTime;
+                        document.getElementById('end-day-ipo').value = this.endTime;
                     });
 
                     // Load initial data based on type - 页面初始化时默认加载数据
@@ -1531,6 +1573,21 @@
                     const day = String(date.getDate()).padStart(2, '0');
                     return `${year}-${month}-${day}`;
                 },
+
+                // Get last month's first and last day
+                getLastMonthDates() {
+                    const today = new Date();
+                    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+
+                    // First day of last month
+                    const firstDay = this.formatDate(lastMonth);
+
+                    // Last day of last month (first day of current month - 1 day)
+                    const lastDayDate = new Date(today.getFullYear(), today.getMonth(), 0);
+                    const lastDay = this.formatDate(lastDayDate);
+
+                    return { firstDay, lastDay };
+                },
                 t(key) {
                     return this.translations[key] || key;
                 },
@@ -1594,6 +1651,35 @@
                     return null;
                 },
 
+                // Get userId from localStorage or JWT token
+                getUserId() {
+                    // First try to get from localStorage
+                    let userId = localStorage.getItem('userId');
+                    if (userId) return userId;
+
+                    // If not in localStorage, try to parse from JWT token
+                    const token = this.getApiToken();
+                    if (token) {
+                        try {
+                            // JWT format: header.payload.signature
+                            const parts = token.split('.');
+                            if (parts.length === 3) {
+                                // Decode payload (Base64URL)
+                                const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+                                userId = payload.userId || payload.sub || payload.user_id || payload.id;
+                                if (userId) {
+                                    localStorage.setItem('userId', userId);
+                                    return userId;
+                                }
+                            }
+                        } catch (e) {
+                            console.error('Failed to parse JWT token:', e);
+                        }
+                    }
+
+                    return null;
+                },
+
                 // Deal functionality methods
                 goInv() {
                     this.page = 1;
@@ -1646,8 +1732,15 @@
                     const domStartDate = document.getElementById('start-day').value;
                     const domEndDate = document.getElementById('end-day').value;
 
-                    this.startTime = domStartDate || this.startTime || '2025-07-01';
-                    this.endTime = domEndDate || this.endTime || '2025-07-31';
+                    // Use last month's dates if no dates are set
+                    if (!domStartDate && !this.startTime) {
+                        const dates = this.getLastMonthDates();
+                        this.startTime = dates.firstDay;
+                        this.endTime = dates.lastDay;
+                    } else {
+                        this.startTime = domStartDate || this.startTime;
+                        this.endTime = domEndDate || this.endTime;
+                    }
                     let url = `Funding/Search?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&country=${this.countryName_inv}&industry=${this.category_inv}&fr=${this.fr}&sub_industry=${this.sub_industry}&company=${this.companyName_inv}`;
 
                     if (this.minAmount) {
@@ -1669,6 +1762,9 @@
                     if (apiToken) {
                         config.headers['Authorization'] = 'Bearer ' + apiToken;
                     }
+
+                    // Note: X-User-Id header removed due to CORS preflight issues
+                    // Backend should extract userId from JWT token instead
 
                     axios.get(this.getApiUrl(url), config).then(response => {
                         if (response.data.ReturnCode === 0 && response.data.Data) {
@@ -1722,9 +1818,16 @@
                     const domStartDate = document.getElementById('start-day-ma').value;
                     const domEndDate = document.getElementById('end-day-ma').value;
 
-                    this.startTime = domStartDate || this.startTime || '2025-07-01';
-                    this.endTime = domEndDate || this.endTime || '2025-07-31';
-                    let url = `Acquisition/SearchOpen?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&country=${this.countryName_ma}&industry=${this.category_ma}&sub_industry=${this.sub_industry_ma}&company=${this.companyName_ma}`;
+                    // Use last month's dates if no dates are set
+                    if (!domStartDate && !this.startTime) {
+                        const dates = this.getLastMonthDates();
+                        this.startTime = dates.firstDay;
+                        this.endTime = dates.lastDay;
+                    } else {
+                        this.startTime = domStartDate || this.startTime;
+                        this.endTime = domEndDate || this.endTime;
+                    }
+                    let url = `Acquisition/Search?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&country=${this.countryName_ma}&industry=${this.category_ma}&sub_industry=${this.sub_industry_ma}&company=${this.companyName_ma}`;
 
                     if (this.minPrice) {
                         url += `&amount_min=${this.minPrice}`;
@@ -1745,6 +1848,9 @@
                     if (apiToken) {
                         config.headers['Authorization'] = 'Bearer ' + apiToken;
                     }
+
+                    // Note: X-User-Id header removed due to CORS preflight issues
+                    // Backend should extract userId from JWT token instead
 
                     axios.get(this.getApiUrl(url), config).then(response => {
                         if (response.data.ReturnCode === 0 && response.data.Data) {
@@ -1783,8 +1889,15 @@
                     const domStartDate = document.getElementById('start-day-ipo').value;
                     const domEndDate = document.getElementById('end-day-ipo').value;
 
-                    this.startTime = domStartDate || this.startTime || '2025-07-01';
-                    this.endTime = domEndDate || this.endTime || '2025-07-31';
+                    // Use last month's dates if no dates are set
+                    if (!domStartDate && !this.startTime) {
+                        const dates = this.getLastMonthDates();
+                        this.startTime = dates.firstDay;
+                        this.endTime = dates.lastDay;
+                    } else {
+                        this.startTime = domStartDate || this.startTime;
+                        this.endTime = domEndDate || this.endTime;
+                    }
                     let url = `IPO/SearchOpen?page=${this.page}&pageSize=20&sd=${this.startTime}&ed=${this.endTime}&ses=${this.ses}&country=${this.countryName_ipo}`;
 
                     this.showFlag = true;
@@ -1799,6 +1912,9 @@
                     if (apiToken) {
                         config.headers['Authorization'] = 'Bearer ' + apiToken;
                     }
+
+                    // Note: X-User-Id header removed due to CORS preflight issues
+                    // Backend should extract userId from JWT token instead
 
                     axios.get(this.getApiUrl(url), config).then(response => {
                         if (response.data.ReturnCode === 0 && response.data.Data) {
