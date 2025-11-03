@@ -805,6 +805,20 @@
         }
     };
 
+    // ===== 语言切换事件监听 =====
+    function setupLanguageListener() {
+        // 监听全局语言切换事件
+        window.addEventListener('inno_lang_change', async (event) => {
+            const newLang = event.detail;
+            logInfo(`Language change event detected: ${newLang}`);
+
+            // 切换菜单语言
+            await InnoGlobalMenu.switchLanguage(newLang);
+        });
+
+        logInfo('Language change listener registered');
+    }
+
     // ===== 自动初始化 =====
     function autoInit() {
         if (document.readyState === 'loading') {
@@ -812,11 +826,15 @@
                 InnoGlobalMenu.init().catch(error => {
                     logError('Auto initialization failed', error);
                 });
+                // 设置语言切换监听器
+                setupLanguageListener();
             });
         } else {
             InnoGlobalMenu.init().catch(error => {
                 logError('Auto initialization failed', error);
             });
+            // 设置语言切换监听器
+            setupLanguageListener();
         }
     }
 
