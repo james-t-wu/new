@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="common/css/variables.css">
     <link rel="stylesheet" href="common/css/components.css">
 	<link rel="stylesheet" href="common/css/inno-global-menu.css">
+    <link rel="stylesheet" href="common/css/user-profile.css">
 	
     <link rel="stylesheet" href="css/report_israel.css">
 
@@ -135,8 +136,8 @@
                         </div>
                         <div class="card-body">
                             <p class="text-muted">{{ t('new-report-desc5') }}</p>
-                            <div class="d-grid gap-2 d-md-block">
-                                <button class="btn btn-primary" @click="generateAnnualReport">
+                            <div class="d-grid gap-2 d-md-block" style="padding-top: 2rem; padding-bottom: 1.5rem;">
+                                <button class="btn btn-primary" @click="generateAnnualReport" style="margin-right: 1rem;">
                                     <i class="fas fa-magic"></i> {{ t('generateReport') }}
                                 </button>
                                 <button class="btn btn-secondary" @click="viewSampleReport">
@@ -147,7 +148,7 @@
                     </div>
 
                     <!-- 公司分析报告 -->
-                    <div class="card" data-aos="fade-up" data-aos-delay="200">
+                    <!-- <div class="card" data-aos="fade-up" data-aos-delay="200">
                         <div class="card-header">
                             <h5 class="mb-0">
                                 <i class="fas fa-building"></i>
@@ -187,7 +188,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- 右侧边栏 -->
@@ -309,6 +310,9 @@
 
     <!-- 全局菜单组件 -->
     <script src="common/js/inno-global-menu.js"></script>
+
+    <!-- 用户资料组件 -->
+    <script src="common/js/user-profile.js"></script>
 
     <!-- 认证检查脚本 - JWT通用验证 -->
     <script src="common/js/auth-check.js"></script>
