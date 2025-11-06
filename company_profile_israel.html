@@ -1836,7 +1836,19 @@ body.menu-active .navbar-brand {
                                 >
                                     {{ news.title }}
                                 </a>
-                                <small class="text-muted">{{ formatDate(news.Date) }}</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ formatDate(news.Date) }}</small>
+                                    <a
+                                        href="javascript:;"
+                                        @click="openAINewsModal(news.id, news.title, news.Date, news.url)"
+                                        class="btn btn-sm btn-outline-primary d-flex align-items-center"
+                                        :title="t('aiAnalysis')"
+                                        style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+                                    >
+                                        <i class="fas fa-robot me-1"></i>
+                                        {{ t('aiAnalysis') }}
+                                    </a>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -2117,6 +2129,64 @@ body.menu-active .navbar-brand {
             </div>
         </div>
 
+        <!-- AI News Analysis Modal -->
+        <div v-if="showAINewsModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.6);" tabindex="-1" @click.self="closeAINewsModal">
+            <div class="modal-dialog" style="max-width: 700px; margin: 3rem auto; display: flex; align-items: flex-start; min-height: auto;">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden; width: 100%;">
+                    <!-- Modern Header -->
+                    <div class="modal-header border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem 2rem;">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3" style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-robot" style="color: white; font-size: 1.25rem;"></i>
+                            </div>
+                            <h5 class="modal-title mb-0 text-white fw-bold">
+                                {{ t('aiNewsSummary') }}
+                            </h5>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" @click="closeAINewsModal" style="opacity: 0.9;"></button>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body" style="padding: 0; overflow: hidden;">
+                        <!-- Loading Video -->
+                        <div v-if="aiNewsLoading" style="width: 100%; height: 0; padding-bottom: 56.25%; position: relative; background: linear-gradient(135deg, #d4dce6 0%, #e8eef5 100%);">
+                            <video ref="loadingVideo" autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: block;">
+                                <source src="https://innonation.oss-cn-beijing.aliyuncs.com/ai_news_analysis.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <!-- Analysis Content -->
+                        <div v-if="!aiNewsLoading && aiNewsData" style="padding: 2rem 2rem 1.5rem 2rem;">
+                            <!-- Title -->
+                            <div style="margin-bottom: 1.25rem;">
+                                <div class="d-flex align-items-center" style="margin-bottom: 0.75rem;">
+                                    <div style="width: 4px; height: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin-right: 10px;"></div>
+                                    <h6 class="mb-0 fw-bold" style="color: #2d3748; font-size: 0.813rem; text-transform: uppercase; letter-spacing: 0.5px;">{{ t('newsTitle') }}</h6>
+                                </div>
+                                <div v-if="currentLang === 'zh'" class="p-3 rounded" style="background-color: #f7fafc; border-left: 3px solid #667eea; font-size: 0.938rem; line-height: 1.6;" v-html="aiNewsData.title_cn"></div>
+                                <div v-if="currentLang === 'en'" class="p-3 rounded" style="background-color: #f7fafc; border-left: 3px solid #667eea; font-size: 0.938rem; line-height: 1.6;" v-html="aiNewsData.title_en"></div>
+                            </div>
+                            <!-- Summary -->
+                            <div style="margin-bottom: 1.25rem;">
+                                <div class="d-flex align-items-center" style="margin-bottom: 0.75rem;">
+                                    <div style="width: 4px; height: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin-right: 10px;"></div>
+                                    <h6 class="mb-0 fw-bold" style="color: #2d3748; font-size: 0.813rem; text-transform: uppercase; letter-spacing: 0.5px;">{{ t('summary') }}</h6>
+                                </div>
+                                <div v-if="currentLang === 'zh'" class="p-3 rounded" style="background-color: #f7fafc; border-left: 3px solid #764ba2; font-size: 0.938rem; line-height: 1.75; color: #4a5568;" v-html="aiNewsData.summary_cn"></div>
+                                <div v-if="currentLang === 'en'" class="p-3 rounded" style="background-color: #f7fafc; border-left: 3px solid #764ba2; font-size: 0.938rem; line-height: 1.75; color: #4a5568;" v-html="aiNewsData.summary_en"></div>
+                            </div>
+                            <!-- Original Link -->
+                            <div class="d-flex justify-content-end">
+                                <a v-if="aiNewsData.url" :href="aiNewsData.url" target="_blank" class="btn btn-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 500; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);" @mouseover="$event.target.style.transform='translateY(-2px)'; $event.target.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)'" @mouseout="$event.target.style.transform=''; $event.target.style.boxShadow='0 2px 4px rgba(102, 126, 234, 0.2)'">
+                                    <i class="fas fa-external-link-alt me-2" style="font-size: 0.813rem;"></i>
+                                    {{ t('viewOriginal') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Toast Notification -->
         <div v-if="showToast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11000;">
             <div class="toast show" role="alert">
@@ -2248,6 +2318,10 @@ createApp({
 				url: '',
 				posted_on: ''
 			},
+			// AI News Analysis modal
+			showAINewsModal: false,
+			aiNewsLoading: false,
+			aiNewsData: null,
 			// Toast notification
 			showToast: false,
 			toastType: 'success',
@@ -2601,6 +2675,8 @@ createApp({
 						this.newsData = this.companyProfile.relationships.news.items;
 						this.NewsTotal = this.companyProfile.relationships.news.paging?.total_items || this.newsData.length;
 						this.newsData.forEach(news => {
+							// 确保有id字段供API使用
+							news.id = news.id || news.uuid || '';
 							news.title = news.title || '';
 							news.url = news.url || '#';
 							news.Date = news.post_date || '';
@@ -3142,6 +3218,67 @@ createApp({
 			} finally {
 				this.newsLoading = false;
 			}
+		},
+		// AI News Analysis methods
+		async openAINewsModal(newsId, newsTitle, newsDate, newsUrl) {
+			// Prevent body scroll when modal is open
+			document.body.style.overflow = 'hidden';
+
+			this.showAINewsModal = true;
+			this.aiNewsLoading = true;
+			this.aiNewsData = null;
+
+			// Ensure video plays after Vue renders it
+			this.$nextTick(() => {
+				const video = this.$refs.loadingVideo;
+				if (video) {
+					video.play().catch(err => console.log('Video autoplay failed:', err));
+				}
+			});
+
+			try {
+				// AI API base URL
+				const aiApiBase = 'https://ai.innonation.io/inno_ai_services';
+
+				// Prepare the API URL with parameters
+				const url = `${aiApiBase}/api/AI/AnalysisNewsDify?id=${encodeURIComponent(newsId)}&title=${encodeURIComponent(newsTitle)}&date=${encodeURIComponent(newsDate)}&url=${encodeURIComponent(newsUrl)}&name=${encodeURIComponent(this.companyName)}&company_id=${encodeURIComponent(this.cId)}`;
+
+				// Make API call
+				const response = await axios.get(url);
+
+				if (response.data && response.data.ReturnCode === 0 && response.data.Data) {
+					const data = response.data.Data;
+
+					// Format the data for display
+					this.aiNewsData = {
+						title_cn: (data.title_cn || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'),
+						title_en: (data.title_en || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'),
+						summary_cn: (data.summary_cn || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'),
+						summary_en: (data.summary_en || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'),
+						url: newsUrl
+					};
+				} else {
+					// Show error in toast
+					this.showToast = true;
+					this.toastType = 'error';
+					this.toastMessage = this.t('analysisError') || 'Failed to get AI analysis';
+					this.closeAINewsModal();
+				}
+			} catch (error) {
+				console.error('Failed to get AI news analysis:', error);
+				this.showToast = true;
+				this.toastType = 'error';
+				this.toastMessage = this.t('analysisError') || 'An error occurred while analyzing the news';
+				this.closeAINewsModal();
+			} finally {
+				this.aiNewsLoading = false;
+			}
+		},
+		closeAINewsModal() {
+			this.showAINewsModal = false;
+			this.aiNewsData = null;
+			// Restore body scroll
+			document.body.style.overflow = '';
 		},
 		async openAIAnalysis(){
 			this.showAIModal = true;

@@ -121,5 +121,11 @@
 	"statusMerge": "合并",
 	"isClosed": "是否关闭",
 	"yes": "是",
-	"no": "否"
+	"no": "否",
+	"aiNewsSummary": "AI新闻摘要",
+	"analyzingNews": "正在分析新闻...",
+	"newsTitle": "新闻标题",
+	"summary": "摘要",
+	"viewOriginal": "查看原文",
+	"analysisError": "AI分析失败，请稍后再试"
 } 

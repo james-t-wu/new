@@ -121,5 +121,11 @@
 	"statusMerge": "Merged",
 	"isClosed": "Is Closed",
 	"yes": "Yes",
-	"no": "No"
+	"no": "No",
+	"aiNewsSummary": "AI News Summary",
+	"analyzingNews": "Analyzing news...",
+	"newsTitle": "News Title",
+	"summary": "Summary",
+	"viewOriginal": "View Original",
+	"analysisError": "AI analysis failed, please try again later"
 } 
