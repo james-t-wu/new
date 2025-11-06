@@ -1795,13 +1795,13 @@ body.menu-active .navbar-brand {
                             <div class="mb-3" style="font-size: 3rem; color: var(--color-brand-blue);">
                                 <i class="fas fa-robot"></i>
                             </div>
-                            <h6 class="mb-3">AI Analysis</h6>
-                            <p class="text-muted small mb-3">Get AI-powered insights about this company</p>
+                            <h6 class="mb-3">{{ t('aiAnalysis') }}</h6>
+                            <p class="text-muted small mb-3">{{ t('aiAnalysisDesc') }}</p>
                         <button
                             @click="openAIAnalysis"
                                 class="btn btn-primary w-100"
                         >
-                                Start
+                                {{ t('startAnalysis') }}
                         </button>
                     </div>
                             </div>
@@ -1894,28 +1894,47 @@ body.menu-active .navbar-brand {
                     </div>
 
         <!-- AI Analysis Modal -->
-        <div v-if="showAIModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{ t('aiAnalysisReport') }}</h5>
-                        <button type="button" class="btn-close" @click="showAIModal = false"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div v-if="aiAnalysisLoading" class="text-center py-5">
-                            <div class="spinner-border text-primary mb-3" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                    </div>
-                            <p class="text-muted fw-medium">{{ t('aiAnalyzing') }}</p>
+        <div v-if="showAIModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.6);" tabindex="-1" @click.self="closeAIAnalysisModal">
+            <div class="modal-dialog" style="max-width: 700px; margin: 2rem auto;">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                    <!-- Modern Header -->
+                    <div class="modal-header border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem 2rem;">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3" style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-robot" style="color: white; font-size: 1.25rem;"></i>
+                            </div>
+                            <h5 class="modal-title mb-0 text-white fw-bold">
+                                {{ t('aiAnalysisReport') }}
+                            </h5>
                         </div>
-                        <div v-else-if="aiAnalysis">
-                            <div class="mb-4">
-                                <h6 class="fw-semibold text-dark mb-3">{{ t('chineseAnalysis') }}</h6>
-                                <div class="bg-light p-4 rounded" v-html="aiAnalysis.analysisCN"></div>
+                        <button type="button" class="btn-close btn-close-white" @click="closeAIAnalysisModal" style="opacity: 0.9;"></button>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body" style="padding: 0; overflow: hidden;">
+                        <!-- Loading Video -->
+                        <div v-if="aiAnalysisLoading" style="width: 100%; height: 0; padding-bottom: 56.25%; position: relative; background: linear-gradient(135deg, #d4dce6 0%, #e8eef5 100%);">
+                            <video ref="analysisLoadingVideo" autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: block;">
+                                <source src="https://innonation.oss-cn-beijing.aliyuncs.com/ai_news_analysis2.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
-                        <div>
-                                <h6 class="fw-semibold text-dark mb-3">{{ t('englishAnalysis') }}</h6>
-                                <div class="bg-light p-4 rounded" v-html="aiAnalysis.analysis"></div>
+                        <!-- Analysis Content -->
+                        <div v-if="!aiAnalysisLoading && aiAnalysis" style="padding: 2rem 2rem 6rem; max-height: 70vh; overflow-y: auto;">
+                            <!-- Chinese Analysis -->
+                            <div style="margin-bottom: 1.5rem;">
+                                <div class="d-flex align-items-center" style="margin-bottom: 0.75rem;">
+                                    <div style="width: 4px; height: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin-right: 10px;"></div>
+                                    <h6 class="mb-0 fw-bold" style="color: #2d3748; font-size: 0.813rem; text-transform: uppercase; letter-spacing: 0.5px;">{{ t('chineseAnalysis') }}</h6>
+                                </div>
+                                <div class="p-3 rounded" style="background-color: #f7fafc; border-left: 3px solid #667eea; font-size: 0.938rem; line-height: 1.75; color: #4a5568;" v-html="aiAnalysis.analysis_cn"></div>
+                            </div>
+                            <!-- English Analysis -->
+                            <div>
+                                <div class="d-flex align-items-center" style="margin-bottom: 0.75rem;">
+                                    <div style="width: 4px; height: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin-right: 10px;"></div>
+                                    <h6 class="mb-0 fw-bold" style="color: #2d3748; font-size: 0.813rem; text-transform: uppercase; letter-spacing: 0.5px;">{{ t('englishAnalysis') }}</h6>
+                                </div>
+                                <div class="p-3 rounded" style="background-color: #f7fafc; border-left: 3px solid #764ba2; font-size: 0.938rem; line-height: 1.75; color: #4a5568;" v-html="aiAnalysis.analysis_en"></div>
                             </div>
                         </div>
                     </div>
@@ -3281,29 +3300,75 @@ createApp({
 			document.body.style.overflow = '';
 		},
 		async openAIAnalysis(){
+			// Prevent body scroll when modal is open
+			document.body.style.overflow = 'hidden';
+
 			this.showAIModal = true;
 			this.aiAnalysisLoading = true;
+			this.aiAnalysis = null;
+
+			// Ensure video plays after Vue renders it
+			this.$nextTick(() => {
+				const video = this.$refs.analysisLoadingVideo;
+				if (video) {
+					video.play().catch(err => console.log('Video autoplay failed:', err));
+				}
+			});
+
 			try {
-				// Prepare headers with authentication
-				const config = {
-					headers: {}
-				};
+				// Check if analysis already exists
+				if (this.companyProfile?.properties?.analysis_cn && this.companyProfile?.properties?.analysis_en) {
+					// Show existing analysis after 3 seconds
+					await new Promise(resolve => setTimeout(resolve, 3000));
+					this.aiAnalysis = {
+						analysis_cn: this.companyProfile.properties.analysis_cn.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'),
+						analysis_en: this.companyProfile.properties.analysis_en.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+					};
+				} else {
+					// Call API to get new analysis
+					const aiApiBase = 'https://ai.innonation.io/inno_ai_services';
+					const url = `${aiApiBase}/api/AI/SmartAnalysisCompany?id=${encodeURIComponent(this.cId)}&name=${encodeURIComponent(this.companyName)}`;
 
-				// Add authentication token if available
-				const apiToken = this.getApiToken();
-				if (apiToken) {
-					config.headers['Authorization'] = 'Bearer ' + apiToken;
-				}
+					const response = await axios.get(url);
 
-				const response = await axios.get(this.getApiUrl(`GetAIAnalysis?cId=${this.cId}`), config);
-				if (response.data.ReturnCode === 0) {
-					this.aiAnalysis = response.data.Data;
+					if (response.data && response.data.ReturnCode === 0 && response.data.Data) {
+						const data = response.data.Data;
+
+						// Format the data for display
+						this.aiAnalysis = {
+							analysis_cn: (data.analysis_cn || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'),
+							analysis_en: (data.analysis_en || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+						};
+
+						// Save to companyProfile for future use
+						if (!this.companyProfile.properties) {
+							this.companyProfile.properties = {};
+						}
+						this.companyProfile.properties.analysis_cn = data.analysis_cn;
+						this.companyProfile.properties.analysis_en = data.analysis_en;
+					} else {
+						// Show error
+						this.showToast = true;
+						this.toastType = 'error';
+						this.toastMessage = this.t('analysisError') || 'Failed to get AI analysis';
+						this.closeAIAnalysisModal();
+					}
 				}
-			} catch (e) {
-				console.error('Failed to load AI analysis:', e);
+			} catch (error) {
+				console.error('Failed to load AI analysis:', error);
+				this.showToast = true;
+				this.toastType = 'error';
+				this.toastMessage = this.t('analysisError') || 'An error occurred while analyzing';
+				this.closeAIAnalysisModal();
 			} finally {
 				this.aiAnalysisLoading = false;
 			}
+		},
+		closeAIAnalysisModal() {
+			this.showAIModal = false;
+			this.aiAnalysis = null;
+			// Restore body scroll
+			document.body.style.overflow = '';
 		}
 	}
 }).mount('#app');
