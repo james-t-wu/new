@@ -1,0 +1,18 @@
+{
+  "pageTitle": "查询投资收购",
+  "pageDescription": "输入公司名称，查找相关的投资和收购事件",
+  "searchPlaceholder": "输入公司名称...",
+  "searchButton": "搜索",
+  "emptyStateTitle": "开始搜索",
+  "emptyStateDescription": "输入公司名称以查找相关的投资和收购事件",
+  "noResultsTitle": "未找到结果",
+  "noResultsDescription": "没有找到与该公司相关的投资或收购事件",
+  "resultsTitle": "搜索结果",
+  "announcedDate": "公告日期",
+  "fundingRound": "融资轮次",
+  "industry": "行业",
+  "investors": "投资方",
+  "viewDetails": "查看详情",
+  "loading": "加载中",
+  "loadMore": "加载更多"
+}

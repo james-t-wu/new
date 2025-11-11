@@ -1,6 +1,8 @@
 {
     "aiSearch": "AI SEARCH",
     "discover": "SEARCH",
+    "discover_company": "SEARCH COMPANY",
+    "discover_deal": "SEARCH DEAL",
     "deal": "DEAL",
     "patent": "PATENT",
     "report": "REPORT",

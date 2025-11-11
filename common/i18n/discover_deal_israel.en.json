@@ -1,0 +1,18 @@
+{
+  "pageTitle": "Search Deals",
+  "pageDescription": "Enter company name to find related investment and acquisition events",
+  "searchPlaceholder": "Enter company name...",
+  "searchButton": "Search",
+  "emptyStateTitle": "Start Searching",
+  "emptyStateDescription": "Enter a company name to find related investment and acquisition events",
+  "noResultsTitle": "No Results Found",
+  "noResultsDescription": "No investment or acquisition events found for this company",
+  "resultsTitle": "Search Results",
+  "announcedDate": "Announced Date",
+  "fundingRound": "Funding Round",
+  "industry": "Industry",
+  "investors": "Investors",
+  "viewDetails": "View Details",
+  "loading": "Loading",
+  "loadMore": "Load More"
+}

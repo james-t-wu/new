@@ -28,6 +28,80 @@
 	
     <link rel="stylesheet" href="css/report_israel.css">
 
+    <style>
+        /* 升级模态框动画 */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(25, 111, 166, 0.7);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 20px 10px rgba(25, 111, 166, 0);
+            }
+        }
+
+        /* 模态框内容动画 */
+        .modal-content {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        /* 权益列表项动画 */
+        .benefit-item {
+            opacity: 0;
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+
+        .benefit-item:nth-child(1) { animation-delay: 0.1s; }
+        .benefit-item:nth-child(2) { animation-delay: 0.2s; }
+        .benefit-item:nth-child(3) { animation-delay: 0.3s; }
+        .benefit-item:nth-child(4) { animation-delay: 0.4s; }
+        .benefit-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 渐变按钮悬停效果 */
+        .modal-footer .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4) !important;
+            transition: all 0.3s ease;
+        }
+
+        /* 图标旋转动画 */
+        .fa-crown {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -126,22 +200,104 @@
                         </div>
                     </div>
 
-                    <!-- 年度报告 -->
+                    <!-- 年度报告 - 中国投资以色列 -->
                     <div class="card" data-aos="fade-up" data-aos-delay="100">
                         <div class="card-header">
                             <h5 class="mb-0">
                                 <i class="fas fa-chart-line"></i>
-                                {{ t('new-report-title3') }}
+                                {{ t('chinaInvestReportTitle') }}
                             </h5>
+                            <p class="text-muted small mb-0 mt-2">{{ t('chinaInvestReportSubtitle') }}</p>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted">{{ t('new-report-desc5') }}</p>
-                            <div class="d-grid gap-2 d-md-block" style="padding-top: 2rem; padding-bottom: 1.5rem;">
-                                <button class="btn btn-primary" @click="generateAnnualReport" style="margin-right: 1rem;">
-                                    <i class="fas fa-magic"></i> {{ t('generateReport') }}
-                                </button>
-                                <button class="btn btn-secondary" @click="viewSampleReport">
-                                    <i class="fas fa-eye"></i> {{ t('viewSample') }}
+                            <p class="text-muted mb-4">{{ t('chinaInvestReportDesc') }}</p>
+
+                            <!-- 核心发现预览 -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="fas fa-lightbulb text-warning me-2"></i>{{ t('coreFinding') }}
+                                </h6>
+                                <div class="row g-3">
+                                    <!-- 核心趋势 -->
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-light rounded border-start border-primary border-4 d-flex flex-column" style="min-height: 140px;">
+                                            <div class="text-muted small mb-2">{{ t('coreTrend') }}</div>
+                                            <div class="fs-4 fw-bold text-primary mb-2">{{ t('precisionIrrigation') }}</div>
+                                            <div class="text-muted small mt-auto">{{ t('precisionIrrigationDesc') }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- VC/战略投资 -->
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-light rounded border-start border-success border-4 d-flex flex-column" style="min-height: 140px;">
+                                            <div class="text-muted small mb-2">{{ t('vcStrategicInvest') }}</div>
+                                            <div class="fs-4 fw-bold text-success mb-2">{{ t('vcCasesCount') }}</div>
+                                            <div class="text-muted small mt-auto">{{ t('vcCasesDesc') }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- 重大并购 -->
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-light rounded border-start border-info border-4 d-flex flex-column" style="min-height: 140px;">
+                                            <div class="text-muted small mb-2">{{ t('majorMA') }}</div>
+                                            <div class="fs-4 fw-bold text-info mb-2">{{ t('maCasesCount') }}</div>
+                                            <div class="text-muted small mt-auto">{{ t('maCasesDesc') }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 报告内容预览（模糊效果） -->
+                            <div class="mb-4 position-relative" style="overflow: hidden; border-radius: 0.5rem;">
+                                <div class="bg-light p-4 border" style="filter: blur(2px); pointer-events: none; user-select: none;">
+                                    <h6 class="fw-bold text-secondary mb-3">
+                                        <i class="fas fa-briefcase me-2"></i>{{ currentLang === 'zh' ? '重大并购案例' : 'Major M&A Case' }}
+                                    </h6>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4 text-center">
+                                            <div class="small text-muted">{{ currentLang === 'zh' ? '收购方' : 'Acquirer' }}</div>
+                                            <div class="h5 fw-bold text-primary mt-2">{{ currentLang === 'zh' ? '联想集团' : 'Lenovo Group' }}</div>
+                                            <div class="small text-muted">{{ currentLang === 'zh' ? '中国' : 'China' }}</div>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <i class="fas fa-arrow-right fa-2x text-primary"></i>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="small text-muted">{{ currentLang === 'zh' ? '目标公司' : 'Target' }}</div>
+                                            <div class="h5 fw-bold text-dark mt-2">Infinidat</div>
+                                            <div class="small text-muted">{{ currentLang === 'zh' ? '以色列' : 'Israel' }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="small text-muted mb-2">
+                                            <strong>{{ currentLang === 'zh' ? '关键分析：' : 'Key Analysis:' }}</strong>
+                                            {{ currentLang === 'zh' ? '报告期内唯一重大并购案。此项交易由清晰的产品组合逻辑驱动...' : 'The only major M&A case during the reporting period. This transaction was driven by clear product portfolio logic...' }}
+                                        </p>
+                                    </div>
+                                    <hr class="my-3">
+                                    <h6 class="fw-bold text-secondary mb-3">
+                                        <i class="fas fa-chart-line me-2"></i>{{ currentLang === 'zh' ? 'VC/战略投资案例' : 'VC/Strategic Investment Cases' }}
+                                    </h6>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="bg-white p-3 rounded border-top border-danger border-3">
+                                                <div class="fw-bold text-danger">MitrAssist</div>
+                                                <div class="small text-muted">{{ currentLang === 'zh' ? '医疗器械 | 1亿美元 (C轮)' : 'MedTech | $100M (Series C)' }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="bg-white p-3 rounded border-top border-success border-3">
+                                                <div class="fw-bold text-success">ONE ZERO Digital Bank</div>
+                                                <div class="small text-muted">{{ currentLang === 'zh' ? '金融科技 | 6200万美元 (B轮)' : 'FinTech | $62M (Series B)' }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 渐变遮罩 -->
+                                <div class="position-absolute bottom-0 start-0 w-100" style="height: 120px; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.95), rgba(255,255,255,1)); pointer-events: none;"></div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-block" style="padding-top: 1rem;">
+                                <button class="btn btn-primary" @click="viewChinaInvestReport">
+                                    <i class="fas fa-file-alt"></i> {{ t('viewDetailedReport') }}
                                 </button>
                             </div>
                         </div>
@@ -297,6 +453,60 @@
                 </div>
             </div>
         </div>
+
+        <!-- 升级提示模态框 - 现代化设计 -->
+        <div v-if="showUpgradeModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);" tabindex="-1" @click.self="showUpgradeModal = false">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 540px; margin: 1.75rem auto;">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem; overflow: hidden;">
+                    <!-- 渐变头部 - 压缩高度 -->
+                    <div class="modal-header border-0 text-white position-relative" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.75rem 1.5rem 1.5rem 1.5rem;">
+                        <button type="button" class="btn-close btn-close-white position-absolute" @click="showUpgradeModal = false" style="top: 1.25rem; right: 1.25rem; opacity: 0.9;"></button>
+                        <div class="w-100 text-center">
+                            <div class="mb-2">
+                                <i class="fas fa-crown fa-2x" style="opacity: 0.95;"></i>
+                            </div>
+                            <h6 class="modal-title fw-bold mb-0" style="font-size: 1.1rem;">{{ t('upgradeTitle') }}</h6>
+                        </div>
+                    </div>
+
+                    <div class="modal-body" style="padding: 1.5rem; overflow-y: visible;">
+                        <!-- 当前账户状态 -->
+                        <div class="alert alert-light border d-flex align-items-center mb-3" style="border-radius: 0.75rem; padding: 0.75rem;">
+                            <i class="fas fa-user-circle fa-lg text-muted me-2"></i>
+                            <div>
+                                <div class="small text-muted" style="font-size: 0.8rem;">{{ t('currentPlan') }}</div>
+                                <div class="fw-bold" style="font-size: 0.95rem;">{{ currentUserPlan }}</div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted mb-3" style="font-size: 0.875rem; line-height: 1.5;">{{ t('upgradeDescription') }}</p>
+
+                        <!-- 权益列表 - 紧凑版 -->
+                        <div class="benefits-list">
+                            <div class="benefit-item mb-2" v-for="i in 5" :key="i">
+                                <div class="d-flex align-items-center">
+                                    <div class="benefit-icon me-2" style="flex-shrink: 0;">
+                                        <i class="fas fa-check-circle text-success" style="font-size: 1.1rem;"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0" style="line-height: 1.5; font-size: 0.85rem;">{{ t('upgradeBenefit' + i) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 bg-light d-flex justify-content-between" style="padding: 1rem 1.5rem;">
+                        <button type="button" class="btn btn-light" @click="showUpgradeModal = false" style="flex: 0 0 auto; padding: 0.5rem 1.5rem;">
+                            {{ t('close') }}
+                        </button>
+                        <button type="button" class="btn btn-primary" @click="contactForUpgrade" style="flex: 0 0 auto; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); padding: 0.5rem 1.25rem; white-space: nowrap;">
+                            <i class="fas fa-rocket me-1" style="font-size: 0.9rem;"></i>{{ t('contactUpgrade') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -394,7 +604,7 @@ const FALLBACK_I18N = {
 };
 const { createApp } = Vue;
 
-createApp({
+const app = createApp({
 	data() {
 		return {
 			// i18n
@@ -410,7 +620,11 @@ createApp({
 			reportContent: null,
 			selectedReport: null,
 			// Load More functionality
-			displayCount: 10 // 默认显示10条记录
+			displayCount: 10, // 默认显示10条记录
+			// Upgrade modal
+			showUpgradeModal: false,
+			userInfo: null,
+			currentUserPlan: ''
 		}
 	},
 	async mounted() {
@@ -423,6 +637,7 @@ createApp({
 		document.body.scrollTop = 0;
 
 		await this.loadI18n();
+		await this.loadUserInfo();
 		await this.initData();
 
 		// 最终确保页面在顶部
@@ -498,6 +713,7 @@ createApp({
 			// Use all available report data from original file (2025, 2024, 2023)
 			const availableReports = [
 				// 2025年报告
+				{ year: 2025, month: 10, key: '2025-10' },
 				{ year: 2025, month: 9, key: '2025-09' },
 				{ year: 2025, month: 8, key: '2025-08' },
 				{ year: 2025, month: 7, key: '2025-07' },
@@ -592,8 +808,189 @@ createApp({
 		viewSample(type) {
 		},
 
+		// Load user information
+		async loadUserInfo() {
+			try {
+				// Get userId first
+				const userId = localStorage.getItem('userId');
+				if (!userId) {
+					console.log('[Report] No userId found');
+					this.currentUserPlan = this.t('freePlan');
+					return;
+				}
+
+				// Try to get user info from UserProfile sessionStorage cache
+				const cacheKey = `user_profile_data_${userId}`;
+				const cachedData = sessionStorage.getItem(cacheKey);
+
+				if (cachedData) {
+					console.log('[Report] Using cached user data from sessionStorage');
+					this.userInfo = JSON.parse(cachedData);
+					console.log('[Report] User info from cache:', this.userInfo);
+
+					// Get user membership/role - check multiple possible field names
+					const membership = this.userInfo.Group || this.userInfo.group ||
+					                   this.userInfo.Role || this.userInfo.role ||
+					                   this.userInfo.Membership || this.userInfo.membership || '';
+
+					console.log('[Report] User membership:', membership);
+					this.currentUserPlan = this.getMembershipLabel(membership);
+					console.log('[Report] Current user plan:', this.currentUserPlan);
+					return;
+				}
+
+				console.log('[Report] No cached data, fetching from API');
+
+				// Get API token from cookie
+				const apiToken = this.getCookie('api_token');
+				if (!apiToken) {
+					console.log('[Report] No API token found');
+					this.currentUserPlan = this.t('freePlan');
+					return;
+				}
+
+				// Fetch user info from API using WebService
+				const response = await axios.get('/User_Info.asmx/GetUserInfo', {
+					params: { user_id: userId },
+					headers: {
+						'Authorization': 'Bearer ' + apiToken
+					}
+				});
+
+				console.log('[Report] User info response:', response.data);
+
+				// Parse XML response
+				if (response.data) {
+					const parser = new DOMParser();
+					const xmlDoc = parser.parseFromString(response.data, 'text/xml');
+					const jsonStr = xmlDoc.getElementsByTagName('string')[0]?.textContent;
+
+					if (jsonStr) {
+						const userData = JSON.parse(jsonStr);
+						this.userInfo = userData;
+						console.log('[Report] User info parsed:', this.userInfo);
+
+						// Cache the data for next time
+						sessionStorage.setItem(cacheKey, JSON.stringify(userData));
+						sessionStorage.setItem(`user_profile_cache_time_${userId}`, Date.now().toString());
+
+						// Get user membership/role
+						const membership = this.userInfo.Group || this.userInfo.group ||
+						                   this.userInfo.Role || this.userInfo.role ||
+						                   this.userInfo.Membership || this.userInfo.membership || '';
+
+						console.log('[Report] User membership:', membership);
+						this.currentUserPlan = this.getMembershipLabel(membership);
+						console.log('[Report] Current user plan:', this.currentUserPlan);
+					} else {
+						console.log('[Report] No JSON data in XML response');
+						this.currentUserPlan = this.t('freePlan');
+					}
+				} else {
+					console.log('[Report] No user data in response');
+					this.currentUserPlan = this.t('freePlan');
+				}
+			} catch (error) {
+				console.error('[Report] Failed to load user info:', error);
+				this.currentUserPlan = this.t('freePlan');
+			}
+		},
+
+		// Get cookie value
+		getCookie(name) {
+			const value = `; ${document.cookie}`;
+			const parts = value.split(`; ${name}=`);
+			if (parts.length === 2) {
+				return parts.pop().split(';').shift();
+			}
+			return null;
+		},
+
+		// Get membership label
+		getMembershipLabel(membership) {
+			if (!membership) {
+				console.log('[Report] No membership value');
+				return this.t('freePlan');
+			}
+
+			const membershipStr = String(membership);
+			const membershipUpper = membershipStr.toUpperCase();
+
+			console.log('[Report] Checking membership:', membershipStr, 'Upper:', membershipUpper);
+
+			if (membershipUpper === 'ADMIN' || membershipUpper === 'ADMINISTRATOR') {
+				console.log('[Report] User is ADMIN');
+				return this.t('adminPlan');
+			}
+			if (membershipUpper.includes('PREMIUM') || membershipUpper.includes('PAID') || membershipUpper.includes('PRO')) {
+				console.log('[Report] User is PREMIUM');
+				return this.t('premiumPlan');
+			}
+
+			console.log('[Report] User is FREE');
+			return this.t('freePlan');
+		},
+
+		// Check if user is admin
+		isUserAdmin() {
+			if (!this.userInfo) {
+				console.log('[Report] No userInfo');
+				return false;
+			}
+
+			// Check multiple possible field names
+			const membership = this.userInfo.Group || this.userInfo.group ||
+			                   this.userInfo.Role || this.userInfo.role ||
+			                   this.userInfo.Membership || this.userInfo.membership || '';
+
+			if (!membership) {
+				console.log('[Report] No membership field found');
+				return false;
+			}
+
+			const membershipUpper = String(membership).toUpperCase();
+			const isAdmin = membershipUpper === 'ADMIN' || membershipUpper === 'ADMINISTRATOR';
+
+			console.log('[Report] isUserAdmin check - membership:', membership, 'isAdmin:', isAdmin);
+			return isAdmin;
+		},
+
+		// View China Investment Report (with permission check)
+		viewChinaInvestReport() {
+			console.log('[Report] Button clicked - viewChinaInvestReport');
+			console.log('[Report] userInfo:', this.userInfo);
+			console.log('[Report] currentUserPlan:', this.currentUserPlan);
+
+			// Check if user is admin
+			const isAdmin = this.isUserAdmin();
+			console.log('[Report] isAdmin result:', isAdmin);
+
+			if (isAdmin) {
+				// Admin user - open report
+				console.log('[Report] Opening report for admin user');
+				window.open('china_investor_report.html', '_blank');
+			} else {
+				// Non-admin user - show upgrade modal
+				console.log('[Report] Showing upgrade modal for non-admin user');
+				this.showUpgradeModal = true;
+			}
+		},
+
+		// Contact for upgrade
+		contactForUpgrade() {
+			this.showUpgradeModal = false;
+			this.contactService();
+		},
+
 		// Contact service
 		contactService() {
+			// Scroll to contact section in sidebar
+			const contactCard = document.querySelector('.qr-section');
+			if (contactCard) {
+				contactCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				// Add highlight effect
+				contactCard.parentElement.style.animation = 'pulse 1s ease-in-out 2';
+			}
 		},
 
 		// View current report from modal
@@ -603,7 +1000,11 @@ createApp({
 			}
 		}
 	}
-}).mount('#app');
+});
+
+// Mount and expose for debugging
+const appInstance = app.mount('#app');
+window.reportApp = appInstance;
     </script>
 </body>
 </html>

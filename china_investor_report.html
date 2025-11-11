@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2023-2025年中国对以色列科技投资分析</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Chart.js 用于图表绘制 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入html2pdf.js 用于PDF下载 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- 引入设计系统CSS变量 -->
+    <link rel="stylesheet" href="common/css/css-variables.css">
+    <style>
+        /* 使用Inter字体（Tailwind默认） */
+        body {
+            font-family: var(--font-family-primary);
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-page);
+            font-size: var(--font-size-content);
+            line-height: var(--line-height-normal);
+        }
+
+        /* 品牌颜色应用 */
+        h1, h2, h3 {
+            color: var(--color-brand-blue);
+            font-weight: var(--font-weight-bold);
+        }
+
+        h1 { font-size: var(--font-size-3xl); }
+        h2 { font-size: var(--font-size-2xl); }
+        h3 { font-size: var(--font-size-xl); }
+
+        /* A4 纸张尺寸适配(210mm x 297mm) */
+        #pdf-export-area {
+            max-width: 210mm; /* A4 宽度 */
+            margin: 0 auto; /* 居中显示 */
+            background: var(--color-bg-white);
+            box-shadow: var(--shadow-light);
+            border-radius: var(--border-radius-lg);
+        }
+
+        /* 打印和 PDF 导出样式 */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            #pdf-export-area {
+                max-width: 100%;
+                box-shadow: none;
+            }
+            header {
+                position: static !important;
+            }
+        }
+
+        /* 调整容器宽度以适应 A4 */
+        .container {
+            max-width: 190mm; /* 留出边距 */
+        }
+
+        /* 确保内容不会在 PDF 中被截断 */
+        section {
+            page-break-inside: avoid;
+        }
+
+        /* 表格适配 */
+        table {
+            font-size: 0.85rem;
+            width: 100%;
+            table-layout: auto;
+        }
+
+        /* 表格容器不使用滚动 */
+        #full-table .bg-white {
+            overflow: visible !important;
+        }
+
+        /* 表格单元格自动换行 */
+        table td, table th {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* 禁止元素内换行 */
+        .nowrap { white-space: nowrap; }
+
+        /* 表格日期与融资轮次微调（网页与PDF一致） */
+        #full-table td.date-cell,
+        #full-table td.round-cell {
+            font-size: 0.75rem; /* 比正文略小，提高排版紧凑度 */
+            line-height: 1.1;
+        }
+
+        /* 卡片样式优化 - 应用设计系统 */
+        .grid > div {
+            page-break-inside: avoid;
+            break-inside: avoid;
+            transition: var(--hover-transition);
+        }
+
+        /* 卡片悬停效果 */
+        .bg-white:hover {
+            transform: var(--hover-transform);
+            box-shadow: var(--shadow-enhanced) !important;
+        }
+
+        /* Header 样式 */
+        header {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-md);
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+        }
+
+        header h1, header p {
+            color: var(--color-text-white) !important;
+        }
+
+        /* 按钮样式 - 应用设计系统 */
+        button, .btn {
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            border-radius: var(--btn-border-radius);
+            transition: var(--hover-transition);
+            cursor: pointer;
+        }
+
+        #download-pdf-button {
+            background: var(--gradient-primary);
+            border: none;
+            padding: var(--btn-padding);
+            height: var(--btn-height);
+            box-shadow: 0 2px 8px rgba(25, 111, 166, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #download-pdf-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        #download-pdf-button:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(25, 111, 166, 0.3);
+        }
+
+        #download-pdf-button:hover::before {
+            left: 100%;
+        }
+
+        /* PDF 导出时的特殊样式，只在导出时应用 */
+        .pdf-exporting #vc-cases .grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1rem !important;
+        }
+
+        .pdf-exporting #core-findings .grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 1rem !important;
+        }
+
+        .pdf-exporting #alternative-models .grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1rem !important;
+        }
+
+        .pdf-exporting table td,
+        .pdf-exporting table th {
+            font-size: 0.75rem !important;
+            padding: 0.5rem !important;
+        }
+
+        /* PDF 导出专用类 */
+        .pdf-exporting {
+            background: white !important;
+            box-shadow: none !important;
+        }
+
+        .pdf-exporting .container {
+            max-width: 100% !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        .pdf-exporting header {
+            position: static !important;
+            box-shadow: none !important;
+        }
+
+        /* PDF 导出时移除 sticky 定位 */
+        .pdf-exporting .sticky {
+            position: static !important;
+        }
+
+        /* PDF 导出时优化卡片 */
+        .pdf-exporting .shadow-lg {
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
+        }
+
+        /* PDF 导出时的间距调整 */
+        .pdf-exporting section {
+            margin-top: 2rem !important;
+        }
+
+        .pdf-exporting #pdf-export-area {
+            max-width: 100% !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- 
+      新增一个包装器，用于PDF导出。
+      我们只导出这部分内容，而不是整个 <body>，以避免脚本和页脚引起混乱。
+    -->
+    <div id="pdf-export-area">
+        <!-- 头部 (已修复) -->
+        <header class="bg-white shadow-md sticky top-0 z-10">
+            <div class="container mx-auto px-6 py-5">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-900">2023-2025年中国对以色列科技投资分析</h1>
+                        <p class="text-lg text-slate-600">重点赛道与技术趋势(根据报告生成)</p>
+                    </div>
+                    <!-- PDF 下载按钮 -->
+                    <div id="download-button-container" class="ml-4">
+                        <button id="download-pdf-button" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            下载为 PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容区域 -->
+        <main class="container mx-auto px-6 py-8">
+
+            <!-- 核心发现卡片 -->
+            <section id="core-findings">
+                <h2 class="text-2xl font-semibold text-slate-700 mb-5">核心发现</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- 卡片1: 核心趋势 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-blue-600">
+                        <h3 class="text-lg font-semibold text-slate-500">核心趋势</h3>
+                        <p class="text-4xl font-bold text-blue-700 mt-2">精准滴灌</p>
+                        <p class="text-slate-600 mt-2">投资转向高度集中和更具选择性的领域。</p>
+                    </div>
+                    <!-- 卡片2: VC/战略投资 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-green-600">
+                        <h3 class="text-lg font-semibold text-slate-500">VC/战略投资</h3>
+                        <p class="text-4xl font-bold text-green-700 mt-2">8 起</p>
+                        <p class="text-slate-600 mt-2">已核实的重大融资案例。</p>
+                    </div>
+                    <!-- 卡片3: 并购 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-purple-600">
+                        <h3 class="text-lg font-semibold text-slate-500">重大并购 (M&A)</h3>
+                        <p class="text-4xl font-bold text-purple-700 mt-2">1 起</p>
+                        <p class="text-slate-600 mt-2">报告期内唯一重大的中方并购案。</p>
+                    </div>
+                </div>
+            </section>
+    
+            <!-- 重大并购 (M&A) 案例 -->
+            <section id="m-and-a" class="mt-12">
+                <h2 class="text-2xl font-semibold text-slate-700 mb-5">重大并购 (M&A) 案例 (2025 年 1 月)</h2>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <!-- 收购方 -->
+                        <div class="text-center md:text-left">
+                            <p class="text-sm text-slate-500">收购方</p>
+                            <p class="text-3xl font-bold text-blue-800">联想集团 (中国)</p>
+                            <p class="text-sm text-slate-600">全球化企业背景</p>
+                        </div>
+                        <!-- 箭头 -->
+                        <div class="text-5xl font-light text-blue-500 my-4 md:my-0 transform md:rotate-0 rotate-90">
+                            &rarr;
+                        </div>
+                        <!-- 被收购方 -->
+                        <div class="text-center md:text-right">
+                            <p class="text-sm text-slate-500">目标公司</p>
+                            <p class="text-3xl font-bold text-slate-900">Infinidat (以色列)</p>
+                            <p class="text-sm text-slate-600">高端企业存储解决方案</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 border-t pt-4">
+                        <p class="text-slate-700"><strong class="font-semibold">关键分析：</strong>报告期内唯一重大并购案。此项交易由清晰的产品组合逻辑驱动，并得益于收购方的全球化企业背景和技术的"成熟市场"属性，而非新一轮并购浪潮的指标。</p>
+                    </div>
+                </div>
+            </section>
+    
+            <!-- VC/战略投资趋势图表 -->
+            <section id="vc-trends" class="mt-12">
+                <h2 class="text-2xl font-semibold text-slate-700 mb-5">VC/战略投资趋势：重点赛道 (按案例数)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-slate-600 mb-4">报告显示，投资高度集中于医疗器械和金融/企业 B2B 软件领域，展现了强大的市场协同性。</p>
+                    <!-- 容器ID保持不变，但canvas ID已指定 -->
+                    <div class="h-96 relative">
+                        <canvas id="sectorChart"></canvas>
+                        <!-- 静态图表的占位符 -->
+                    </div>
+                </div>
+            </section>
+    
+            <!-- VC/战略投资案例卡片 -->
+            <section id="vc-cases" class="mt-12">
+                <h2 class="text-2xl font-semibold text-slate-700 mb-5">VC/战略投资案例卡片 (2023-2025)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- 卡片: MitrAssist -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-red-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-red-700">MitrAssist</h3>
+                            <p class="text-sm text-slate-500 mb-2">2023 年 9 月 | 医疗器械(MedTech)</p>
+                            <p class="text-2xl font-semibold text-slate-800">1 亿美元 <span class="text-lg font-medium">(C 轮)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方：</strong>通和毓承(6D Capital)等</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析：</strong>"以色列研发+中国市场/资本"的深度融合模式，总部已位于上海。</p>
+                    </div>
+    
+                    <!-- 卡片: ONE ZERO Digital Bank -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-cyan-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-cyan-700">ONE ZERO Digital Bank</h3>
+                            <p class="text-sm text-slate-500 mb-2">2023年2月 | 金融科技 (FinTech)</p>
+                            <p class="text-2xl font-semibold text-slate-800">6200万美元 <span class="text-lg font-medium">(B轮)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 腾讯 (Tencent)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 中国科技巨头参与以色列数字银行业务，看重其可扩展性与金融生态协同。</p>
+                    </div>
+    
+                    <!-- 卡片: Voyantis -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-indigo-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-indigo-700">Voyantis</h3>
+                            <p class="text-sm text-slate-500 mb-2">2025年2月 | 人工智能 / MarTech</p>
+                            <p class="text-2xl font-semibold text-slate-800">4100万美元 <span class="text-lg font-medium">(B轮)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 元航资本 (Essential Capital)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 中国VC参与由英特尔资本领投的B轮融资。</p>
+                    </div>
+    
+                    <!-- 卡片: INNOVENTRIC -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-red-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-red-700">INNOVENTRIC</h3>
+                            <p class="text-sm text-slate-500 mb-2">2024年10月 | 医疗器械 (MedTech)</p>
+                            <p class="text-2xl font-semibold text-slate-800">2850万美元 <span class="text-lg font-medium">(B轮)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 精中投资 (JG Investment)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 专注于中以投资的精中投资作为现有投资者跟投。</p>
+                    </div>
+    
+                    <!-- 卡片: Octup -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-indigo-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-indigo-700">Octup</h3>
+                            <p class="text-sm text-slate-500 mb-2">2025年7月 | 人工智能 / B2B SaaS</p>
+                            <p class="text-2xl font-semibold text-slate-800">1200万美元 <span class="text-lg font-medium">(种子轮)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 磐石资本 (Stone Capital)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 位于上海的磐石资本参与AI物流运营平台种子轮。</p>
+                    </div>
+    
+                    <!-- 卡片: TinyTap -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-amber-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-amber-700">TinyTap</h3>
+                            <p class="text-sm text-slate-500 mb-2">2023年4月 | 教育科技 / Web3</p>
+                            <p class="text-2xl font-semibold text-slate-800">850万美元 <span class="text-lg font-medium">(B轮)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 红杉中国 (Sequoia Capital China)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 红杉中国领投，目标公司为Animoca Brands的子公司。</p>
+                    </div>
+    
+                    <!-- 卡片: 40seas -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-cyan-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-cyan-700">40seas</h3>
+                            <p class="text-sm text-slate-500 mb-2">2023年8月 | 金融科技 (FinTech)</p>
+                            <p class="text-2xl font-semibold text-slate-800">金额未披露 <span class="text-lg font-medium">(种子轮扩展)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 翊翎资本 (Eminence Ventures)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 参与B2B跨境贸易融资平台的种子轮扩展融资。</p>
+                    </div>
+    
+                    <!-- 卡片: Optima Design Automation -->
+                    <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-between h-full border-t-4 border-gray-500">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-700">Optima Design Automation</h3>
+                            <p class="text-sm text-slate-500 mb-2">2023年5月 | 半导体 / EDA</p>
+                            <p class="text-2xl font-semibold text-slate-800">未披露 <span class="text-lg font-medium">(战略投资)</span></p>
+                            <p class="text-sm text-slate-600 mt-3"><strong>中方:</strong> 芯华章 (X-EPIC)</p>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 bg-slate-50 p-2 rounded"><strong>分析:</strong> 精准布局，旨在弥补半导体产业链（汽车半导体验证）特定技术短板。</p>
+                    </div>
+                </div>
+            </section>
+    
+            <!-- 详细投资列表 (表格) -->
+            <section id="full-table" class="mt-12">
+                <h2 class="text-2xl font-semibold text-slate-700 mb-5">详细投资列表 (2023-2025)</h2>
+                <div class="bg-white rounded-lg shadow-lg overflow-visible">
+                    <table class="w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">投资时间</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">中国实体</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">目标公司</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">行业</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">融资轮次</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">融资金额(整轮)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-slate-200">
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2025年7月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">磐石资本 (Stone Capital)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Octup</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">人工智能 / B2B SaaS</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">种子轮 (Seed)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">1200万美元</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2025年2月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">元航资本 (Essential Capital)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Voyantis</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">人工智能 / MarTech</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">B轮 (Series B)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">4100万美元</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2024年10月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">精中投资 (JG Investment)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">INNOVENTRIC</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">医疗器械 (MedTech)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">B轮 (Series B)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">2850万美元</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2023年9月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">通和毓承 (6D Capital) 等</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">MitrAssist</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">医疗器械 (MedTech)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">C轮 (Series C)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">1亿美元</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2023年8月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">翊翎资本 (Eminence Ventures)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">40seas</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">金融科技 (FinTech)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">种子轮扩展</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">未披露</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2023年5月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">芯华章 (X-EPIC)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Optima Design Automation</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">半导体 / EDA</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">战略投资</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">未披露</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2023年4月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">红杉中国 (Sequoia Capital China)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">TinyTap</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">教育科技 / Web3</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">B轮 (Series B)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">850万美元</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-slate-900">2023年2月</td>
+                                <td class="px-6 py-4 text-sm text-slate-900">腾讯 (Tencent)</td>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">ONE ZERO Digital Bank</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">金融科技 (FinTech)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">B轮 (Series B)</td>
+                                <td class="px-6 py-4 text-sm text-slate-700">6200万美元</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+    
+            <!-- 替代模式 -->
+            <section id="alternative-models" class="mt-12">
+                <h2 class="text-2xl font-semibold text-slate-700 mb-5">替代合作模式</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 模式1: 非股权合作 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-slate-900">非股权合作 (软性伙伴关系)</h3>
+                        <p class="text-slate-600 mt-2">在AI、网络安全等战略领域，合作转向非资本伙伴关系。</p>
+                        <ul class="list-disc list-inside mt-3 space-y-1 text-slate-700">
+                            <li><strong>共同开发:</strong> 如百度、商汤与以色列AI初创公司合作。</li>
+                            <li><strong>联合演习:</strong> 如360集团与以色列网安公司技术研究合作。</li>
+                            <li><strong>研发中心:</strong> 如阿里巴巴在以色列设立研发中心。</li>
+                        </ul>
+                    </div>
+                    <!-- 模式2: IP逆向流动 -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-slate-900">IP逆向流动 (吸引"走进来")</h3>
+                        <p class="text-slate-600 mt-2">中国地方政府吸引以色列的IP和人才落地中国。</p>
+                        <div class="mt-3 bg-slate-50 p-4 rounded">
+                            <p class="font-semibold text-slate-800">核心案例: 中以常州创新园 (CICIP)</p>
+                            <p class="text-sm text-slate-700 mt-1">以色列公司在中国境内成立子公司，以换取政府提供的拨款、补贴、市场准入和许可协助。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+        </main>
+    </div> <!-- 结束 #pdf-export-area -->
+
+
+    <!-- 页脚 (移到导出区域之外) -->
+    <footer class="text-center py-8 mt-10 border-t border-slate-200">
+        <p class="text-sm text-slate-500">页面内容完全基于《2023-2025年中国对以色列科技投资分析》报告生成。</p>
+    </footer>
+
+    <!-- Chart.js 初始化脚本 -->
+    <script>
+        // 将图表实例存储在全局变量中，以便PDF脚本可以访问它
+        var mySectorChart = null; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 行业分布图表数据 (基于报告中8个VC案例统计)
+            // 医疗器械: 2 (MitrAssist, INNOVENTRIC)
+            // 金融/企业B2B: 4 (Octup, Voyantis, 40seas, ONE ZERO)
+            // 半导体/EDA: 1 (Optima)
+            // 教育科技: 1 (TinyTap)
+            const sectorData = {
+                labels: ['金融/企业B2B (FinTech/B2B)', '医疗器械 (MedTech)', '半导体/EDA', '教育科技 (Edtech)'],
+                datasets: [{
+                    label: '投资案例数量',
+                    data: [4, 2, 1, 1],
+                    backgroundColor: [
+                        'rgba(25, 111, 166, 0.7)',  // 品牌蓝
+                        'rgba(139, 92, 246, 0.7)',  // 紫色
+                        'rgba(220, 38, 38, 0.7)',   // 红色
+                        'rgba(245, 158, 11, 0.7)'   // 橙色
+                    ],
+                    borderColor: [
+                        'rgba(25, 111, 166, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(220, 38, 38, 1)',
+                        'rgba(245, 158, 11, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 8,  // 添加圆角
+                    borderSkipped: false  // 确保所有边都有圆角
+                }]
+            };
+
+            const ctx = document.getElementById('sectorChart').getContext('2d');
+            mySectorChart = new Chart(ctx, { // 赋值给全局变量
+                type: 'bar',
+                data: sectorData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // 将图表转为横向条形图，更易于阅读标签
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1 // 确保X轴刻度为整数
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // 隐藏图例，因为只有一个数据集
+                        },
+                        title: {
+                            display: true,
+                            text: '2023-2025年中方VC投资赛道分布 (按案例数)'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- 表格日期在“年”后强制换行（网页与PDF一致） -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateCells = document.querySelectorAll('#full-table tbody tr td:first-child');
+            const datePattern = /(\d{4})\s*年\s*(\d{1,2})\s*月/;
+            dateCells.forEach(td => {
+                // 避免重复处理
+                if (td.dataset.yearBreakApplied === 'true') return;
+                const original = td.innerHTML;
+                if (datePattern.test(original)) {
+                    td.innerHTML = original.replace(datePattern, '<span class="nowrap">$1年</span><br>$2月');
+                    td.classList.add('date-cell');
+                    td.dataset.yearBreakApplied = 'true';
+                }
+            });
+
+            // 融资轮次：将括号内容换到新行，如 "B轮 (Series B)" => "B轮\n(Series B)"
+            const roundCells = document.querySelectorAll('#full-table tbody tr td:nth-child(5)');
+            roundCells.forEach(td => {
+                if (td.dataset.roundBreakApplied === 'true') return;
+                const original = td.innerHTML;
+                if (original.includes('(')) {
+                    td.innerHTML = original.replace(/\s*\(/, '<br>(');
+                    td.classList.add('round-cell');
+                    td.dataset.roundBreakApplied = 'true';
+                }
+            });
+        });
+    </script>
+
+    <!-- PDF下载脚本 (已优化) -->
+    <script>
+        // 等待DOM加载完毕后再给按钮绑定事件
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('download-pdf-button').addEventListener('click', () => {
+                const element = document.getElementById('pdf-export-area'); // 更改：只捕获特定区域
+                const buttonContainer = document.getElementById('download-button-container');
+                const chartCanvas = document.getElementById('sectorChart');
+                const canvasContainer = chartCanvas.parentElement;
+                
+                // 1. 创建图表的静态图像
+                let chartImage = null;
+                if (mySectorChart && chartCanvas) {
+                    // 使用canvas的toDataURL方法,而不是chart实例的方法
+                    const chartImageSrc = chartCanvas.toDataURL('image/png');
+                    chartImage = document.createElement('img');
+                    chartImage.src = chartImageSrc;
+                    chartImage.style.width = '100%';
+                    chartImage.style.height = 'auto'; // 保持宽高比
+                    chartImage.id = 'temp-chart-image';
+                }
+
+                // 在生成PDF前执行的操作
+                const beforePrint = () => {
+                    // 滚动到页面顶部
+                    window.scrollTo(0, 0);
+
+                    element.classList.add('pdf-exporting'); // 添加PDF导出专用类
+                    buttonContainer.style.display = 'none'; // 隐藏按钮
+                    if (chartImage) {
+                        chartCanvas.style.display = 'none'; // 隐藏动态图表
+                        canvasContainer.appendChild(chartImage); // 插入静态图像
+                    }
+                };
+
+                // 在生成PDF后执行的操作（无论成功还是失败）
+                const afterPrint = () => {
+                    element.classList.remove('pdf-exporting'); // 移除PDF导出专用类
+                    buttonContainer.style.display = 'block'; // 恢复按钮
+                    if (chartImage) {
+                        chartCanvas.style.display = 'block'; // 恢复动态图表
+                        canvasContainer.removeChild(chartImage); // 移除静态图像
+                    }
+                };
+
+                const opt = {
+                    margin:       10,
+                    filename:     '中以科技投资分析 (2023-2025).pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  {
+                        scale: 2,
+                        useCORS: true,
+                        scrollY: -window.scrollY,
+                        scrollX: 0,
+                        letterRendering: true,
+                        logging: false
+                    },
+                    jsPDF:        {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    },
+                    pagebreak:    {
+                        mode: ['avoid-all', 'css', 'legacy']
+                    }
+                };
+
+                // 执行前置操作
+                beforePrint();
+
+                // 生成PDF
+                html2pdf().set(opt).from(element).save().then(() => {
+                    afterPrint();
+                }).catch(err => {
+                    console.error('PDF生成失败:', err);
+                    afterPrint(); // 确保即使失败也恢复界面
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

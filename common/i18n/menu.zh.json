@@ -1,6 +1,8 @@
 {
     "aiSearch": "智能查询",
     "discover": "查询",
+    "discover_company": "查询公司",
+    "discover_deal": "查询投资收购",
     "deal": "投资事件",
     "patent": "技术专利",
     "report": "商业报告",
