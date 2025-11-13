@@ -1,6 +1,6 @@
 {
 	"loadingReportInfo": "正在加载报告信息...",
-	"monthlyReports": "月度报告",
+	"monthlyReports": "全球投资以色列月度报告",
 	"reportName": "报告名称",
 	"actions": "操作",
 	"download": "下载",
@@ -110,7 +110,7 @@
 		"noReports": "暂无报告"
 	},
 
-	"new-report-title1": "全球投资以色列月度盘点",
+	"new-report-title1": "全球投资以色列报告",
 	"new-report-title2": "公司分析报告",
 	"new-report-title3": "跨境投资分析年度报告",
 	"new-report-desc1": "盘点内容由 Smart Match 自动梳理生成，包括当月投资以色列总额、投资阶段及趋势、投资项目列表、被收购事件及所涉及技术细节介绍等。",
@@ -118,7 +118,7 @@
 	"new-report-desc3": "在具体公司的详情页 logo下面点击 \"公司报告及对接\"按钮，选择需要的服务。",
 	"new-report-desc4": "公司分析报告由 INNONATION 专做海外科技项目落地的线下团队定制。除公司详情页信息外，详细介绍了目标公司的产品、技术及市场情况，并根据需求做出财务预测，对产品的市场趋势和竞争情况等进行深入剖析。",
 	"new-report-desc5": "报告数据和图谱等内容由 Smart Match 自动梳理生成，包括年度投资以色列总额、行业热点、各地区分别对以色列投资详情、投资项目列表、被收购事件介绍等。",
-	"chinaInvestReportTitle": "中国对以色列科技投资分析报告",
+	"chinaInvestReportTitle": "中国投资以色列报告",
 	"chinaInvestReportSubtitle": "2023-2025年重点赛道与技术趋势",
 	"chinaInvestReportDesc": "深度分析中国对以色列的科技投资趋势，涵盖VC/战略投资、并购案例、重点赛道及技术领域。报告基于 Smart Match 自动梳理生成，包含详细的投资数据、行业分析和趋势洞察。",
 	"viewDetailedReport": "查看详细报告",

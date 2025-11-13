@@ -725,14 +725,14 @@
                             <div class="deal-detail-item" v-if="deal.funding_round">
                                 <span class="deal-detail-label">{{ t('fundingRound') }}</span>
                                 <span class="deal-detail-value">
-                                    <span class="badge badge-primary">{{ deal.funding_round }}</span>
+                                    <span class="badge badge-primary">{{ currentLang === 'zh' ? (deal.funding_round_cn || deal.funding_round) : deal.funding_round }}</span>
                                 </span>
                             </div>
 
                             <div class="deal-detail-item industry-item" v-if="deal.industry">
                                 <span class="deal-detail-label">{{ t('industry') }}</span>
                                 <div class="industry-tags">
-                                    <span v-for="(tag, index) in parseIndustries(deal.industry)"
+                                    <span v-for="(tag, index) in parseIndustries(currentLang === 'zh' ? (deal.industry_cn || deal.industry) : deal.industry)"
                                           :key="index"
                                           class="badge badge-secondary">
                                         {{ tag }}
@@ -891,6 +891,8 @@
                 return {
                     currentLang: (localStorage.getItem('inno_lang') || 'zh').toLowerCase(),
                     translations: {},
+                    categoryTranslations: [], // 行业分类翻译对照表
+                    fundingRoundsTranslations: [], // 融资轮次翻译对照表
                     companyName: '',
                     deals: [],
                     loading: false,
@@ -904,6 +906,8 @@
             },
             async mounted() {
                 await this.loadI18n();
+                await this.loadCategoryTranslations();
+                await this.loadFundingRoundsTranslations();
                 // Add scroll event listener for infinite scroll
                 window.addEventListener('scroll', this.handleScroll);
             },
@@ -940,6 +944,64 @@
                     if (window.UserProfile) {
                         await window.UserProfile.setLang(this.currentLang);
                     }
+                },
+
+                async loadCategoryTranslations() {
+                    try {
+                        const res = await axios.get('../data/categories_translation_pair.json');
+                        this.categoryTranslations = res.data || [];
+                    } catch (e) {
+                        console.error('Failed to load category translations:', e);
+                        this.categoryTranslations = [];
+                    }
+                },
+
+                async loadFundingRoundsTranslations() {
+                    try {
+                        const res = await axios.get('../data/funding_rounds_translation.json');
+                        this.fundingRoundsTranslations = res.data || [];
+                    } catch (e) {
+                        console.error('Failed to load funding rounds translations:', e);
+                        this.fundingRoundsTranslations = [];
+                    }
+                },
+
+                translateCategory(englishCategory) {
+                    if (!englishCategory) return '';
+                    if (!this.categoryTranslations || this.categoryTranslations.length === 0) {
+                        return englishCategory;
+                    }
+                    const item = this.categoryTranslations.find(t => t.en === englishCategory);
+                    return item ? item.cn : englishCategory;
+                },
+
+                translateIndustryGroup(industryString) {
+                    if (!industryString) return '';
+
+                    // Handle array type
+                    if (Array.isArray(industryString)) {
+                        const translatedIndustries = industryString.map(ind => this.translateCategory(String(ind).trim()));
+                        return translatedIndustries.join('/');
+                    }
+
+                    // Convert to string and handle string type
+                    const str = String(industryString);
+                    const industries = str.split('/').map(i => i.trim());
+                    const translatedIndustries = industries.map(ind => this.translateCategory(ind));
+                    return translatedIndustries.join('/');
+                },
+
+                translateFundingRound(englishRound) {
+                    if (!englishRound) return '';
+                    if (!this.fundingRoundsTranslations || this.fundingRoundsTranslations.length === 0) {
+                        return englishRound;
+                    }
+                    let item = this.fundingRoundsTranslations.find(t => t.en === englishRound);
+                    if (!item && englishRound.startsWith('Series ')) {
+                        const seriesLetter = englishRound.replace('Series ', '').trim();
+                        item = this.fundingRoundsTranslations.find(t => t.en === `Series ${seriesLetter}`);
+                    }
+                    return item ? item.cn : englishRound;
                 },
 
                 getApiUrl(endpoint) {
@@ -1039,6 +1101,23 @@
                                 }
 
                                 item.investorNames = investorArr.join(', ');
+
+                                // Process funding round translation
+                                if (item.funding_round) {
+                                    // Store original English version
+                                    item.funding_round_en = item.funding_round;
+                                    // Generate Chinese version
+                                    item.funding_round_cn = this.translateFundingRound(item.funding_round);
+                                }
+
+                                // Process industry translation
+                                if (item.industry) {
+                                    // Store original English version
+                                    item.industry_en = item.industry;
+                                    // Generate Chinese version
+                                    item.industry_cn = this.translateIndustryGroup(item.industry);
+                                }
+
                                 return item;
                             });
 

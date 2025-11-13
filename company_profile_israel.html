@@ -1575,8 +1575,8 @@ body.menu-active .navbar-brand {
                                  </div>
                                 <div>
                                     <h2 class="mb-1">{{ companyProfile?.properties?.name || t('companyName') }}</h2>
-                                    <div v-if="companyProfile?.properties?.focus_en" class="mb-2 text-muted" style="font-size: 0.875rem;">
-                                        {{ companyProfile.properties.focus_en }}
+                                    <div v-if="currentFocus" class="mb-2 text-muted" style="font-size: 0.875rem;">
+                                        {{ currentFocus }}
                                     </div>
                                     <div class="d-flex gap-2">
                                         <span v-if="shouldShowStatus()" class="status-badge" :class="getStatusClass()">
@@ -1591,7 +1591,7 @@ body.menu-active .navbar-brand {
                                  <div class="info-row-single">
                                      <div class="info-item">
                                          <span class="info-label">{{ t('industry') }}</span>
-                                         <span class="info-value">{{ companyProfile?.Industry || t('na') }}</span>
+                                         <span class="info-value">{{ currentIndustry || t('na') }}</span>
                                      </div>
                                  </div>
 
@@ -1627,9 +1627,9 @@ body.menu-active .navbar-brand {
                              </div>
 
                              <!-- 公司描述 -->
-                             <div v-if="companyProfile?.Description" class="mt-4 pt-4 border-top">
+                             <div v-if="currentDescription" class="mt-4 pt-4 border-top">
                                  <h6 class="mb-3">{{ t('companyDetails') }}</h6>
-                                 <div class="text-muted lh-base" style="font-size: 0.875rem;" v-html="companyProfile.Description"></div>
+                                 <div class="text-muted lh-base" style="font-size: 0.875rem;" v-html="currentDescription"></div>
                              </div>
                          </div>
                      </div>
@@ -1698,7 +1698,7 @@ body.menu-active .navbar-brand {
                                                             target="_blank"
                                                     class="text-decoration-none"
                                                         >
-                                                            <span class="badge bg-secondary">{{ round.Series }}</span>
+                                                            <span class="badge bg-secondary">{{ getCurrentFundingRound(round) }}</span>
                                                         </a>
                                                     </td>
                                             <td>{{ round.Currency }}</td>
@@ -2265,6 +2265,8 @@ createApp({
 			// i18n
 			currentLang: DEFAULT_LANG,
 			translations: FALLBACK_I18N[DEFAULT_LANG] || {},
+			categoryTranslations: [], // 行业分类翻译对照表
+			fundingRoundsTranslations: [], // 融资轮次翻译对照表
 			// Company data
 			cId: this.getUrlParam('cId') || '4117c2a737664095e483ccf813ca31ac',
 			companyName: '',
@@ -2352,6 +2354,40 @@ createApp({
 			street: ''
 		}
 	},
+	computed: {
+		// 根据当前语言返回对应的公司描述
+		currentDescription() {
+			if (this.currentLang === 'zh') {
+				// 中文模式：优先显示中文描述，如果没有则显示英文描述
+				return this.companyProfile?.DescriptionCN || this.companyProfile?.Description || '';
+			} else {
+				// 英文模式：优先显示英文描述
+				return this.companyProfile?.Description || '';
+			}
+		},
+		// 根据当前语言返回对应的行业
+		currentIndustry() {
+			if (!this.companyProfile?.Industry) return '';
+
+			if (this.currentLang === 'zh') {
+				// 中文模式：将英文行业翻译为中文
+				return this.companyProfile.IndustryCN || this.companyProfile.Industry;
+			} else {
+				// 英文模式：显示英文行业
+				return this.companyProfile.Industry;
+			}
+		},
+		// 根据当前语言返回对应的业务焦点
+		currentFocus() {
+			if (this.currentLang === 'zh') {
+				// 中文模式：优先显示中文焦点，如果没有则显示英文焦点
+				return this.companyProfile?.properties?.focus_cn || this.companyProfile?.properties?.focus_en || '';
+			} else {
+				// 英文模式：优先显示英文焦点，如果没有则显示中文焦点
+				return this.companyProfile?.properties?.focus_en || this.companyProfile?.properties?.focus_cn || '';
+			}
+		}
+	},
 	async mounted() {
 		// 立即滚动到顶部，防止浏览器自动恢复滚动位置
 		if ('scrollRestoration' in history) {
@@ -2362,6 +2398,8 @@ createApp({
 		document.body.scrollTop = 0;
 
 		await this.loadI18n();
+		await this.loadCategoryTranslations();
+		await this.loadFundingRoundsTranslations();
 		await this.initData();
 
 		// 检查用户是否已登录（有有效的API token）
@@ -2396,6 +2434,69 @@ createApp({
 			}
 		},
 		t(key) { return this.translations[key] || key; },
+		// 加载行业分类翻译对照表
+		async loadCategoryTranslations() {
+			try {
+				const res = await axios.get('../data/categories_translation_pair.json');
+				this.categoryTranslations = res.data || [];
+			} catch (e) {
+				console.error('Failed to load category translations:', e);
+				this.categoryTranslations = [];
+			}
+		},
+		// 加载融资轮次翻译对照表
+		async loadFundingRoundsTranslations() {
+			try {
+				const res = await axios.get('../data/funding_rounds_translation.json');
+				this.fundingRoundsTranslations = res.data || [];
+			} catch (e) {
+				console.error('Failed to load funding rounds translations:', e);
+				this.fundingRoundsTranslations = [];
+			}
+		},
+		// 翻译单个行业名称
+		translateCategory(englishCategory) {
+			if (!englishCategory) return '';
+			if (!this.categoryTranslations || this.categoryTranslations.length === 0) {
+				return englishCategory;
+			}
+			const item = this.categoryTranslations.find(t => t.en === englishCategory);
+			return item ? item.cn : englishCategory;
+		},
+		// 翻译行业组（斜杠分隔的多个行业）
+		translateIndustryGroup(industryString) {
+			if (!industryString) return '';
+			const industries = industryString.split('/').map(i => i.trim());
+			const translatedIndustries = industries.map(ind => this.translateCategory(ind));
+			return translatedIndustries.join('/');
+		},
+		// 翻译融资轮次
+		translateFundingRound(englishRound) {
+			if (!englishRound) return '';
+			if (!this.fundingRoundsTranslations || this.fundingRoundsTranslations.length === 0) {
+				return englishRound;
+			}
+
+			// 尝试直接匹配
+			let item = this.fundingRoundsTranslations.find(t => t.en === englishRound);
+
+			// 如果没找到，尝试提取Series后面的字母 (如 "Series A" -> "A")
+			if (!item && englishRound.startsWith('Series ')) {
+				const seriesLetter = englishRound.replace('Series ', '').trim();
+				item = this.fundingRoundsTranslations.find(t => t.en === `Series ${seriesLetter}`);
+			}
+
+			return item ? item.cn : englishRound;
+		},
+		// 获取当前语言的融资轮次名称
+		getCurrentFundingRound(round) {
+			if (!round) return '';
+			if (this.currentLang === 'zh') {
+				return round.SeriesCN || round.Series;
+			} else {
+				return round.Series;
+			}
+		},
 		async toggleLang() {
 			this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
 			localStorage.setItem('inno_lang', this.currentLang);
@@ -2520,7 +2621,21 @@ createApp({
 						this.fundingData.forEach(round => {
 							round.Date = this.formatMonthStr(round.properties.announced_on);
 							round.Currency = round.properties.money_raised_usd ? `$${this.nFormatter(round.properties.money_raised_usd, 2)}` : '—';
-							round.Series = round.properties.series ? `Series ${round.properties.series}` : round.properties.funding_type?.replace(/_/g, ' ');
+							// 英文轮次
+							let englishSeries = '';
+							if (round.properties.series) {
+								englishSeries = `Series ${round.properties.series}`;
+							} else if (round.properties.funding_type) {
+								// 将下划线替换为空格,并转换为首字母大写
+								englishSeries = round.properties.funding_type
+									.replace(/_/g, ' ')
+									.split(' ')
+									.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+									.join(' ');
+							}
+							round.Series = englishSeries;
+							// 中文轮次
+							round.SeriesCN = this.translateFundingRound(englishSeries);
 							if (round.relationships?.investments?.items) {
 								const leadInvestors = round.relationships.investments.items
 									.filter(inv => inv.properties.is_lead_investor)
@@ -2603,9 +2718,13 @@ createApp({
 								});
 							}
 						});
+						// 英文行业
 						this.companyProfile.Industry = industryArr.join('/');
+						// 中文行业
+						this.companyProfile.IndustryCN = this.translateIndustryGroup(this.companyProfile.Industry);
 					} else {
 						this.companyProfile.Industry = '';
+						this.companyProfile.IndustryCN = '';
 					}
 
 					// 总部
@@ -2671,10 +2790,17 @@ createApp({
 					}
 
 					// 描述 - 短描述在前，空行分隔，然后是详细描述
+					// 英文描述
 					const desEnArr = [];
 					if (this.companyProfile.properties.short_description) desEnArr.push(this.companyProfile.properties.short_description);
 					if (this.companyProfile.properties.description) desEnArr.push(this.companyProfile.properties.description);
 					this.companyProfile.Description = desEnArr.length > 0 ? desEnArr.join('<br><br>') : '';
+
+					// 中文描述
+					const desCnArr = [];
+					if (this.companyProfile.properties.short_description_cn) desCnArr.push(this.companyProfile.properties.short_description_cn);
+					if (this.companyProfile.properties.description_cn) desCnArr.push(this.companyProfile.properties.description_cn);
+					this.companyProfile.DescriptionCN = desCnArr.length > 0 ? desCnArr.join('<br><br>') : '';
 
 					// 技术信息 - 根据公司特点设置技术名称和描述
 					// 这里可以根据实际API数据或公司信息来设置
