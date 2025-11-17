@@ -1913,8 +1913,7 @@ body.menu-active .navbar-brand {
                     <div class="modal-body" style="padding: 0; overflow: hidden;">
                         <!-- Loading Video -->
                         <div v-if="aiAnalysisLoading" style="width: 100%; height: 0; padding-bottom: 56.25%; position: relative; background: linear-gradient(135deg, #d4dce6 0%, #e8eef5 100%);">
-                            <video ref="analysisLoadingVideo" autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: block;">
-                                <source src="https://innonation.oss-cn-beijing.aliyuncs.com/ai_news_analysis2.mp4" type="video/mp4">
+                            <video :key="currentAnalysisVideo" ref="analysisLoadingVideo" :src="currentAnalysisVideo" autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: block;">
                                 Your browser does not support the video tag.
                             </video>
                         </div>
@@ -2168,8 +2167,7 @@ body.menu-active .navbar-brand {
                     <div class="modal-body" style="padding: 0; overflow: hidden;">
                         <!-- Loading Video -->
                         <div v-if="aiNewsLoading" style="width: 100%; height: 0; padding-bottom: 56.25%; position: relative; background: linear-gradient(135deg, #d4dce6 0%, #e8eef5 100%);">
-                            <video ref="loadingVideo" autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: block;">
-                                <source src="https://innonation.oss-cn-beijing.aliyuncs.com/ai_news_analysis.mp4" type="video/mp4">
+                            <video :key="currentNewsVideo" ref="loadingVideo" :src="currentNewsVideo" autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: block;">
                                 Your browser does not support the video tag.
                             </video>
                         </div>
@@ -2351,7 +2349,12 @@ createApp({
 			country: '',
 			region: '',
 			city: '',
-			street: ''
+			street: '',
+			// Random video selection
+			videoBaseUrl: 'https://innonation.oss-cn-beijing.aliyuncs.com/',
+			availableVideos: ['ai_news_analysis.mp4', 'ai_news_analysis1.mp4', 'ai_news_analysis2.mp4'],
+			currentAnalysisVideo: '',
+			currentNewsVideo: ''
 		}
 	},
 	computed: {
@@ -2418,6 +2421,13 @@ createApp({
 		});
 	},
 	methods: {
+		// Random video selection
+		getRandomVideo() {
+			const randomIndex = Math.floor(Math.random() * this.availableVideos.length);
+			const selectedVideo = this.videoBaseUrl + this.availableVideos[randomIndex];
+			console.log('🎬 Random video selected:', selectedVideo);
+			return selectedVideo;
+		},
 		// URL parameter helper
 		getUrlParam(name) {
 			const urlParams = new URLSearchParams(window.location.search);
@@ -3369,6 +3379,10 @@ createApp({
 			// Prevent body scroll when modal is open
 			document.body.style.overflow = 'hidden';
 
+			// Select random video for news analysis
+			this.currentNewsVideo = this.getRandomVideo();
+			console.log('📰 AI News Modal opened with video:', this.currentNewsVideo);
+
 			this.showAINewsModal = true;
 			this.aiNewsLoading = true;
 			this.aiNewsData = null;
@@ -3377,6 +3391,7 @@ createApp({
 			this.$nextTick(() => {
 				const video = this.$refs.loadingVideo;
 				if (video) {
+					// Video element will auto-reload with new src due to :key binding
 					video.play().catch(err => console.log('Video autoplay failed:', err));
 				}
 			});
@@ -3429,6 +3444,10 @@ createApp({
 			// Prevent body scroll when modal is open
 			document.body.style.overflow = 'hidden';
 
+			// Select random video for company analysis
+			this.currentAnalysisVideo = this.getRandomVideo();
+			console.log('🏢 AI Company Analysis Modal opened with video:', this.currentAnalysisVideo);
+
 			this.showAIModal = true;
 			this.aiAnalysisLoading = true;
 			this.aiAnalysis = null;
@@ -3437,6 +3456,7 @@ createApp({
 			this.$nextTick(() => {
 				const video = this.$refs.analysisLoadingVideo;
 				if (video) {
+					// Video element will auto-reload with new src due to :key binding
 					video.play().catch(err => console.log('Video autoplay failed:', err));
 				}
 			});
