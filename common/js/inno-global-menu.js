@@ -23,7 +23,42 @@
     	let lang = (localStorage.getItem('inno_lang') || 'zh').toLowerCase();
 	if (lang === 'zh') lang = 'zh';
 	const DEFAULT_LANG = lang;
-    const I18N_BASE_PATH = 'common/i18n/menu.';
+
+    // 动态计算i18n路径 - 根据当前页面位置自动调整
+    function getI18nBasePath() {
+        const currentPath = window.location.pathname;
+
+        // 找到 'new' 在路径中的位置
+        const pathParts = currentPath.split('/').filter(part => part); // 移除空字符串
+        const newIndex = pathParts.indexOf('new');
+
+        if (newIndex === -1) {
+            // 如果路径中没有 'new'，使用默认相对路径
+            return 'common/i18n/menu.';
+        }
+
+        // 计算从当前HTML文件到 /new/ 目录的层级数
+        // pathParts.length - 1 是因为最后一个是文件名
+        // newIndex + 1 是 /new/ 目录的下一层
+        const depth = pathParts.length - 1 - (newIndex + 1);
+
+        if (depth === 0) {
+            // 文件直接在 /new/ 目录下 (如 /new/index.html)
+            return 'common/i18n/menu.';
+        } else {
+            // 文件在 /new/ 的子目录中
+            const prefix = '../'.repeat(depth);
+            return `${prefix}common/i18n/menu.`;
+        }
+    }
+
+    const I18N_BASE_PATH = getI18nBasePath();
+
+    // 调试信息 - 生产环境可以注释掉
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.log('[InnoGlobalMenu] Current path:', window.location.pathname);
+        console.log('[InnoGlobalMenu] Calculated i18n base path:', I18N_BASE_PATH);
+    }
 
     // ===== 全局状态 =====
     let state = {

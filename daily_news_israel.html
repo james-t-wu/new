@@ -377,6 +377,118 @@
             },
 
             methods: {
+                // 内容清理和验证方法
+                sanitizeContent(content) {
+                    if (!content) return '';
+
+                    // 如果内容是对象，尝试提取文本
+                    if (typeof content === 'object') {
+                        return this.extractTextFromObject(content);
+                    }
+
+                    // 如果内容是字符串，检查是否是JSON
+                    if (typeof content === 'string') {
+                        // 尝试检测并解析JSON内容
+                        if (this.isJsonString(content)) {
+                            try {
+                                const parsed = JSON.parse(content);
+                                return this.extractTextFromObject(parsed);
+                            } catch (e) {
+                                console.warn('Failed to parse JSON content:', e);
+                                return content;
+                            }
+                        }
+                        return content;
+                    }
+
+                    return String(content);
+                },
+
+                isJsonString(str) {
+                    // 检查字符串是否看起来像JSON
+                    if (typeof str !== 'string') return false;
+                    const trimmed = str.trim();
+                    return (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+                           (trimmed.startsWith('[') && trimmed.endsWith(']'));
+                },
+
+                extractTextFromObject(obj) {
+                    if (!obj || typeof obj !== 'object') return '';
+
+                    // 根据当前语言优先提取内容
+                    const lang = this.currentLang;
+
+                    // 常见的内容字段名称
+                    const contentFields = [
+                        lang === 'zh' ? 'content' : 'content',
+                        lang === 'zh' ? '内容' : 'content',
+                        lang === 'zh' ? '标题cn' : '标题en',
+                        lang === 'zh' ? 'ChineseContent' : 'EnglishContent',
+                        lang === 'zh' ? 'ChineseSummary' : 'EnglishSummary',
+                        'text', 'description', 'summary'
+                    ];
+
+                    // 尝试从对象中提取内容
+                    for (const field of contentFields) {
+                        if (obj[field]) {
+                            const value = obj[field];
+                            // 递归处理嵌套对象
+                            if (typeof value === 'object') {
+                                const extracted = this.extractTextFromObject(value);
+                                if (extracted) return extracted;
+                            } else if (typeof value === 'string' && value.trim()) {
+                                return value;
+                            }
+                        }
+                    }
+
+                    // 如果没有找到内容字段，返回对象的第一个有效字符串值
+                    for (const key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            const value = obj[key];
+                            if (typeof value === 'string' && value.trim()) {
+                                return value;
+                            } else if (typeof value === 'object') {
+                                const extracted = this.extractTextFromObject(value);
+                                if (extracted) return extracted;
+                            }
+                        }
+                    }
+
+                    return '';
+                },
+
+                processNewsItem(item) {
+                    // 处理单个新闻项的所有内容字段
+                    const processed = { ...item };
+
+                    // 处理标题
+                    if (processed.ChineseTitle) {
+                        processed.ChineseTitle = this.sanitizeContent(processed.ChineseTitle);
+                    }
+                    if (processed.EnglishTitle) {
+                        processed.EnglishTitle = this.sanitizeContent(processed.EnglishTitle);
+                    }
+
+                    // 处理摘要
+                    if (processed.ChineseSummary) {
+                        processed.ChineseSummary = this.sanitizeContent(processed.ChineseSummary);
+                    }
+                    if (processed.EnglishSummary) {
+                        processed.EnglishSummary = this.sanitizeContent(processed.EnglishSummary);
+                    }
+
+                    // 处理完整内容
+                    if (processed.ChineseContent) {
+                        processed.ChineseContent = this.sanitizeContent(processed.ChineseContent);
+                    }
+                    if (processed.EnglishContent) {
+                        processed.EnglishContent = this.sanitizeContent(processed.EnglishContent);
+                    }
+
+                    return processed;
+                },
+
                 // i18n 方法
                 t(key) {
                     return this.translations[key] || key;
@@ -446,8 +558,13 @@
                         });
 
                         if (response.data.ReturnCode === 0) {
-                            this.newsList = response.data.Data.Items;
+                            // 处理每个新闻项，清理和验证内容
+                            const rawItems = response.data.Data.Items || [];
+                            this.newsList = rawItems.map(item => this.processNewsItem(item));
                             this.total = response.data.Data.Total;
+
+                            // 打印处理后的数据用于调试
+                            console.log('Processed news items:', this.newsList.length);
                         } else {
                             console.error('Failed to load news:', response.data.Message);
                         }
@@ -483,7 +600,8 @@
                 },
 
                 openModal(item) {
-                    this.selectedItem = item;
+                    // 确保模态框中的内容也经过处理
+                    this.selectedItem = this.processNewsItem(item);
                     this.showModal = true;
                     this.isClosing = false;
                     document.body.style.overflow = 'hidden';
