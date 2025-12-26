@@ -1790,7 +1790,7 @@ body.menu-active .navbar-brand {
                      </div>
 
                      <!-- AI Analysis 卡片 -->
-                     <div v-if="!companyProfile?.properties?.is_closed" class="card" data-aos="fade-up" data-aos-delay="200">
+                     <div v-if="shouldShowAIAnalysis()" class="card" data-aos="fade-up" data-aos-delay="200">
                         <div class="card-body text-center">
                             <div class="mb-3" style="font-size: 3rem; color: var(--color-brand-blue);">
                                 <i class="fas fa-robot"></i>
@@ -3104,6 +3104,17 @@ createApp({
 			if (props?.is_acquired) return 'status-badge-purple';
 			if (props?.is_closed) return 'status-badge-red';
 			return 'status-badge-green';
+		},
+		shouldShowAIAnalysis() {
+			const props = this.companyProfile?.properties;
+			// 如果公司已关闭，不显示 AI 分析
+			if (props?.is_closed) return false;
+			// 如果公司状态为以下几种，不显示 AI 分析
+			if (props?.company_status) {
+				const hiddenStatuses = ['stopped', 'site_closed', 'site_not_verified', 'no_site'];
+				if (hiddenStatuses.includes(props.company_status)) return false;
+			}
+			return true;
 		},
 		normalizeLogoUrl(value) {
 			if (!value) return '';

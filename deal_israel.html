@@ -1857,8 +1857,8 @@
                                 item.industryStr = item.acquiree_industry.join(', ');
                                 item.price_accurate = (item.price == null || item.price === '') ? '0' : item.price;
                                 item.price = (item.price == null || item.price === '') ? '—' : '$' + this.formatNumber(item.price);
-                                item.acquiree_id = item.acquiree_uuid;
-                                item.acquirer_id = item.acquirer_uuid;
+                                // item.acquiree_id = item.acquiree_uuid;
+                                // item.acquirer_id = item.acquirer_uuid;
                                 this.acquisitionData.push(item);
                             });
 
