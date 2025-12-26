@@ -9,7 +9,7 @@
 
     // API配置
     const API_BASE_URL = 'https://ai.innonation.io/inno_ai_services/api';
-    const LOGIN_PAGE = '/home_israel.aspx';
+    const LOGIN_PAGE = '/home_new_israel.aspx';
 
     /**
      * 获取 Cookie 值
