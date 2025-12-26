@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div class="input-container">
-                            <input type="text" v-model="userInput" @keyup.enter="sendMessage" :placeholder="inputPlaceholder" :disabled="isThinking">
+                            <input type="text" v-model="userInput" @keyup.enter="sendMessage" :disabled="isThinking">
                             <button class="send-btn" @click="sendMessage" :disabled="isThinking || !userInput.trim()">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
@@ -155,7 +155,6 @@
                     userInput: '',
                     isThinking: false,
                     isTyping: false,
-                    inputPlaceholder: '',
                     apiDomain: 'https://ai.innonation.io/inno_ai_services',
                     currentConversationId: null,
                     isNewConversation: true
@@ -177,7 +176,6 @@
                         const langFile = `ai_search_israel.${this.currentLang}.json`;
                         const response = await axios.get(`common/i18n/${langFile}`);
                         this.translations = response.data || {};
-                        this.inputPlaceholder = this.t('assistant-ask');
                     } catch (error) {
                         console.error('Failed to load i18n:', error);
                         // 设置默认翻译

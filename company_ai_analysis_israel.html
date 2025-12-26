@@ -166,6 +166,16 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .file-upload-wrapper:hover,
@@ -205,38 +215,115 @@
         }
 
         .selected-file-container {
-            background: var(--background-light);
-            padding: 1rem;
+            background: linear-gradient(135deg, rgba(25, 111, 166, 0.05) 0%, var(--background-light) 100%);
+            padding: 1.25rem;
             border-radius: var(--border-radius);
-            margin-top: 1rem;
+            border: 2px solid rgba(25, 111, 166, 0.2);
+            margin-top: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1rem;
+            transition: all var(--transition-base);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .selected-file-container:hover {
+            border-color: rgba(25, 111, 166, 0.4);
+            box-shadow: 0 2px 8px rgba(25, 111, 166, 0.1);
         }
 
         .file-info {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
+            flex: 1;
+            min-width: 0;
         }
 
         .file-info i {
             color: var(--color-brand-blue);
-            font-size: 1.25rem;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .file-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-size {
+            font-size: 0.875rem;
+            color: var(--light-text);
         }
 
         .delete-file-btn {
-            background: none;
+            background: var(--error-color);
             border: none;
-            color: var(--error-color);
-            padding: 0.5rem;
+            color: white;
+            padding: 0.625rem 1.25rem;
             cursor: pointer;
             border-radius: var(--border-radius);
             transition: all var(--transition-base);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
         }
 
         .delete-file-btn:hover {
-            background: rgba(231, 76, 60, 0.1);
+            background: #c0392b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .delete-file-btn:active {
+            transform: translateY(0);
+        }
+
+        .delete-file-btn i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .selected-file-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .file-info {
+                width: 100%;
+            }
+
+            .delete-file-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         /* 表单组样式优化 */
@@ -426,6 +513,35 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 0;
+        }
+
+        .new-analysis-section {
+            padding: 2rem;
+            border-top: 2px solid var(--border-color);
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-white) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .new-analysis-section .btn {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-base);
+        }
+
+        .new-analysis-section .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .new-analysis-section .btn i {
+            font-size: 1.125rem;
         }
 
         .result-panel {
@@ -686,7 +802,7 @@
                     <div class="card-header">
                         <h1 class="card-title">
                             <i class="fas fa-brain"></i>
-                            {{ currentLang === 'zh' ? '公司智能分析报告' : 'AI Powered Company Analysis Report' }}
+                            {{ currentLang === 'zh' ? '公司简介生成器' : 'Profile Generator' }}
                         </h1>
                     </div>
                     <div class="card-body">
@@ -726,57 +842,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- 公司介绍 -->
-                                    <div class="form-group">
-                                        <label for="company_introduction">
-                                            {{ currentLang === 'zh' ? '公司相关素材（推荐）' : 'Company Materials (Recommend)' }}
-                                        </label>
-                                        <textarea
-                                            class="form-control"
-                                            id="company_introduction"
-                                            v-model="company_introcution"
-                                            rows="6"
-                                            :placeholder="currentLang === 'zh' ? '请输入公司介绍、产品信息或其他相关材料...' : 'Enter company introduction, product information or other relevant materials...'"
-                                        ></textarea>
-                                    </div>
-
-                                    <!-- 文件上传 -->
-                                    <div class="form-group">
-                                        <label for="file-upload">
-                                            {{ currentLang === 'zh' ? '上传公司相关附件（可选）' : 'Upload company file（Optional）' }}
-                                        </label>
-                                        <div class="file-upload-wrapper" id="upload-wrapper">
-                                            <input
-                                                type="file"
-                                                class="file-upload-input"
-                                                id="file-upload"
-                                                @change="onFileSelected"
-                                                accept=".txt,.doc,.docx,.pdf"
-                                            >
-                                            <div class="file-upload-content" v-if="!selectedFile">
-                                                <i class="fas fa-cloud-upload upload-icon"></i>
-                                                <div class="upload-text">
-                                                    {{ currentLang === 'zh' ? '点击或拖拽文件到此处' : 'Click or drag files here' }}
-                                                </div>
-                                                <div class="upload-hint">
-                                                    {{ currentLang === 'zh' ? '支持 .txt, .doc, .docx, .pdf 格式' : 'Support .txt, .doc, .docx, .pdf formats' }}
-                                                </div>
-                                            </div>
-                                            <div v-if="selectedFile" class="selected-file-container">
-                                                <div class="file-info">
-                                                    <i class="fas fa-file-text"></i>
-                                                    <span class="file-name">{{ selectedFile.name }}</span>
-                                                </div>
-                                                <button type="button"
-                                                        class="delete-file-btn"
-                                                        @click.prevent.stop="deleteFile"
-                                                        :title="currentLang === 'zh' ? '删除文件' : 'Delete file'">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <!-- URL输入 -->
                                     <div class="form-group">
                                         <label for="URL_official_web">
@@ -802,6 +867,65 @@
                                             v-model="URL_anylink"
                                             :placeholder="currentLang === 'zh' ? '新闻报道、介绍文章等链接' : 'News articles, introduction links, etc.'"
                                         >
+                                    </div>
+
+                                    <!-- 公司介绍 -->
+                                    <div class="form-group">
+                                        <label for="company_introduction">
+                                            {{ currentLang === 'zh' ? '公司相关素材（推荐）' : 'Company Materials (Recommend)' }}
+                                        </label>
+                                        <textarea
+                                            class="form-control"
+                                            id="company_introduction"
+                                            v-model="company_introcution"
+                                            rows="6"
+                                            :placeholder="currentLang === 'zh' ? '请输入公司介绍、产品信息或其他相关材料...' : 'Enter company introduction, product information or other relevant materials...'"
+                                        ></textarea>
+                                    </div>
+
+                                    <!-- 文件上传 -->
+                                    <div class="form-group">
+                                        <label for="file-upload">
+                                            {{ currentLang === 'zh' ? '上传公司相关附件（可选）' : 'Upload company file（Optional）' }}
+                                        </label>
+
+                                        <!-- 文件上传区域 - 仅在未选择文件时显示 -->
+                                        <div v-if="!selectedFile" class="file-upload-wrapper" id="upload-wrapper">
+                                            <input
+                                                type="file"
+                                                class="file-upload-input"
+                                                id="file-upload"
+                                                @change="onFileSelected"
+                                                accept=".txt,.doc,.docx,.pdf,.png,.jpg,.jpeg"
+                                            >
+                                            <div class="file-upload-content">
+                                                <i class="fas fa-cloud-upload upload-icon"></i>
+                                                <div class="upload-text">
+                                                    {{ currentLang === 'zh' ? '点击或拖拽文件到此处' : 'Click or drag files here' }}
+                                                </div>
+                                                <div class="upload-hint">
+                                                    {{ currentLang === 'zh' ? '支持 .txt, .doc, .docx, .pdf, .png, .jpg, .jpeg 格式' : 'Support .txt, .doc, .docx, .pdf, .png, .jpg, .jpeg formats' }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 已选择的文件显示 - 独立于上传区域 -->
+                                        <div v-if="selectedFile" class="selected-file-container">
+                                            <div class="file-info">
+                                                <i :class="getFileIcon(selectedFile.name)"></i>
+                                                <div class="file-details">
+                                                    <span class="file-name">{{ selectedFile.name }}</span>
+                                                    <span class="file-size">{{ formatFileSize(selectedFile.size) }}</span>
+                                                </div>
+                                            </div>
+                                            <button type="button"
+                                                    class="delete-file-btn"
+                                                    @click="deleteFile"
+                                                    :title="currentLang === 'zh' ? '删除此文件' : 'Delete this file'">
+                                                <i class="fas fa-trash-alt"></i>
+                                                <span>{{ currentLang === 'zh' ? '删除' : 'Delete' }}</span>
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <!-- 提交按钮 -->
@@ -903,6 +1027,13 @@
                                     <h4 class="panel-title">תוצאה בעברית</h4>
                                     <div class="panel-content" v-html="hebrewResult"></div>
                                 </div>
+                            </div>
+                            <!-- 新建分析按钮 -->
+                            <div class="new-analysis-section">
+                                <button type="button" class="btn btn-secondary" @click="startNewAnalysis">
+                                    <i class="fas fa-plus-circle"></i>
+                                    {{ currentLang === 'zh' ? '开始新分析' : 'New Analysis' }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1055,6 +1186,7 @@
                 toggleLang() {
                     this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
                     document.getElementById('lang-text').textContent = this.currentLang === 'zh' ? 'EN' : '中文';
                 },
 
@@ -1081,7 +1213,7 @@
 
                         const file = e.dataTransfer.files[0];
                         if (file) {
-                            const allowedTypes = ['.txt', '.doc', '.docx', '.pdf'];
+                            const allowedTypes = ['.txt', '.doc', '.docx', '.pdf', '.png', '.jpg', '.jpeg'];
                             const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
 
                             if (allowedTypes.includes(fileExtension)) {
@@ -1109,6 +1241,65 @@
                     if (fileInput) {
                         fileInput.value = '';
                     }
+
+                    // 重新初始化上传区域（等待DOM更新后）
+                    this.$nextTick(() => {
+                        this.initializeFileUpload();
+                    });
+                },
+
+                formatFileSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                getFileIcon(filename) {
+                    const extension = filename.toLowerCase().substring(filename.lastIndexOf('.'));
+                    const iconMap = {
+                        '.png': 'fas fa-file-image',
+                        '.jpg': 'fas fa-file-image',
+                        '.jpeg': 'fas fa-file-image',
+                        '.pdf': 'fas fa-file-pdf',
+                        '.doc': 'fas fa-file-word',
+                        '.docx': 'fas fa-file-word',
+                        '.txt': 'fas fa-file-alt'
+                    };
+                    return iconMap[extension] || 'fas fa-file-alt';
+                },
+
+                startNewAnalysis() {
+                    // 清空所有表单字段
+                    this.URL_official_web = '';
+                    this.company_name = '';
+                    this.company_introcution = '';
+                    this.URL_anylink = '';
+                    this.output_hebrew = 'no';
+
+                    // 清空文件
+                    this.selectedFile = null;
+                    const fileInput = document.getElementById('file-upload');
+                    if (fileInput) {
+                        fileInput.value = '';
+                    }
+
+                    // 隐藏结果
+                    this.isResultDisplayed = false;
+                    this.chineseResult = '';
+                    this.englishResult = '';
+                    this.hebrewResult = '';
+
+                    // 滚动到表单顶部并重新初始化上传区域
+                    this.$nextTick(() => {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                        // 重新初始化上传区域
+                        this.initializeFileUpload();
+                    });
                 },
 
                 async analyze(apiName) {
@@ -1140,8 +1331,8 @@
                         this.loading = false;
                         await this.showNotification(
                             this.currentLang === 'zh'
-                                ? '请至少提供以下一项：\n1. 公司相关素材\n2. 上传公司相关附件\n3. 网络连接'
-                                : 'Please provide at least one of the following:\n1. Company materials\n2. Upload company files\n3. Network links',
+                                ? '请至少提供以下一项：\n1. 公司官网\n2. 公司相关素材\n3. 上传公司相关附件'
+                                : 'Please provide at least one of the following:\n1. Network links\n2. Company materials\n3. Upload company files',
                             'error'
                         );
 
@@ -1154,7 +1345,10 @@
                             document.getElementById('company_introduction').style.borderColor = 'var(--error-color)';
                         }
                         if (!hasFile) {
-                            document.getElementById('upload-wrapper').style.borderColor = 'var(--error-color)';
+                            const uploadWrapper = document.getElementById('upload-wrapper');
+                            if (uploadWrapper) {
+                                uploadWrapper.style.borderColor = 'var(--error-color)';
+                            }
                         }
                         return;
                     }
@@ -1163,7 +1357,10 @@
                     document.getElementById('URL_official_web').style.borderColor = '';
                     document.getElementById('URL_anylink').style.borderColor = '';
                     document.getElementById('company_introduction').style.borderColor = '';
-                    document.getElementById('upload-wrapper').style.borderColor = '';
+                    const uploadWrapper = document.getElementById('upload-wrapper');
+                    if (uploadWrapper) {
+                        uploadWrapper.style.borderColor = '';
+                    }
 
                     try {
                         const formData = new FormData();
@@ -1244,10 +1441,17 @@
                                 this.scrollToBottom();
                             });
                         } else {
-                            await this.showNotification(
-                                response.data.Message || (this.currentLang === 'zh' ? '未知错误' : 'Unknown error'),
-                                'error'
-                            );
+                            // 检查特定错误：文档格式错误
+                            let errorMessage;
+                            if (response.data.ReturnCode === -1 && response.data.Message === '未提取有效信息') {
+                                errorMessage = this.currentLang === 'zh'
+                                    ? '您上传的文档格式有误'
+                                    : 'The uploaded document format is invalid';
+                            } else {
+                                errorMessage = response.data.Message || (this.currentLang === 'zh' ? '未知错误' : 'Unknown error');
+                            }
+
+                            await this.showNotification(errorMessage, 'error');
                         }
                     } catch (error) {
                         console.error('Analysis failed:', error);

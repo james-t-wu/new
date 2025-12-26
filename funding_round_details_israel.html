@@ -477,6 +477,7 @@
                 async toggleLang() {
                     this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
                     await this.loadTranslations();
                 },
 

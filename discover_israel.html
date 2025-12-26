@@ -1846,6 +1846,7 @@
                 toggleLang() {
                     this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     localStorage.setItem('inno_lang', this.currentLang);
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
                 },
 
                 // URL 参数操作
@@ -2102,9 +2103,9 @@
                             if (response.data.ReturnCode === 0) {
                                 if (response.data.Data) {
                                     response.data.Data.company.forEach(function(item) {
-                                        item.link = "company_profile_israel.aspx?cId=" + item.id;
+                                        item.link = "company_profile_israel.html?cId=" + item.id;
                                         if (item.source == 'kr') {
-                                            item.link = "startup.aspx?id=" + item.id;
+                                            item.link = "startup.html?id=" + item.id;
                                         }
 
                                         if (!_self.isChineseChar(_self.searchValue)) {

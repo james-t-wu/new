@@ -316,9 +316,9 @@
 
         /* 图片样式 */
         .grid-middle img {
-            max-width: 300px;
-            max-height: 450px;
-            object-fit: contain;
+            width: 300px;
+            height: 450px;
+            object-fit: cover;
             border-radius: 8px;
         }
 
@@ -1366,13 +1366,26 @@ body.menu-active.menu-collapsed {
                     isPlaying: false,
                     hasContent: false,
                     isSearchingMiddle: false,
-                    ciImageSrc: 'https://innonation.oss-cn-beijing.aliyuncs.com/CI.png',
+                    ciImageSrc: '',
+                    currentTechName: '', // 当前显示的技术名称（用于语言切换时保持）
                     messages: [{ id: 1, text: '', isTyping: false }],
                     containerStyle: {
                         height: 'auto'
                     },
                     apiDomain: 'https://ai.innonation.io/inno_ai_services',
                     apiToken: 'Bearer your-api-token',
+
+                    // 技术名称中英文映射
+                    techNameMap: {
+                        '电光系统': 'Electro-Optical System',
+                        'Electro-Optical System': '电光系统',
+                        '量子驱动的机密计算网络安全': 'Quantum-Driven Confidential Computing Network Security',
+                        'Quantum-Driven Confidential Computing Network Security': '量子驱动的机密计算网络安全',
+                        '数据安全态势管理': 'Data Security Posture Management',
+                        'Data Security Posture Management': '数据安全态势管理',
+                        '开发安全运维': 'DevSecOps',
+                        'DevSecOps': '开发安全运维'
+                    },
 
                     // 默认技术卡片数据
                     techs_cn: [
@@ -1388,13 +1401,13 @@ body.menu-active.menu-collapsed {
                                                 <div class="chinese-title">电光系统</div>
                                                 <div class="english-title">Electro-Optical System</div>
                                                 <div class="explanation">
-                                                    电光系统就像是高科技的"超级眼睛"。它结合了电子技术和光学技术，能够捕捉、处理和显示各种光信息。想象一下，它就像是给了普通相机一个超级大脑，不仅能在各种光线条件下看得更清楚，还能分析所看到的内容。这种系统广泛应用于军事、航空、医疗等领域，让我们能够"看见"肉眼看不到的世界。
+                                                    电光系统就像是机器的眼睛和大脑的结合，将电信号转换为光信号或反之。想象一下相机如何捕捉光线并将其转化为数字照片，电光系统也是如此工作。它们广泛应用于夜视设备、导弹制导和卫星通信中，让机器能在各种环境下"看见"世界。
                                                 </div>
                                             </div>
                                             <div class="icon-container">
-                                                <div class="icon">📷</div>
+                                                <div class="icon">👁️</div>
+                                                <div class="icon">📡</div>
                                                 <div class="icon">🔍</div>
-                                                <div class="icon">💡</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1411,15 +1424,15 @@ body.menu-active.menu-collapsed {
                                             <div class="divider"></div>
                                             <div class="dynamic-content">
                                                 <div class="chinese-title">量子驱动的机密计算网络安全</div>
-                                                <div class="english-title">Quantum-driven confidential computing network security</div>
+                                                <div class="english-title">Quantum-Driven Confidential Computing Network Security</div>
                                                 <div class="explanation">
-                                                    想象一下，这就像给你的数据穿上了一件超级隐形衣。量子技术就像是这件隐形衣的神奇材料，让数据在处理时完全隐形。机密计算则是隐形衣的设计，确保数据即使在使用中也不会被看到。而网络安全就是守护这件隐形衣的卫士，防止任何人偷走或损坏它。这种方法不仅保护数据免受当前威胁，还能抵御未来可能出现的超级计算机的攻击，为数据安全开启了一个全新的时代。
+                                                    这是将量子技术与加密计算融合的网络防护系统，就像给数据穿上了量子级隐形斗篷。传统加密如同用复杂锁头保护文件柜，而量子加密则是让锁本身在被非法触碰时自动变形。即使黑客拥有超级计算机，也难以破解这种在数据处理过程中持续保持加密状态的防护层。
                                                 </div>
                                             </div>
                                             <div class="icon-container">
                                                 <div class="icon">🔒</div>
-                                                <div class="icon">🖥</div>
-                                                <div class="icon">🔗</div>
+                                                <div class="icon">⚛️</div>
+                                                <div class="icon">🌐</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1438,13 +1451,13 @@ body.menu-active.menu-collapsed {
                                                 <div class="chinese-title">数据安全态势管理</div>
                                                 <div class="english-title">Data Security Posture Management</div>
                                                 <div class="explanation">
-                                                    数据安全态势管理就像是给你的数据穿上了一套智能盔甲。想象一下，你有一个装满珍贵宝石的保险箱。DSPM不仅会帮你锁好保险箱，还会时刻监控周围环境，预测可能的威胁，并在必要时自动加强防护。它就像一个全天候的数据保镖，不断学习新的防御技能，确保你的数据始终处于最安全的状态。简而言之，DSPM让你对数据安全了如指掌，并随时准备应对各种挑战。
+                                                    想象一个城市的安全系统：数据安全态势管理就像一个智能控制中心，实时监控所有数据资产的安全状态。它不仅能发现城墙上的漏洞，还能预测可能的入侵路径，并自动调整防御策略。这套系统持续评估风险，确保你的数据城堡始终处于最佳防御状态。
                                                 </div>
                                             </div>
                                             <div class="icon-container">
-                                                <div class="icon">🖥</div>
-                                                <div class="icon">🛡</div>
-                                                <div class="icon">👁</div>
+                                                <div class="icon">🛡️</div>
+                                                <div class="icon">📊</div>
+                                                <div class="icon">🔍</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1468,9 +1481,9 @@ body.menu-active.menu-collapsed {
                                                 </div>
                                             </div>
                                             <div class="icon-container">
-                                                <div class="icon">📷</div>
-                                                <div class="icon">👁</div>
-                                                <div class="icon">💻</div>
+                                                <div class="icon">👁️</div>
+                                                <div class="icon">📡</div>
+                                                <div class="icon">🔍</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1478,7 +1491,7 @@ body.menu-active.menu-collapsed {
                             `
                         },
                         {
-                            name: 'Power Conversion Solutions',
+                            name: 'Quantum-Driven Confidential Computing Network Security',
                             svg: `
                                 <div class="svg-wrapper en">
                                     <div class="card">
@@ -1486,15 +1499,15 @@ body.menu-active.menu-collapsed {
                                             <div class="title">Smart Match Tech Explainer</div>
                                             <div class="divider"></div>
                                             <div class="dynamic-content">
-                                                <div class="english-title">Power Conversion Solutions</div>
+                                                <div class="english-title">Quantum-Driven Confidential Computing Network Security</div>
                                                 <div class="explanation">
-                                                    Power Conversion Solutions are like magical energy translators that help different devices speak the same electrical language. Just as a translator helps people who speak different languages understand each other, these solutions transform electricity from one form to another so that various devices can work together harmoniously.
+                                                    A fortress for data that uses quantum principles to protect information while it's being processed. Unlike traditional security that guards data at rest or in transit, this shields it during computation—like having an invisible force field around your thoughts. Quantum elements add an extra layer by creating keys that change if anyone tries to eavesdrop.
                                                 </div>
                                             </div>
                                             <div class="icon-container">
-                                                <div class="icon">⚡</div>
-                                                <div class="icon">🔌</div>
-                                                <div class="icon">🔧</div>
+                                                <div class="icon">🔒</div>
+                                                <div class="icon">⚛️</div>
+                                                <div class="icon">🌐</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1516,9 +1529,9 @@ body.menu-active.menu-collapsed {
                                                 </div>
                                             </div>
                                             <div class="icon-container">
-                                                <div class="icon">🖥</div>
-                                                <div class="icon">🛡</div>
-                                                <div class="icon">👁</div>
+                                                <div class="icon">🛡️</div>
+                                                <div class="icon">📊</div>
+                                                <div class="icon">🔍</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1573,14 +1586,14 @@ body.menu-active.menu-collapsed {
                     `,
                     // 快捷技术名词（各语言3个）
                     quickTechs_cn: [
-                        { name: '电光系统', term: '电光系统' },
-                        { name: '量子驱动的机密计算网络安全', term: '量子驱动的机密计算网络安全' },
-                        { name: '数据安全态势管理', term: '数据安全态势管理' }
+                        { name: '电光系统' },
+                        { name: '量子驱动的机密计算网络安全' },
+                        { name: '数据安全态势管理' }
                     ],
                     quickTechs_en: [
-                        { name: 'Electro-Optical System', term: 'Electro-Optical System' },
-                        { name: 'Power Conversion Solutions', term: 'Power Conversion Solutions' },
-                        { name: 'Data Security Posture Management', term: 'Data Security Posture Management' }
+                        { name: 'Electro-Optical System' },
+                        { name: 'Quantum-Driven Confidential Computing Network Security' },
+                        { name: 'Data Security Posture Management' }
                     ]
                 }
             },
@@ -1604,8 +1617,63 @@ body.menu-active.menu-collapsed {
 
                 // 设置默认技术卡片
                 this.setDefaultCard();
+
+                // 设置默认图片
+                this.setDefaultImage();
             },
             methods: {
+                // 生成技术卡片图片 URL
+                getTechCardImageUrl(techName) {
+                    return `https://innonation.oss-cn-beijing.aliyuncs.com/techcard/${encodeURIComponent(techName)}.png`;
+                },
+                // 设置默认图片
+                setDefaultImage() {
+                    const defaultTechName = this.currentLang === 'zh' ? '开发安全运维' : 'DevSecOps';
+                    this.currentTechName = defaultTechName;
+                    this.ciImageSrc = this.getTechCardImageUrl(defaultTechName);
+                },
+                // 更新当前技术的图片（用于语言切换）
+                updateCurrentTechImage() {
+                    if (!this.currentTechName) {
+                        this.setDefaultImage();
+                        return;
+                    }
+                    // 根据当前语言获取对应的技术名称
+                    const mappedName = this.techNameMap[this.currentTechName];
+                    if (mappedName) {
+                        // 如果找到映射，使用映射后的名称
+                        this.currentTechName = mappedName;
+                        this.ciImageSrc = this.getTechCardImageUrl(mappedName);
+                    }
+                    // 如果没有找到映射，保持原图片不变（可能是自定义搜索的结果）
+                },
+                // 更新当前技术的卡片（用于语言切换）
+                updateCurrentTechCard() {
+                    if (!this.currentTechName) {
+                        this.setDefaultCard();
+                        return;
+                    }
+
+                    // 根据当前语言获取对应的技术名称
+                    const mappedName = this.techNameMap[this.currentTechName];
+
+                    // 如果找到映射，说明是预定义的技术，可以切换语言
+                    if (mappedName) {
+                        // 根据当前语言选择数据源
+                        const techList = this.currentLang === 'zh' ? this.techs_cn : this.techs_en;
+
+                        // 查找对应的技术卡片
+                        const foundTech = techList.find(t => t.name === mappedName);
+
+                        if (foundTech && foundTech.svg) {
+                            const resultSvg = document.getElementById('resultSvg');
+                            if (resultSvg) {
+                                resultSvg.innerHTML = foundTech.svg;
+                            }
+                        }
+                    }
+                    // 如果没有找到映射，保持原卡片不变（可能是自定义搜索的结果）
+                },
                 // 旧的按钮svg预设逻辑已不再需要
                 setDefaultCard() {
                     // 根据当前语言设置默认卡片
@@ -1630,12 +1698,17 @@ body.menu-active.menu-collapsed {
                     this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
                     this.selectedLang = this.currentLang; // 同步 selectedLang
                     localStorage.setItem('inno_lang', this.currentLang);
+                    window.dispatchEvent(new CustomEvent('inno_lang_change', { detail: this.currentLang }));
 
                     // 更新语言显示
                     const langText = document.querySelector('.lang-text');
                     if (langText) {
                         langText.textContent = this.currentLang === 'zh' ? 'EN' : '中文';
                     }
+
+                    // 更新当前技术的卡片和图片
+                    this.updateCurrentTechCard();
+                    this.updateCurrentTechImage();
                 },
                 async initPage() {
                     try {
@@ -1652,6 +1725,10 @@ body.menu-active.menu-collapsed {
                     this.selectedLang = lang;
                     this.currentLang = lang; // 同步 currentLang
                     localStorage.setItem('inno_lang', lang);
+
+                    // 更新当前技术的卡片和图片
+                    this.updateCurrentTechCard();
+                    this.updateCurrentTechImage();
                 },
                 showSample(tech) {
                     // 显示预定义的技术卡片，但不显示内容容器
@@ -1664,11 +1741,59 @@ body.menu-active.menu-collapsed {
                         };
                     }
                 },
-                quickSearch(tech) {
-                    if (!tech || !tech.term) return;
-                    this.searchTerm = tech.term;
-                    // 直接触发查询流程
-                    this.searchTechTerm();
+                async quickSearch(tech) {
+                    if (!tech || !tech.name) return;
+
+                    // 根据当前语言选择数据源
+                    const techList = this.selectedLang === 'zh' ? this.techs_cn : this.techs_en;
+
+                    // 从本地数据中查找对应的技术卡片
+                    const foundTech = techList.find(t => t.name === tech.name);
+
+                    if (foundTech && foundTech.svg) {
+                        // 清空左侧卡片内容
+                        const resultSvgEl = document.getElementById('resultSvg');
+                        if (resultSvgEl) {
+                            resultSvgEl.innerHTML = '';
+                        }
+
+                        // 开始加载：显示动画，隐藏内容，显示中间图片loading
+                        this.isLoading = true;
+                        this.isPlaying = true;
+                        this.hasContent = false;
+                        this.messages = [];
+                        this.isSearchingMiddle = true; // 显示中间图片loading
+
+                        // 更新搜索提示文本
+                        this.searchingText = this.currentLang === 'zh'
+                            ? `正在生成"${tech.name}"技术卡片...`
+                            : `Generating "${tech.name}" tech card...`;
+
+                        // 更新搜索词
+                        this.searchTerm = tech.name;
+
+                        // 模拟3秒加载过程
+                        await new Promise(resolve => setTimeout(resolve, 3000));
+
+                        // 显示卡片
+                        const resultSvg = document.getElementById('resultSvg');
+                        if (resultSvg) {
+                            resultSvg.innerHTML = foundTech.svg;
+                        }
+
+                        // 更新中间图片
+                        this.currentTechName = tech.name; // 记录当前技术名称
+                        this.ciImageSrc = this.getTechCardImageUrl(tech.name);
+                        this.isSearchingMiddle = false; // 隐藏中间图片loading
+
+                        // 结束加载：隐藏动画，显示初始界面
+                        this.isLoading = false;
+                        this.isPlaying = false;
+                        this.hasContent = false;
+
+                        // 重置搜索文本
+                        this.searchingText = this.currentLang === 'zh' ? '正在生成技术卡片...' : 'Generating tech card...';
+                    }
                 },
                 async searchTechTerm() {
                     if (!this.searchTerm.trim()) return;
@@ -1738,6 +1863,7 @@ body.menu-active.menu-collapsed {
                                 } else {
                                     this.ciImageSrc = 'data:image/png;base64,' + str.replace(/\s+/g, '');
                                 }
+                                this.currentTechName = this.searchTerm; // 记录当前技术名称
                                 this.isSearchingMiddle = false;
                             }
                         }
@@ -1833,7 +1959,7 @@ body.menu-active.menu-collapsed {
                 },
                 async callTechCardImageAPI() {
                     try {
-                        const url = `${this.apiDomain}/api/techcard/image?term=${encodeURIComponent(this.searchTerm)}`;
+                        const url = `${this.apiDomain}/api/techcard/image?term=${encodeURIComponent(this.searchTerm)}&lang=${this.selectedLang}`;
   
                         const response = await fetch(url, {
                             method: 'GET',

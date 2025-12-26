@@ -166,29 +166,17 @@
                                     <span>${t('aiSearch')}</span>
                                 </a>
                             </li>
-                            <!-- 查询子菜单 -->
-                            <li class="modern-menu-item discover">
-                                <a href="#" class="modern-menu-link" data-role="submenu-toggle" data-submenu="discover-menu">
+                            <li class="modern-menu-item discover-company">
+                                <a href="/new/discover_israel.html" class="modern-menu-link">
                                     <i class="fas fa-magnifying-glass"></i>
-                                    <span>${t('discover')}</span>
-                                    <div class="modern-menu-arrow">
-                                        <i class="fas fa-angle-right"></i>
-                                    </div>
+                                    <span>${t('discover_company')}</span>
                                 </a>
-                                <ul class="modern-submenu" data-submenu="discover-menu">
-                                    <li class="discover-company">
-                                        <a href="/new/discover_israel.html" class="modern-submenu-link">
-                                            <i class="fas fa-building"></i>
-                                            <span>${t('discover_company')}</span>
-                                        </a>
-                                    </li>
-                                    <li class="discover-deal">
-                                        <a href="/new/discover_deal_israel.html" class="modern-submenu-link">
-                                            <i class="fas fa-handshake"></i>
-                                            <span>${t('discover_deal')}</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                            </li>
+                            <li class="modern-menu-item deal">
+                                <a href="/new/deal_israel.html" class="modern-menu-link">
+                                    <i class="fas fa-building"></i>
+                                    <span>${t('deal')}</span>
+                                </a>
                             </li>
                             <li class="modern-menu-item report">
                                 <a href="/new/report_israel.html" class="modern-menu-link">
@@ -219,29 +207,17 @@
                                 </a>
                             </li>
 
-                            <!-- AI工具子菜单 -->
-                            <li class="modern-menu-item ai-tool">
-                                <a href="#" class="modern-menu-link" data-role="submenu-toggle" data-submenu="ai-tools">
-                                    <i class="fas fa-gear"></i>
-                                    <span>${t('aiTools')}</span>
-                                    <div class="modern-menu-arrow">
-                                        <i class="fas fa-angle-right"></i>
-                                    </div>
+                            <li class="modern-menu-item tech-explainer">
+                                <a href="/new/technical_card_israel.html" class="modern-menu-link">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>${t('techExplainer')}</span>
                                 </a>
-                                <ul class="modern-submenu" data-submenu="ai-tools">
-                                    <li class="tech-explainer">
-                                        <a href="/new/technical_card_israel.html" class="modern-submenu-link">
-                                            <i class="fas fa-lightbulb"></i>
-                                            <span>${t('techExplainer')}</span>
-                                        </a>
-                                    </li>
-                                    <li class="company-ai-analysis">
-                                        <a href="/new/company_ai_analysis_israel.html" class="modern-submenu-link">
-                                            <i class="fa fa-codepen"></i>
-                                            <span>${t('companyAnalyze')}</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                            </li>
+                            <li class="modern-menu-item company-ai-analysis">
+                                <a href="/new/company_ai_analysis_israel.html" class="modern-menu-link">
+                                    <i class="fa fa-codepen"></i>
+                                    <span>${t('companyAnalyze')}</span>
+                                </a>
                             </li>
 
                         </ul>

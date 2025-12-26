@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成微信分享图片</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .instructions h2 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        .instructions ol {
+            line-height: 1.8;
+        }
+
+        .instructions code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        /* 分享图片画布 - 1200x630 标准尺寸 */
+        #shareImage {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        /* 装饰性背景元素 */
+        .bg-decoration {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: white;
+            top: -100px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: white;
+            bottom: -80px;
+            left: -80px;
+        }
+
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            background: white;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+        }
+
+        /* 内容容器 */
+        .content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px;
+        }
+
+        /* Logo/图标 */
+        .logo-icon {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 主标题 */
+        .main-title {
+            font-size: 72px;
+            font-weight: 700;
+            color: white;
+            margin: 0 0 20px 0;
+            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+        }
+
+        /* 副标题 */
+        .subtitle {
+            font-size: 36px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.95);
+            margin: 0 0 40px 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 标签 */
+        .tags {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 24px;
+            color: white;
+            font-size: 20px;
+            font-weight: 500;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* 底部品牌 */
+        .brand {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 下载按钮 */
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .preview-note {
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>📸 如何生成微信分享图片</h2>
+        <ol>
+            <li>下方是预览图，你可以直接<strong>右键点击图片 → 图片另存为</strong>，保存为 <code>news-calendar-share.jpg</code></li>
+            <li>或者点击下方的"下载图片"按钮</li>
+            <li>登录阿里云OSS控制台：<code>https://oss.console.aliyun.com/</code></li>
+            <li>找到 bucket: <code>innonation.oss-cn-beijing.aliyuncs.com</code></li>
+            <li>创建文件夹 <code>share</code>（如果不存在）</li>
+            <li>上传图片，命名为 <code>news-calendar-share.jpg</code></li>
+            <li>设置权限为"公共读"</li>
+            <li>完成！现在在微信中分享就会显示这张图片了</li>
+        </ol>
+        <p><strong>提示：</strong>你也可以使用专业设计软件（如Photoshop、Figma）制作更精美的分享图，尺寸保持 1200x630 像素即可。</p>
+    </div>
+
+    <!-- 分享图片画布 -->
+    <div id="shareImage">
+        <!-- 装饰性背景 -->
+        <div class="bg-decoration circle-1"></div>
+        <div class="bg-decoration circle-2"></div>
+        <div class="bg-decoration circle-3"></div>
+
+        <!-- 内容 -->
+        <div class="content">
+            <div class="logo-icon">📰</div>
+            <h1 class="main-title">中国科技日报</h1>
+            <p class="subtitle">每日精选科技新闻</p>
+            <div class="tags">
+                <span class="tag">📅 日历浏览</span>
+                <span class="tag">🤖 AI精选</span>
+                <span class="tag">⚡ 实时更新</span>
+            </div>
+        </div>
+
+        <div class="brand">INNONATION AI</div>
+    </div>
+
+    <button class="download-btn" onclick="downloadImage()">📥 下载图片 (1200x630)</button>
+
+    <p class="preview-note">
+        💡 这是标准的微信分享图片尺寸（1200x630像素），上传后在微信分享时会自动显示。
+        <br>你也可以根据需要修改下方代码来自定义图片样式。
+    </p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        async function downloadImage() {
+            const element = document.getElementById('shareImage');
+
+            try {
+                // 使用html2canvas将HTML转换为canvas
+                const canvas = await html2canvas(element, {
+                    scale: 2, // 2倍分辨率，确保清晰度
+                    useCORS: true,
+                    backgroundColor: null,
+                    width: 1200,
+                    height: 630
+                });
+
+                // 转换为blob并下载
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = 'news-calendar-share.jpg';
+                    link.href = url;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                }, 'image/jpeg', 0.95);
+
+                alert('图片生成成功！请查看下载文件夹。');
+            } catch (error) {
+                console.error('生成图片失败:', error);
+                alert('生成失败，请尝试右键点击图片直接保存。');
+            }
+        }
+
+        // 页面加载后的提示
+        window.addEventListener('load', function() {
+            console.log('分享图片生成器已加载');
+            console.log('你可以修改HTML代码来自定义图片样式');
+        });
+    </script>
+</body>
+</html>
