@@ -215,7 +215,7 @@
                             </li>
                             <li class="modern-menu-item company-ai-analysis">
                                 <a href="/new/company_ai_analysis_israel.html" class="modern-menu-link">
-                                    <i class="fa fa-codepen"></i>
+                                    <i class="fas fa-brain"></i>
                                     <span>${t('companyAnalyze')}</span>
                                 </a>
                             </li>
