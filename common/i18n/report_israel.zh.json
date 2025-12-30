@@ -183,5 +183,9 @@
 	"new-report-name-2023-09": "投资以色列盘点  2023 年 09 月",
 	"new-report-name-2023-10": "投资以色列盘点  2023 年 10 月",
 	"new-report-name-2023-11": "投资以色列盘点  2023 年 11 月",
-	"new-report-name-2023-12": "投资以色列盘点  2023 年 12 月"
+	"new-report-name-2023-12": "投资以色列盘点  2023 年 12 月",
+	"loginRequired": "需要登录",
+	"loginRequiredMessage": "您还未登录，无法查看该报告。请先登录您的账户以继续访问。",
+	"redirectingToLogin": "3秒后将自动跳转到登录页面...",
+	"goToLogin": "立即登录"
 }

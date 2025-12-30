@@ -855,7 +855,7 @@
                                                 <th><i class="fas fa-dollar-sign me-2"></i>{{ t('amount') }}</th>
                                                 <th><i class="fas fa-calendar me-2"></i>{{ t('date') }}</th>
                                                 <th><i class="fas fa-users me-2"></i>{{ t('investors') }}</th>
-                                                <th><i class="fas fa-globe me-2"></i>{{ t('region') }}</th>
+                                                <!-- <th><i class="fas fa-globe me-2"></i>{{ t('region') }}</th> -->
                                                 <th v-if="showNeedTrackFlag"><i class="fas fa-cogs me-2"></i>{{ t('actions') }}</th>
                                             </tr>
                                         </thead>
@@ -878,7 +878,7 @@
                                                 </td>
                                                 <td>{{item.announced_on}}</td>
                                                 <td :title="item.investorStr">{{item.investorStr}}</td>
-                                                <td>{{item.country}}</td>
+                                                <!-- <td>{{item.country}}</td> -->
                                                 <td v-if="showNeedTrackFlag">
                                                     <button class="btn btn-sm btn-outline-primary" @click="openAIInvestmentModal(item._id, item.company_name, 'inv', '')">
                                                         <i class="fas fa-robot me-1"></i>{{ t('aiAnalysis') }}
@@ -998,7 +998,7 @@
                                                 <th>{{ t('industry') }}</th>
                                                 <th>{{ t('price') }}</th>
                                                 <th>{{ t('date') }}</th>
-                                                <th>{{ t('region') }}</th>
+                                                <!-- <th>{{ t('region') }}</th> -->
                                                 <th v-if="showNeedTrackFlag">{{ t('actions') }}</th>
                                             </tr>
                                         </thead>
@@ -1011,7 +1011,7 @@
                                                 <td :title="item.industryStr">{{item.industryStr}}</td>
                                                 <td>{{item.price}}</td>
                                                 <td>{{item.announced_on}}</td>
-                                                <td>{{item.acquiree_country}}</td>
+                                                <!-- <td>{{item.acquiree_country}}</td> -->
                                                 <td v-if="showNeedTrackFlag">
                                                     <button class="btn btn-sm btn-outline-primary" @click="openAIInvestmentModal(item._id, item.acquiree_name, 'ma', '')">
                                                         <i class="fas fa-robot me-1"></i>{{ t('aiAnalysis') }}

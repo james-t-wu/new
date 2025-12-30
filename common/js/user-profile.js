@@ -266,6 +266,7 @@
         }
 
         return {
+            isLoggedIn: true,  // 标记为已登录
             name: name,
             membership: membership,
             expiry: expiry,
@@ -278,9 +279,10 @@
 
     function getDefaultUserData() {
         return {
-            name: 'wu James',
-            membership: 'ADMIN',
-            expiry: 'Jun.21.2030',
+            isLoggedIn: false,  // 标记为未登录
+            name: '',
+            membership: '',
+            expiry: '',
             avatarUrl: null
         };
     }
@@ -297,6 +299,20 @@
         const t = state.t;
         const hasAvatar = userData.avatarUrl && userData.avatarUrl !== '';
 
+        // 如果用户未登录，显示登录按钮
+        if (!userData.isLoggedIn) {
+            return html`
+                <div class="user-profile-container">
+                    <!-- 登录按钮 -->
+                    <a href="/home_new_israel.aspx" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%); border: none; padding: 0.7rem; font-size: 0.875rem; white-space: nowrap;">
+                        <i class="fas fa-sign-in-alt me-1"></i>
+                        <span>${t('login') || '登录'}</span>
+                    </a>
+                </div>
+            `;
+        }
+
+        // 已登录用户显示完整的用户资料下拉菜单
         return html`
             <div class="user-profile-container">
                 <!-- 用户头像按钮 -->
@@ -357,13 +373,59 @@
         return t('freeUser');
     }
 
+    // ===== 退出登录处理 =====
+    function handleLogout(e) {
+        e.preventDefault();
+
+        logInfo('User logout initiated');
+
+        // 1. 清除 localStorage 中的用户相关数据
+        const localStorageKeys = ['userId', 'user_id', 'userName', 'userEmail', 'userToken', 'api_token'];
+        localStorageKeys.forEach(key => {
+            if (localStorage.getItem(key)) {
+                localStorage.removeItem(key);
+                logInfo(`Removed localStorage key: ${key}`);
+            }
+        });
+
+        // 2. 清除 sessionStorage 中的所有用户相关缓存
+        const sessionKeys = Object.keys(sessionStorage);
+        sessionKeys.forEach(key => {
+            if (key.startsWith('user_profile_') || key.startsWith('user_')) {
+                sessionStorage.removeItem(key);
+                logInfo(`Removed sessionStorage key: ${key}`);
+            }
+        });
+
+        // 3. 清除所有用户相关的 cookies
+        const cookiesToClear = ['user_id', 'api_token', 'auth_token', 'session_id'];
+        cookiesToClear.forEach(cookieName => {
+            // 清除当前域名的 cookie
+            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            // 清除根域名的 cookie
+            const domain = window.location.hostname;
+            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain};`;
+            logInfo(`Cleared cookie: ${cookieName}`);
+        });
+
+        // 4. 清空组件状态
+        state.userData = null;
+
+        logInfo('User data cleared successfully');
+
+        // 5. 跳转到登出页面
+        const redirectUrl = e.target.closest('a').getAttribute('href');
+        window.location.href = redirectUrl;
+    }
+
     // ===== 事件绑定 =====
     function bindEvents() {
         const avatarBtn = document.getElementById('user-avatar-btn');
         const dropdown = document.getElementById('user-profile-dropdown');
 
+        // 如果是未登录状态（没有下拉菜单），不需要绑定事件
         if (!avatarBtn || !dropdown) {
-            logError('User profile elements not found');
+            logInfo('User not logged in or profile elements not found - skipping event binding');
             return;
         }
 
@@ -393,6 +455,15 @@
                 dropdown.classList.remove('show');
             }
         });
+
+        // 退出登录处理
+        const logoutLink = dropdown.querySelector('.user-profile-menu-link.logout');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', handleLogout);
+            logInfo('Logout event handler attached');
+        } else {
+            logError('Logout link not found');
+        }
     }
 
     // ===== 主渲染函数 =====

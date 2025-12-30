@@ -183,5 +183,9 @@
 	"new-report-name-2023-09": "Invest to Israel Monthly Report · 2023 September",
 	"new-report-name-2023-10": "Invest to Israel Monthly Report · 2023 October",
 	"new-report-name-2023-11": "Invest to Israel Monthly Report · 2023 November",
-	"new-report-name-2023-12": "Invest to Israel Monthly Report · 2023 December"
+	"new-report-name-2023-12": "Invest to Israel Monthly Report · 2023 December",
+	"loginRequired": "Login Required",
+	"loginRequiredMessage": "You are not logged in and cannot view this report. Please log in to your account to continue.",
+	"redirectingToLogin": "Redirecting to login page in 3 seconds...",
+	"goToLogin": "Go to Login"
 }
